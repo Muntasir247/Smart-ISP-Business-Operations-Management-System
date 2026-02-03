@@ -10,10 +10,15 @@
     />
     <title>Smart ISP - Billing</title>
     <style>
-      /* Sidebar submenu always visible */
+      /* Sidebar submenu hidden by default */
       .sidebar .submenu {
-        display: block;
+        display: none;
         padding-left: 20px;
+      }
+
+      /* Show submenu when parent has 'active' */
+      .sidebar .has-submenu.active > .submenu {
+        display: block;
       }
 
       /* Highlight active menu */
@@ -22,7 +27,7 @@
         color: #fff;
       }
 
-      /* Optional: rotate caret for active submenu */
+      /* Rotate caret for active submenu */
       .sidebar .has-submenu > a.active i.fa-caret-right {
         transform: rotate(90deg);
         transition: transform 0.3s;
@@ -34,7 +39,8 @@
         border-collapse: collapse;
       }
 
-      .client-table th, .client-table td {
+      .client-table th,
+      .client-table td {
         padding: 10px;
         border: 1px solid #ddd;
         text-align: left;
@@ -45,10 +51,59 @@
         border: none;
         color: #fff;
         cursor: pointer;
+        font-size: 13px;
       }
 
       .btn-navy {
         background-color: #1e3a8a;
+      }
+
+      .btn-default {
+        background-color: #6b7280;
+        cursor: not-allowed;
+      }
+
+      .btn-green {
+        background-color: #16a34a;
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .modal h2 {
+        margin-top: 0;
+      }
+
+      .modal button {
+        margin-top: 10px;
       }
     </style>
   </head>
@@ -63,15 +118,17 @@
           <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         </li>
 
-        <!-- Billing Menu (keep only this one) -->
-        <li class="has-submenu">
+        <!-- Billing Menu -->
+        <li class="has-submenu active">
           <a href="#" class="active">
             <i class="fa-solid fa-file-invoice-dollar"></i> Billing
             <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li>
-              <a href="billing.html" class="active"><i class="fa-regular fa-circle"></i> Monthly Billing</a>
+              <a href="billing.html" class="active">
+                <i class="fa-regular fa-circle"></i> Monthly Billing
+              </a>
             </li>
           </ul>
         </li>
@@ -82,9 +139,7 @@
             <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a>
-            </li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
@@ -104,105 +159,152 @@
           </ul>
         </li>
 
-        <!-- Other menus remain intact -->
+        <!-- Other sidebar items remain the same -->
+         <!-- Mikrotik Server -->
         <li class="has-submenu">
-          <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          <a href="#">
+            <i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="bulk_client_import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li>
           </ul>
         </li>
 
+        <!-- HR & Payroll -->
         <li class="has-submenu">
-          <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          <a href="#">
+            <i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Leave Management -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Events & Holidays -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Support & Ticketing -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Task Management -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-list-check"></i> Task Management
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Bandwidth Buy -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Purchase -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Inventory -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Assets -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
+        <!-- Income -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income
-            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+            <i
+              class="fa-solid fa-caret-right"
+              style="float:right;font-size:10px;margin-top:5px"
+            ></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
+      </ul>
       </ul>
     </aside>
 
@@ -237,6 +339,7 @@
                   <th>Month</th>
                   <th>Bill Amount</th>
                   <th>Paid</th>
+                  <th>Payment Method</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -247,13 +350,43 @@
       </div>
     </div>
 
+    <!-- Modal for Invoice -->
+    <div id="invoiceModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Invoice</h2>
+        <div id="invoiceContent"></div>
+        <button onclick="printInvoice()" class="btn btn-navy"><i class="fa-solid fa-print"></i> Print</button>
+        <button onclick="downloadInvoice()" class="btn btn-green"><i class="fa-solid fa-download"></i> Download PDF</button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+      const { jsPDF } = window.jspdf;
+
+      // Sidebar toggle
+      const sidebarToggle = document.querySelector('.sidebar-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      // Submenu toggle
+      document.querySelectorAll('.sidebar .has-submenu > a').forEach(menu => {
+        menu.addEventListener('click', function(e) {
+          e.preventDefault();
+          const parent = this.parentElement;
+          parent.classList.toggle('active');
+        });
+      });
+
       // Sample Billing Data
       const billingData = [
-        {id: 'C1001', name: 'John Doe', address: '123 Main St', month: 'January', amount: 50, paid: true},
-        {id: 'C1002', name: 'Jane Smith', address: '456 Elm St', month: 'January', amount: 45, paid: false},
-        {id: 'C1003', name: 'Robert Brown', address: '789 Oak St', month: 'January', amount: 60, paid: true},
-        {id: 'C1004', name: 'Emily Davis', address: '321 Pine St', month: 'January', amount: 55, paid: false},
+        {id: 'C1001', name: 'John Doe', address: '123 Main St', month: 'January', amount: 5000, paid: true, method: 'Bkash'},
+        {id: 'C1002', name: 'Jane Smith', address: '456 Elm St', month: 'January', amount: 4500, paid: false, method: 'Nagad'},
+        {id: 'C1003', name: 'Robert Brown', address: '789 Oak St', month: 'January', amount: 6000, paid: true, method: 'Cash'},
+        {id: 'C1004', name: 'Emily Davis', address: '321 Pine St', month: 'January', amount: 5500, paid: false, method: 'Bkash'},
       ];
 
       const billingBody = document.getElementById('billingBody');
@@ -267,22 +400,65 @@
             <td>${c.name}</td>
             <td>${c.address}</td>
             <td>${c.month}</td>
-            <td>$${c.amount.toFixed(2)}</td>
+            <td>৳${c.amount.toLocaleString()}</td>
             <td>${c.paid ? '<span style="color:green">Paid</span>' : '<span style="color:red">Unpaid</span>'}</td>
+            <td>${c.method}</td>
             <td>
               ${c.paid 
-                ? '' 
-                : `<button class="btn btn-navy" onclick="sendReminder('${c.id}')"><i class="fa-solid fa-envelope"></i> Send Reminder</button>`}
+                ? '<button class="btn btn-default" disabled>Paid</button>' 
+                : `<button class="btn btn-navy" onclick="openInvoiceModal('${c.id}')"><i class="fa-solid fa-file-invoice"></i> Invoice</button>
+                   <button class="btn btn-green" onclick="markPaid('${c.id}')"><i class="fa-solid fa-check"></i> Mark Paid</button>`}
             </td>
           `;
           billingBody.appendChild(row);
         });
       }
 
-      function sendReminder(customerId) {
+      // Invoice modal
+      const modal = document.getElementById('invoiceModal');
+      const invoiceContent = document.getElementById('invoiceContent');
+      const closeModal = document.querySelector('.close');
+      closeModal.onclick = () => { modal.style.display = 'none'; };
+
+      function openInvoiceModal(customerId) {
+        const customer = billingData.find(c => c.id === customerId);
+        if (!customer) return;
+
+        invoiceContent.innerHTML = `
+          <p><strong>Customer ID:</strong> ${customer.id}</p>
+          <p><strong>Name:</strong> ${customer.name}</p>
+          <p><strong>Address:</strong> ${customer.address}</p>
+          <p><strong>Month:</strong> ${customer.month}</p>
+          <p><strong>Bill Amount:</strong> ৳${customer.amount.toLocaleString()}</p>
+          <p><strong>Payment Method:</strong> ${customer.method}</p>
+          <p><strong>Status:</strong> ${customer.paid ? 'Paid' : 'Unpaid'}</p>
+        `;
+        modal.style.display = 'block';
+      }
+
+      function printInvoice() {
+        const printWindow = window.open('', 'PRINT', 'height=400,width=600');
+        printWindow.document.write('<html><head><title>Invoice</title></head><body>');
+        printWindow.document.write(invoiceContent.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      }
+
+      function downloadInvoice() {
+        const doc = new jsPDF();
+        doc.text(invoiceContent.innerText, 10, 10);
+        doc.save('invoice.pdf');
+      }
+
+      function markPaid(customerId) {
         const customer = billingData.find(c => c.id === customerId);
         if (customer) {
-          alert(`Reminder sent to ${customer.name} for payment.`);
+          customer.paid = true;
+          renderBillingTable(billingData);
+          alert(`Payment marked as paid for ${customer.name}`);
         }
       }
 
@@ -298,3 +474,4 @@
     </script>
   </body>
 </html>
+
