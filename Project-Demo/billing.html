@@ -357,6 +357,7 @@
       </header>
 
       <div class="page-content">
+        
 
         <!-- NEW TOP BILLING UI -->
         <div class="billing-hero">
@@ -392,6 +393,10 @@
         <h1>Monthly Billing</h1>
         <div class="card">
           <div class="data-table-container">
+            <button onclick="exportToExcel()" class="btn btn-green" style="margin-bottom:10px;">
+  <i class="fa-solid fa-file-excel"></i> Export Excel Report
+</button>
+
             <table id="billingTable" class="client-table">
               <thead>
                 <tr>
@@ -424,8 +429,29 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
+      function exportToExcel() {
+
+  const dataForExcel = billingData.map(c => ({
+    "Customer ID": c.id,
+    "Name": c.name,
+    "Address": c.address,
+    "Month": c.month,
+    "Bill Amount (BDT)": c.amount,
+    "Status": c.paid ? "Paid" : "Unpaid",
+    "Payment Method": c.method
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(dataForExcel);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Billing Report");
+
+  XLSX.writeFile(workbook, "Smart_ISP_Billing_Report.xlsx");
+}
+
       const { jsPDF } = window.jspdf;
 
       const sidebarToggle = document.querySelector('.sidebar-toggle');
