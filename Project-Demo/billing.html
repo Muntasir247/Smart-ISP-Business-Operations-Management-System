@@ -105,6 +105,87 @@
       .modal button {
         margin-top: 10px;
       }
+
+      /* ===== NEW BILLING HEADER UI ===== */
+      .billing-hero {
+        background: linear-gradient(90deg, #091c45);
+        padding: 25px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .billing-hero h1 {
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: 1px;
+      }
+
+      .billing-summary {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .summary-card {
+        flex: 1;
+        min-width: 280px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 18px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      }
+
+      .summary-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .upgrade-btn {
+        background: #051b4b;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .payment-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .payment-box i {
+        font-size: 26px;
+        color: #f59e0b;
+      }
+
+      .change-btn {
+        background: #e5e7eb;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .usage-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      .usage-fill {
+        width: 90%;
+        height: 100%;
+        background: #0aa741;
+      }
     </style>
   </head>
   <body>
@@ -118,7 +199,6 @@
           <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         </li>
 
-        <!-- Billing Menu -->
         <li class="has-submenu active">
           <a href="#" class="active">
             <i class="fa-solid fa-file-invoice-dollar"></i> Billing
@@ -133,7 +213,6 @@
           </ul>
         </li>
 
-        <!-- Configuration -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-cogs"></i> Configuration
             <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
@@ -143,7 +222,6 @@
           </ul>
         </li>
 
-        <!-- Client -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-user"></i> Client
             <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
@@ -159,156 +237,107 @@
           </ul>
         </li>
 
-        <!-- Other sidebar items remain the same -->
-         <!-- Mikrotik Server -->
         <li class="has-submenu">
-          <a href="#">
-            <i class="fa-solid fa-server"></i> Mikrotik Server
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+          <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="bulk_client_import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li>
           </ul>
         </li>
 
-        <!-- HR & Payroll -->
         <li class="has-submenu">
-          <a href="#">
-            <i class="fa-solid fa-users-gear"></i> HR & Payroll
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+          <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Leave Management -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Events & Holidays -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Support & Ticketing -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Task Management -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-list-check"></i> Task Management
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Bandwidth Buy -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Purchase -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Inventory -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Assets -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
 
-        <!-- Income -->
         <li class="has-submenu">
           <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income
-            <i
-              class="fa-solid fa-caret-right"
-              style="float:right;font-size:10px;margin-top:5px"
-            ></i>
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
           </a>
           <ul class="submenu">
             <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
           </ul>
         </li>
-      </ul>
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <div class="main-content">
       <header>
         <div class="header-left">
@@ -328,6 +357,38 @@
       </header>
 
       <div class="page-content">
+
+        <!-- NEW TOP BILLING UI -->
+        <div class="billing-hero">
+          <h1>Billing and Invoicing Screen</h1>
+        </div>
+
+        <div class="billing-summary">
+          <div class="summary-card">
+            <div class="summary-head">
+              <h3>Current Plan Summary</h3>
+              <button class="upgrade-btn">Upgrade</button>
+            </div>
+            <p><strong>Plan:</strong> Growth Plan</p>
+            <p><strong>Billing Cycle:</strong> Monthly</p>
+            <p><strong>Cost:</strong> ৳5698</p>
+            <div class="usage-bar"><div class="usage-fill"></div></div>
+            <small>4850 out of 5k monthly active users</small>
+          </div>
+
+          <div class="summary-card">
+            <h3>Payment Method</h3>
+            <div class="payment-box">
+              <i class="fa-brands fa-cc-mastercard"></i>
+              <div>
+                <p><strong>Master Card</strong></p>
+                <small>**** **** **** 4002</small>
+              </div>
+              <button class="change-btn">Change</button>
+            </div>
+          </div>
+        </div>
+
         <h1>Monthly Billing</h1>
         <div class="card">
           <div class="data-table-container">
@@ -363,17 +424,16 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
       const { jsPDF } = window.jspdf;
 
-      // Sidebar toggle
       const sidebarToggle = document.querySelector('.sidebar-toggle');
       const sidebar = document.querySelector('.sidebar');
       sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
       });
 
-      // Submenu toggle
       document.querySelectorAll('.sidebar .has-submenu > a').forEach(menu => {
         menu.addEventListener('click', function(e) {
           e.preventDefault();
@@ -382,7 +442,6 @@
         });
       });
 
-      // Sample Billing Data
       const billingData = [
         {id: 'C1001', name: 'John Doe', address: '123 Main St', month: 'January', amount: 5000, paid: true, method: 'Bkash'},
         {id: 'C1002', name: 'Jane Smith', address: '456 Elm St', month: 'January', amount: 4500, paid: false, method: 'Nagad'},
@@ -404,29 +463,22 @@
             <td>৳${c.amount.toLocaleString()}</td>
             <td>${c.paid ? '<span style="color:green">Paid</span>' : '<span style="color:red">Unpaid</span>'}</td>
             <td>${c.method}</td>
-           <td>
-  <!-- Invoice button always available -->
-  <button class="btn btn-navy" onclick="openInvoiceModal('${c.id}')">
-    <i class="fa-solid fa-file-invoice"></i> Invoice
-  </button>
-
-  <!-- Reminder only for unpaid -->
-  ${!c.paid ? `<button class="btn btn-default" onclick="sendReminder('${c.id}')">
-    <i class="fa-solid fa-envelope"></i> Reminder
-  </button>` : ''}
-
-  <!-- Mark Paid only for unpaid -->
-  ${!c.paid ? `<button class="btn btn-green" onclick="markPaid('${c.id}')">
-    <i class="fa-solid fa-check"></i> Mark Paid
-  </button>` : '<button class="btn btn-default" disabled>Paid</button>'}
-</td>
-
+            <td>
+              <button class="btn btn-navy" onclick="openInvoiceModal('${c.id}')">
+                <i class="fa-solid fa-file-invoice"></i> Invoice
+              </button>
+              ${!c.paid ? `<button class="btn btn-default" onclick="sendReminder('${c.id}')">
+                <i class="fa-solid fa-envelope"></i> Reminder
+              </button>` : ''}
+              ${!c.paid ? `<button class="btn btn-green" onclick="markPaid('${c.id}')">
+                <i class="fa-solid fa-check"></i> Mark Paid
+              </button>` : '<button class="btn btn-default" disabled>Paid</button>'}
+            </td>
           `;
           billingBody.appendChild(row);
         });
       }
 
-      // Invoice modal
       const modal = document.getElementById('invoiceModal');
       const invoiceContent = document.getElementById('invoiceContent');
       const closeModal = document.querySelector('.close');
@@ -458,7 +510,6 @@
         printWindow.print();
         printWindow.close();
       }
-      
 
       function downloadInvoice() {
         const doc = new jsPDF();
@@ -475,16 +526,20 @@
         }
       }
 
-      // Search
+      function sendReminder(customerId) {
+        const customer = billingData.find(c => c.id === customerId);
+        if (!customer) return;
+        alert(`📩 Reminder sent to ${customer.name} (${customer.method}) for ৳${customer.amount}`);
+        console.log(`Reminder sent to ${customer.name}`);
+      }
+
       document.getElementById('searchInput').addEventListener('input', function() {
         const val = this.value.toLowerCase();
         const filtered = billingData.filter(c => c.name.toLowerCase().includes(val) || c.id.toLowerCase().includes(val));
         renderBillingTable(filtered);
       });
 
-      // Initial render
       renderBillingTable(billingData);
     </script>
   </body>
 </html>
-
