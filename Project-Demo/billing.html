@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Smart ISP - Billing</title>
+    <style>
+      /* Sidebar submenu always visible */
+      .sidebar .submenu {
+        display: block;
+        padding-left: 20px;
+      }
+
+      /* Highlight active menu */
+      .sidebar a.active {
+        background-color: #1f2937;
+        color: #fff;
+      }
+
+      /* Optional: rotate caret for active submenu */
+      .sidebar .has-submenu > a.active i.fa-caret-right {
+        transform: rotate(90deg);
+        transition: transform 0.3s;
+      }
+
+      /* Simple table styling */
+      .client-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .client-table th, .client-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      .btn {
+        padding: 5px 10px;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .btn-navy {
+        background-color: #1e3a8a;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Smart ISP
+      </div>
+      <ul class="menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Billing Menu (keep only this one) -->
+        <li class="has-submenu">
+          <a href="#" class="active">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html" class="active"><i class="fa-regular fa-circle"></i> Monthly Billing</a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Configuration -->
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-cogs"></i> Configuration
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-user"></i> Client
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> New Request</a></li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Add New</a></li>
+            <li><a href="client_list.html"><i class="fa-regular fa-circle"></i> Client List</a></li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Left Client</a></li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Scheduler</a></li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Change Request</a></li>
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Portal Manage</a></li>
+          </ul>
+        </li>
+
+        <!-- Other menus remain intact -->
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="bulk_client_import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-list-check"></i> Task Management
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Customer or ID" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
+          <div class="notifications"><i class="fa-solid fa-bell"></i> <span class="badge">0</span></div>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <h1>Monthly Billing</h1>
+        <div class="card">
+          <div class="data-table-container">
+            <table id="billingTable" class="client-table">
+              <thead>
+                <tr>
+                  <th>Customer ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Month</th>
+                  <th>Bill Amount</th>
+                  <th>Paid</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="billingBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample Billing Data
+      const billingData = [
+        {id: 'C1001', name: 'John Doe', address: '123 Main St', month: 'January', amount: 50, paid: true},
+        {id: 'C1002', name: 'Jane Smith', address: '456 Elm St', month: 'January', amount: 45, paid: false},
+        {id: 'C1003', name: 'Robert Brown', address: '789 Oak St', month: 'January', amount: 60, paid: true},
+        {id: 'C1004', name: 'Emily Davis', address: '321 Pine St', month: 'January', amount: 55, paid: false},
+      ];
+
+      const billingBody = document.getElementById('billingBody');
+
+      function renderBillingTable(data) {
+        billingBody.innerHTML = '';
+        data.forEach(c => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${c.id}</td>
+            <td>${c.name}</td>
+            <td>${c.address}</td>
+            <td>${c.month}</td>
+            <td>$${c.amount.toFixed(2)}</td>
+            <td>${c.paid ? '<span style="color:green">Paid</span>' : '<span style="color:red">Unpaid</span>'}</td>
+            <td>
+              ${c.paid 
+                ? '' 
+                : `<button class="btn btn-navy" onclick="sendReminder('${c.id}')"><i class="fa-solid fa-envelope"></i> Send Reminder</button>`}
+            </td>
+          `;
+          billingBody.appendChild(row);
+        });
+      }
+
+      function sendReminder(customerId) {
+        const customer = billingData.find(c => c.id === customerId);
+        if (customer) {
+          alert(`Reminder sent to ${customer.name} for payment.`);
+        }
+      }
+
+      // Search
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const val = this.value.toLowerCase();
+        const filtered = billingData.filter(c => c.name.toLowerCase().includes(val) || c.id.toLowerCase().includes(val));
+        renderBillingTable(filtered);
+      });
+
+      // Initial render
+      renderBillingTable(billingData);
+    </script>
+  </body>
+</html>
