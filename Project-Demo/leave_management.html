@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart ISP – Leave Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* ===== Leave Management Layout ===== */
+    .leave-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .leave-header h1 {
+      font-size: 22px;
+      color: #1e3a8a;
+    }
+
+    .leave-btn {
+      background: #0d1b2a;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .leave-dashboard {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+    }
+
+    /* ===== Stats Card ===== */
+    .stats-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+    }
+
+    .stats-card h3 {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 5px;
+    }
+
+    .stats-card p {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    /* ===== Employee List ===== */
+    .employee-list {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .employee {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .employee img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .employee-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .status {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .approved { background: #dcfce7; color: #15803d; }
+    .pending  { background: #fef3c7; color: #92400e; }
+    .denied   { background: #fee2e2; color: #b91c1c; }
+
+    /* ===== Timeline ===== */
+    .timeline {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+
+    .timeline-header {
+      display: grid;
+      grid-template-columns: 200px repeat(7, 1fr);
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 200px repeat(7, 1fr);
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .timeline-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 10px;
+    }
+
+    .bar.orange { background: #f59e0b; }
+    .bar.blue   { background: #3b82f6; }
+    .bar.pink   { background: #ec4899; }
+  </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="brand"><i class="fa-solid fa-circle-nodes"></i> Smart ISP</div>
+  <ul class="menu">
+    <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+    <li class="has-submenu open">
+      <a href="#" class="active">
+        <i class="fa-solid fa-door-open"></i> Leave Management
+      </a>
+    </li>
+  </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+    </div>
+    <div class="header-right">
+      <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Page Header -->
+    <div class="leave-header">
+      <h1>Leave Management</h1>
+      <button class="leave-btn"><i class="fa-solid fa-plus"></i> Add Leave Request</button>
+    </div>
+
+    <div class="leave-dashboard">
+
+      <!-- LEFT COLUMN -->
+      <div>
+
+        <div class="stats-card">
+          <h3>Total Employees</h3>
+          <p>1832</p>
+        </div>
+
+        <div class="stats-card">
+          <h3>Working Employees</h3>
+          <p>1796</p>
+        </div>
+
+        <div class="stats-card">
+          <h3>Pending Approval</h3>
+          <p>39</p>
+        </div>
+
+        <div class="employee-list">
+          <div class="employee">
+            <img src="https://i.pravatar.cc/40?img=1">
+            <div class="employee-name">Ignatius Anto</div>
+            <span class="status approved">Approved</span>
+          </div>
+          <div class="employee">
+            <img src="https://i.pravatar.cc/40?img=2">
+            <div class="employee-name">Joe Kurian</div>
+            <span class="status pending">Pending</span>
+          </div>
+          <div class="employee">
+            <img src="https://i.pravatar.cc/40?img=3">
+            <div class="employee-name">Sahana Nigam</div>
+            <span class="status denied">Denied</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="timeline">
+
+        <div class="timeline-header">
+          <div>Employee</div>
+          <div>18 Jun</div>
+          <div>19 Jun</div>
+          <div>20 Jun</div>
+          <div>21 Jun</div>
+          <div>22 Jun</div>
+          <div>23 Jun</div>
+          <div>24 Jun</div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="timeline-name">Ignatius Anto</div>
+          <div></div><div></div>
+          <div class="bar orange"></div>
+          <div class="bar orange"></div>
+          <div class="bar orange"></div>
+          <div></div><div></div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="timeline-name">Joe Kurian</div>
+          <div></div>
+          <div class="bar blue"></div>
+          <div class="bar blue"></div>
+          <div></div><div></div><div></div><div></div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="timeline-name">Sahana Nigam</div>
+          <div></div><div></div><div></div>
+          <div class="bar pink"></div>
+          <div class="bar pink"></div>
+          <div></div><div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.querySelector('.sidebar-toggle')
+    .addEventListener('click', () =>
+      document.querySelector('.sidebar').classList.toggle('active')
+    );
+</script>
+
+</body>
+</html>
