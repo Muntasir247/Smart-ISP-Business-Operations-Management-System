@@ -3,13 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart ISP - Bulk Clients Import</title>
+    <title>Smart ISP - Ticket List</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- FontAwesome for Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <style>
+      .ticket-filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .priority-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .priority-high { background: #e53935; }
+      .priority-medium { background: #ff9800; }
+      .priority-low { background: #43a047; }
+      
+      .ticket-id {
+        font-weight: 700;
+        color: #3498db;
+      }
+    </style>
   </head>
   <body>
     <!-- Sidebar -->
@@ -19,7 +43,9 @@
       </div>
       <ul class="menu">
         <li>
-          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+          <a href="index.html"
+            ><i class="fa-solid fa-gauge"></i> Dashboard</a
+          >
         </li>
 
         <li class="has-submenu">
@@ -103,22 +129,17 @@
           </ul>
         </li>
 
-        <li class="has-submenu open">
+        <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-server"></i> Mikrotik Server
             <i
               class="fa-solid fa-caret-right"
-              style="
-                float: right;
-                font-size: 10px;
-                margin-top: 5px;
-                transform: rotate(90deg);
-              "
+              style="float: right; font-size: 10px; margin-top: 5px"
             ></i
           ></a>
-          <ul class="submenu" style="max-height: 500px">
+          <ul class="submenu">
             <li>
-              <a href="Bulk_Client_Import.html" class="active"
+              <a href="Bulk_Client_Import.html"
                 ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
               >
             </li>
@@ -176,16 +197,16 @@
           </ul>
         </li>
 
-        <li class="has-submenu">
+        <li class="has-submenu open">
           <a href="#"
             ><i class="fa-solid fa-headset"></i> Support & Ticketing
             <i
               class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
+              style="float: right; font-size: 10px; margin-top: 5px; transform: rotate(90deg)"
             ></i
           ></a>
-          <ul class="submenu">
-            <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+          <ul class="submenu" style="max-height: 500px">
+            <li><a href="ticket_list.html" class="active"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
             <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
             <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
             <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
@@ -299,147 +320,118 @@
       </ul>
     </aside>
 
-    <!-- Main Content Area -->
     <div class="main-content">
-      <!-- Header -->
       <header>
         <div class="header-left">
           <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
           <div class="search-box">
-            <input type="text" placeholder="Search Customer" />
+            <input type="text" placeholder="Search Tickets" />
             <i class="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
         <div class="header-right">
-          <div class="monitor">
-            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
-          </div>
-          <div class="releases">
-            <i class="fa-solid fa-wrench"></i> Releases
-            <span class="badge">0</span>
-          </div>
-          <div class="notifications">
-            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
-          </div>
-          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i> Admin</div>
         </div>
       </header>
 
-      <!-- Page Content -->
       <div class="page-content">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fa-solid fa-users"></i> Bulk Clients Import
-              <span class="warning-text"
-                >(Your Uploaded Data Will No Longer Available After 24
-                Hours!!!)</span
-              >
-            </div>
-            <div
-              style="
-                font-size: 12px;
-                color: #888;
-                float: right;
-                margin-top: -20px;
-              "
-            >
-              <i class="fa-solid fa-file"></i> Client > Bulk Import
+        <div class="content-header">
+          <h1>Support Ticket List</h1>
+          <p>Manage and respond to client support requests</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-ticket"></i></div>
+            <div class="stat-info">
+              <h3>24</h3>
+              <p>Total Open</p>
             </div>
           </div>
-
-          <div class="toggle-switch">
-            Learn How to Import Clients...
-            <label class="switch">
-              <input type="checkbox" />
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="import-controls">
-            <button class="btn btn-default">
-              <i class="fa-solid fa-file-excel"></i> Download Sample Excel
-            </button>
-
-            <div class="btn-group">
-              <button class="btn btn-navy">
-                <i class="fa-solid fa-file-import"></i> Upload Importable
-                Clients(Excel)
-              </button>
-              <button class="btn btn-navy">
-                <i class="fa-solid fa-file-export"></i> Download Edited Data
-              </button>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #e53935; background: #ffebee;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="stat-info">
+              <h3>5</h3>
+              <p>High Priority</p>
             </div>
           </div>
-
-          <div class="filter-section">
-            <button class="btn btn-navy" style="background-color: #1a3c5e">
-              <i class="fa-solid fa-broom"></i> Clear All Clients
-            </button>
-
-            <div class="entries-select">
-              SHOW
-              <select style="padding: 5px">
-                <option>All</option>
-              </select>
-              ENTRIES
-            </div>
-
-            <div class="search-field">
-              SEARCH: <input type="text" placeholder="" />
-            </div>
-          </div>
-
-          <div class="data-table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Mobile</th>
-                  <th>Email</th>
-                  <th>NationalID</th>
-                  <th>Address</th>
-                  <th>Zone</th>
-                  <th>Conn.Type</th>
-                  <th>Server</th>
-                  <th>Prot.Type</th>
-                  <th>Profile</th>
-                  <th>UserName</th>
-                  <th>Password</th>
-                  <th>C.Type</th>
-                  <th>Package</th>
-                  <th>B.Status</th>
-                  <th>M.Bill</th>
-                  <th>Bill.Month</th>
-                  <th>Join.Date</th>
-                  <th>Exp.Date</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colspan="20" style="text-align: center; padding: 20px">
-                    No data available in table
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-footer">
-            <div>Showing 0 to 0 of 0 entries</div>
-            <div class="pagination">
-              <a href="#">Previous</a>
-              <a href="#" class="active">1</a>
-              <a href="#">Next</a>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #43a047; background: #e8f5e9;"><i class="fa-solid fa-check-double"></i></div>
+            <div class="stat-info">
+              <h3>156</h3>
+              <p>Resolved Today</p>
             </div>
           </div>
         </div>
+
+        <div class="card">
+          <div class="ticket-filters">
+            <div class="form-group" style="flex: 0 0 200px">
+              <select>
+                <option>All Status</option>
+                <option>Open</option>
+                <option>Pending</option>
+                <option>Resolved</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 0 0 200px">
+              <select>
+                <option>All Priority</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+            </div>
+            <button class="btn btn-navy" style="margin-left: auto;">
+              <i class="fa-solid fa-filter"></i> Apply Filters
+            </button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Subject</th>
+                <th>Client</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Last Update</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ticket-id">#TK-8842</td>
+                <td>Internet connection dropping frequently</td>
+                <td>John Doe</td>
+                <td><span class="priority-indicator priority-high"></span> High</td>
+                <td><span class="status-badge pending">Open</span></td>
+                <td>10 mins ago</td>
+                <td><button class="btn btn-default btn-sm">View</button></td>
+              </tr>
+              <tr>
+                <td class="ticket-id">#TK-8839</td>
+                <td>Router configuration help needed</td>
+                <td>Sarah Smith</td>
+                <td><span class="priority-indicator priority-medium"></span> Medium</td>
+                <td><span class="status-badge scheduled">Pending</span></td>
+                <td>2 hours ago</td>
+                <td><button class="btn btn-default btn-sm">View</button></td>
+              </tr>
+              <tr>
+                <td class="ticket-id">#TK-8835</td>
+                <td>Billing discrepancy for Jan 2026</td>
+                <td>Michael Brown</td>
+                <td><span class="priority-indicator priority-low"></span> Low</td>
+                <td><span class="status-badge completed">Resolved</span></td>
+                <td>5 hours ago</td>
+                <td><button class="btn btn-default btn-sm">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    <div class="chat-widget">Send message</div>
-
     <script src="script.js"></script>
   </body>
 </html>
