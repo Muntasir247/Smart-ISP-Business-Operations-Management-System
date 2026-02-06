@@ -5,69 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <title>Smart ISP - Billing</title>
+  <title>Smart ISP - Dashboard</title>
+  
 </head>
+
+
+
 <body>
 
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="brand">
-      <i class="fa-solid fa-circle-nodes"></i> Smart ISP
-    </div>
-    <ul class="menu">
-      <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+  <!-- Sidebar -->
+<aside class="sidebar">
+  <div class="brand">
+    <i class="fa-solid fa-circle-nodes"></i> Smart ISP
+  </div>
 
-      <li class="has-submenu">
-        <a href="#"><i class="fa-solid fa-cogs"></i> Configuration</a>
-        <ul class="submenu">
-          <li><a href="dropdown1.html">Dropdown 1</a></li>
-        </ul>
-      </li>
+  <ul class="menu">
 
-      <li class="has-submenu">
-        <a href="#"><i class="fa-solid fa-user"></i> Client</a>
-        <ul class="submenu">
-          <li><a href="dropdown1.html">New Request</a></li>
-          <li><a href="dropdown1.html">Add New</a></li>
-          <li><a href="client_list.html">Client List</a></li>
-          <li><a href="dropdown1.html">Left Client</a></li>
-          <li><a href="dropdown1.html">Scheduler</a></li>
-          <li><a href="dropdown1.html">Change Request</a></li>
-          <li><a href="dropdown1.html">Portal Manage</a></li>
-        </ul>
-      </li>
+    <li>
+      <a href="index.html">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+    </li>
 
-      <!-- Billing menu -->
-      <li class="has-submenu">
-        <a href="billing.html" id="menu-billing"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
-      </li>
+    <!-- Configuration -->
+    <li class="has-submenu">
+      <a href="#">
+        <i class="fa-solid fa-cogs"></i> Configuration
+        <i class="fa-solid fa-caret-right caret"></i>
+      </a>
+      <ul class="submenu">
+        <li>
+          <a href="dropdown1.html">
+            <i class="fa-regular fa-circle"></i> Dropdown 1
+          </a>
+        </li>
+      </ul>
+    </li>
 
-      <li class="has-submenu">
-        <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server</a>
-        <ul class="submenu">
-          <li><a href="bulk_client_import.html">Bulk Client Import</a></li>
-        </ul>
-      </li>
+    <!-- Client Menu -->
+<li class="has-submenu">
+  <a href="#">
+    <i class="fa-solid fa-user"></i> Client
+    <i class="fa-solid fa-caret-right caret"></i>
+  </a>
 
-      <li>
-        <a href="leave_management.html">
-          <i class="fa-solid fa-door-open"></i>
-          Leave Management
-        </a>
-      </li>
+  <ul class="submenu">
+    <li>
+      <a href="client_list.html">
+        <i class="fa-regular fa-circle"></i> Client List
+      </a>
+    </li>
 
-      <!-- Add your other menus here as in original -->
-    </ul>
-  </aside>
+    <li>
+      <a href="client_add.html">
+        <i class="fa-regular fa-circle"></i> Add New
+      </a>
+    </li>
+
+    <li>
+      <a href="client_request.html">
+        <i class="fa-regular fa-circle"></i> New Request
+      </a>
+    </li>
+
+    <li>
+      <a href="client_left.html">
+        <i class="fa-regular fa-circle"></i> Left Client
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+    <!-- BILLING (SINGLE PAGE - NO SUBMENU) -->
+    <li>
+      <a href="billing.html">
+        <i class="fa-solid fa-file-invoice-dollar"></i> Billing
+      </a>
+    </li>
+
+    <li>
+      <a href="bulk_client_import.html">
+        <i class="fa-solid fa-server"></i> Mikrotik Server
+      </a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll</a>
+    </li>
+
+    <li>
+      <a href="leave_management.html"><i class="fa-solid fa-door-open"></i> Leave Management</a>
+    </li>
+
+    <li>
+      <a href="events_holidays.html"><i class="fa-solid fa-calendar-days"></i> Events & Holidays</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-list-check"></i> Task Management</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets</a>
+    </li>
+
+    <li>
+      <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income</a>
+    </li>
+
+  </ul>
+</aside>
+
 
   <!-- Main Content -->
   <div class="main-content">
-    <!-- Header -->
     <header>
       <div class="header-left">
         <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
         <div class="search-box">
-          <input type="text" placeholder="Search Customer or ID" id="searchCustomer"/>
+          <input type="text" id="searchCustomer" placeholder="Search Customer or ID"/>
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
@@ -79,68 +153,10 @@
       </div>
     </header>
 
-    <!-- Page Content -->
     <div class="page-content">
-      <h1>Monthly Billing</h1>
-      
+      <h1>Dashboard</h1>
       <div class="card">
-        <div class="filter-section">
-          <input type="text" id="searchInput" placeholder="Search by Customer ID or Name" style="padding:5px; width:300px;">
-        </div>
-
-        <div class="data-table-container">
-          <table class="client-table" id="billingTable">
-            <thead>
-              <tr>
-                <th>Customer ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Monthly Bill</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>C1001</td>
-                <td>John Doe</td>
-                <td>123 Main St</td>
-                <td>$50</td>
-                <td>2026-02-05</td>
-                <td>Unpaid</td>
-                <td><button class="btn btn-navy" onclick="sendReminder('C1001')">Send Reminder</button></td>
-              </tr>
-              <tr>
-                <td>C1002</td>
-                <td>Jane Smith</td>
-                <td>456 Elm St</td>
-                <td>$40</td>
-                <td>2026-02-10</td>
-                <td>Paid</td>
-                <td><button class="btn btn-default" disabled>Paid</button></td>
-              </tr>
-              <tr>
-                <td>C1003</td>
-                <td>Robert Brown</td>
-                <td>789 Oak St</td>
-                <td>$55</td>
-                <td>2026-02-08</td>
-                <td>Unpaid</td>
-                <td><button class="btn btn-navy" onclick="sendReminder('C1003')">Send Reminder</button></td>
-              </tr>
-              <tr>
-                <td>C1004</td>
-                <td>Emily Davis</td>
-                <td>321 Pine St</td>
-                <td>$60</td>
-                <td>2026-02-12</td>
-                <td>Paid</td>
-                <td><button class="btn btn-default" disabled>Paid</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <p>Welcome to Smart ISP Dashboard. Use the sidebar to navigate through modules.</p>
       </div>
     </div>
   </div>
@@ -153,32 +169,37 @@
       sidebar.classList.toggle('active');
     });
 
-    // Highlight active menu
-    document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
-    const billingMenu = document.querySelector('#menu-billing');
-    if (billingMenu) billingMenu.classList.add('active');
+    // Submenu toggle
+   // Submenu toggle
+document.querySelectorAll('.sidebar .has-submenu > a').forEach(menu => {
+  menu.addEventListener('click', function(e) {
+    const parent = this.parentElement;
+    // Only toggle submenu if there is actually a <ul class="submenu">
+    const submenu = parent.querySelector('.submenu');
+    if(submenu) {
+      e.preventDefault(); // prevent link only if submenu exists
+      parent.classList.toggle('active');
+    }
+  });
+});
 
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('keyup', () => {
-      const filter = searchInput.value.toLowerCase();
-      const rows = document.querySelectorAll('#billingTable tbody tr');
-      rows.forEach(row => {
-        const id = row.cells[0].textContent.toLowerCase();
-        const name = row.cells[1].textContent.toLowerCase();
-        if (id.includes(filter) || name.includes(filter)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+
+    // Highlight active menu dynamically
+    const currentPage = location.pathname.split("/").pop();
+    document.querySelectorAll('.sidebar a').forEach(a => {
+      if(a.getAttribute('href') === currentPage){
+        a.classList.add('active');
+        const parentSubmenu = a.closest('.has-submenu');
+        if(parentSubmenu) parentSubmenu.classList.add('active');
+      }
     });
 
-    // Send reminder function
-    function sendReminder(customerId) {
-      alert(`Reminder sent to customer ${customerId}`);
-    }
+    // Optional: search filtering logic for future table
+    document.getElementById('searchCustomer')?.addEventListener('input', function() {
+      // implement table search here if table exists
+    });
   </script>
+  <script src="script.js"></script>
 
 </body>
 </html>
