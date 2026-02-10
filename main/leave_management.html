@@ -1,292 +1,714 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Smart ISP – Leave Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart ISP – Leave Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="leave_management.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
 
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+<body>
 
-    <style>
-      /* ===== Leave Management Layout ===== */
-      .leave-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="brand"><i class="fa-solid fa-circle-nodes"></i> Smart ISP</div>
+  <ul class="menu">
+    <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
 
-      .leave-header h1 {
-        font-size: 22px;
-        color: #1e3a8a;
-      }
-
-      .leave-btn {
-        background: #0d1b2a;
-        color: white;
-        border: none;
-        padding: 8px 14px;
-        border-radius: 6px;
-        cursor: pointer;
-      }
-
-      .leave-dashboard {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        gap: 20px;
-      }
-
-      /* ===== Stats Card ===== */
-      .stats-card {
-        background: #fff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        margin-bottom: 15px;
-      }
-
-      .stats-card h3 {
-        font-size: 13px;
-        color: #6b7280;
-        margin-bottom: 5px;
-      }
-
-      .stats-card p {
-        font-size: 22px;
-        font-weight: bold;
-        color: #1e3a8a;
-      }
-
-      /* ===== Employee List ===== */
-      .employee-list {
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      }
-
-      .employee {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        border-bottom: 1px solid #eee;
-      }
-
-      .employee img {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        margin-right: 10px;
-      }
-
-      .employee-name {
-        flex: 1;
-        font-size: 14px;
-        font-weight: 500;
-      }
-
-      .status {
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 600;
-      }
-
-      .approved {
-        background: #dcfce7;
-        color: #15803d;
-      }
-      .pending {
-        background: #fef3c7;
-        color: #92400e;
-      }
-      .denied {
-        background: #fee2e2;
-        color: #b91c1c;
-      }
-
-      /* ===== Timeline ===== */
-      .timeline {
-        background: #fff;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        overflow-x: auto;
-      }
-
-      .timeline-header {
-        display: grid;
-        grid-template-columns: 200px repeat(7, 1fr);
-        font-size: 12px;
-        color: #6b7280;
-        margin-bottom: 10px;
-      }
-
-      .timeline-row {
-        display: grid;
-        grid-template-columns: 200px repeat(7, 1fr);
-        align-items: center;
-        margin-bottom: 12px;
-      }
-
-      .timeline-name {
-        font-size: 13px;
-        font-weight: 500;
-      }
-
-      .bar {
-        height: 6px;
-        border-radius: 10px;
-      }
-
-      .bar.orange {
-        background: #f59e0b;
-      }
-      .bar.blue {
-        background: #3b82f6;
-      }
-      .bar.pink {
-        background: #ec4899;
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <i class="fa-solid fa-circle-nodes"></i> Smart ISP
-      </div>
-      <ul class="menu">
-        <li>
-          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-        </li>
-        <li class="has-submenu open">
-          <a href="#" class="active">
-            <i class="fa-solid fa-door-open"></i> Leave Management
-          </a>
-        </li>
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-cogs"></i> Configuration <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
       </ul>
-    </aside>
+    </li>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <!-- Header -->
-      <header>
-        <div class="header-left">
-          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">New Request</a></li>
+        <li><a href="dropdown1.html">Add New</a></li>
+        <li><a href="client_list.html">Client List</a></li>
+        <li><a href="dropdown1.html">Left Client</a></li>
+        <li><a href="dropdown1.html">Scheduler</a></li>
+        <li><a href="dropdown1.html">Change Request</a></li>
+        <li><a href="dropdown1.html">Portal Manage</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="billing.html">Monthly Billing</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="bulk_client_import.html">Bulk Client Import</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu open">
+      <a href="#" class="active"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="leave_management.html" class="active">View Leave Management</a></li>
+        <li><a href="dropdown1.html">Apply Leave</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+
+    <li class="has-submenu">
+      <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-chevron-right submenu-arrow"></i></a>
+      <ul class="submenu">
+        <li><a href="dropdown1.html">Dropdown 1</a></li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+      <div class="search-box">
+        <input type="text" placeholder="Search Customer or ID" id="searchCustomer"/>
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+      <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
+      <div class="notifications"><i class="fa-solid fa-bell"></i> <span class="badge">0</span></div>
+      <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Page Header -->
+    <div class="leave-header">
+      <h1>Leave Management System</h1>
+      <button class="leave-btn" onclick="openNewLeaveModal()"><i class="fa-solid fa-plus"></i> Add Leave Request</button>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="leave-stats-grid">
+      <div class="stats-card-main">
+        <div class="stats-icon" style="background: #3b82f6;">
+          <i class="fa-solid fa-users"></i>
         </div>
-        <div class="header-right">
-          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        <div class="stats-info">
+          <h3>Total Employees</h3>
+          <p>1832</p>
         </div>
-      </header>
+      </div>
 
-      <div class="page-content">
-        <!-- Page Header -->
-        <div class="leave-header">
-          <h1>Leave Management</h1>
-          <button class="leave-btn">
-            <i class="fa-solid fa-plus"></i> Add Leave Request
-          </button>
+      <div class="stats-card-main">
+        <div class="stats-icon" style="background: #10b981;">
+          <i class="fa-solid fa-user-check"></i>
         </div>
+        <div class="stats-info">
+          <h3>Working Today</h3>
+          <p>1796</p>
+        </div>
+      </div>
 
-        <div class="leave-dashboard">
-          <!-- LEFT COLUMN -->
-          <div>
-            <div class="stats-card">
-              <h3>Total Employees</h3>
-              <p>1832</p>
-            </div>
+      <div class="stats-card-main">
+        <div class="stats-icon" style="background: #f59e0b;">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <div class="stats-info">
+          <h3>Pending Approval</h3>
+          <p>39</p>
+        </div>
+      </div>
 
-            <div class="stats-card">
-              <h3>Working Employees</h3>
-              <p>1796</p>
-            </div>
-
-            <div class="stats-card">
-              <h3>Pending Approval</h3>
-              <p>39</p>
-            </div>
-
-            <div class="employee-list">
-              <div class="employee">
-                <img src="https://i.pravatar.cc/40?img=1" />
-                <div class="employee-name">Ignatius Anto</div>
-                <span class="status approved">Approved</span>
-              </div>
-              <div class="employee">
-                <img src="https://i.pravatar.cc/40?img=2" />
-                <div class="employee-name">Joe Kurian</div>
-                <span class="status pending">Pending</span>
-              </div>
-              <div class="employee">
-                <img src="https://i.pravatar.cc/40?img=3" />
-                <div class="employee-name">Sahana Nigam</div>
-                <span class="status denied">Denied</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- RIGHT COLUMN -->
-          <div class="timeline">
-            <div class="timeline-header">
-              <div>Employee</div>
-              <div>18 Jun</div>
-              <div>19 Jun</div>
-              <div>20 Jun</div>
-              <div>21 Jun</div>
-              <div>22 Jun</div>
-              <div>23 Jun</div>
-              <div>24 Jun</div>
-            </div>
-
-            <div class="timeline-row">
-              <div class="timeline-name">Ignatius Anto</div>
-              <div></div>
-              <div></div>
-              <div class="bar orange"></div>
-              <div class="bar orange"></div>
-              <div class="bar orange"></div>
-              <div></div>
-              <div></div>
-            </div>
-
-            <div class="timeline-row">
-              <div class="timeline-name">Joe Kurian</div>
-              <div></div>
-              <div class="bar blue"></div>
-              <div class="bar blue"></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-
-            <div class="timeline-row">
-              <div class="timeline-name">Sahana Nigam</div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div class="bar pink"></div>
-              <div class="bar pink"></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+      <div class="stats-card-main">
+        <div class="stats-icon" style="background: #ef4444;">
+          <i class="fa-solid fa-umbrella-beach"></i>
+        </div>
+        <div class="stats-info">
+          <h3>On Leave</h3>
+          <p>36</p>
         </div>
       </div>
     </div>
 
-    <script>
-      document
-        .querySelector(".sidebar-toggle")
-        .addEventListener("click", () =>
-          document.querySelector(".sidebar").classList.toggle("active"),
-        );
-    </script>
-  </body>
+    <!-- Filter Section -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="leave-filter-section">
+        <div class="filter-group">
+          <label>Status Filter</label>
+          <select id="statusFilter" onchange="filterLeaves()">
+            <option value="all">All Requests</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Leave Type</label>
+          <select id="typeFilter" onchange="filterLeaves()">
+            <option value="all">All Types</option>
+            <option value="sick">Sick Leave</option>
+            <option value="casual">Casual Leave</option>
+            <option value="annual">Annual Leave</option>
+            <option value="maternity">Maternity Leave</option>
+            <option value="emergency">Emergency Leave</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Search Employee</label>
+          <input type="text" id="searchEmployee" placeholder="Search by name or ID..." onkeyup="filterLeaves()">
+        </div>
+
+        <div class="filter-group">
+          <label>Date Range</label>
+          <input type="date" id="dateFrom" onchange="filterLeaves()">
+        </div>
+
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-default" onclick="clearFilters()">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leave Requests Table -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-list"></i> Leave Requests</h2>
+      </div>
+
+      <div class="data-table-container">
+        <table class="client-table" id="leaveTable">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Employee Name</th>
+              <th>Department</th>
+              <th>Leave Type</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Days</th>
+              <th>Reason</th>
+              <th>Applied On</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="leaveTableBody">
+            <tr data-status="pending" data-type="sick" data-employee="john doe">
+              <td>EMP001</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=1" style="width: 32px; height: 32px; border-radius: 50%;" alt="John Doe">
+                  <span>John Doe</span>
+                </div>
+              </td>
+              <td>Engineering</td>
+              <td><span class="leave-type sick">Sick Leave</span></td>
+              <td>2026-02-15</td>
+              <td>2026-02-17</td>
+              <td>3</td>
+              <td>Medical treatment required</td>
+              <td>2026-02-10</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn-action approve" onclick="approveLeave(this)" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject">
+                  <i class="fa-solid fa-times"></i>
+                </button>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="approved" data-type="annual" data-employee="jane smith">
+              <td>EMP002</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=2" style="width: 32px; height: 32px; border-radius: 50%;" alt="Jane Smith">
+                  <span>Jane Smith</span>
+                </div>
+              </td>
+              <td>Marketing</td>
+              <td><span class="leave-type annual">Annual Leave</span></td>
+              <td>2026-02-20</td>
+              <td>2026-02-27</td>
+              <td>7</td>
+              <td>Family vacation</td>
+              <td>2026-02-05</td>
+              <td><span class="status approved">Approved</span></td>
+              <td>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button class="btn-action cancel" onclick="cancelLeave(this)" title="Cancel">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="pending" data-type="casual" data-employee="robert brown">
+              <td>EMP003</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=3" style="width: 32px; height: 32px; border-radius: 50%;" alt="Robert Brown">
+                  <span>Robert Brown</span>
+                </div>
+              </td>
+              <td>Operations</td>
+              <td><span class="leave-type casual">Casual Leave</span></td>
+              <td>2026-02-12</td>
+              <td>2026-02-12</td>
+              <td>1</td>
+              <td>Personal work</td>
+              <td>2026-02-08</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn-action approve" onclick="approveLeave(this)" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject">
+                  <i class="fa-solid fa-times"></i>
+                </button>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="rejected" data-type="casual" data-employee="emily davis">
+              <td>EMP004</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=4" style="width: 32px; height: 32px; border-radius: 50%;" alt="Emily Davis">
+                  <span>Emily Davis</span>
+                </div>
+              </td>
+              <td>Finance</td>
+              <td><span class="leave-type casual">Casual Leave</span></td>
+              <td>2026-02-11</td>
+              <td>2026-02-13</td>
+              <td>3</td>
+              <td>Personal reasons</td>
+              <td>2026-02-09</td>
+              <td><span class="status denied">Rejected</span></td>
+              <td>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="approved" data-type="sick" data-employee="michael johnson">
+              <td>EMP005</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=5" style="width: 32px; height: 32px; border-radius: 50%;" alt="Michael Johnson">
+                  <span>Michael Johnson</span>
+                </div>
+              </td>
+              <td>IT Support</td>
+              <td><span class="leave-type sick">Sick Leave</span></td>
+              <td>2026-02-08</td>
+              <td>2026-02-09</td>
+              <td>2</td>
+              <td>Fever and flu symptoms</td>
+              <td>2026-02-07</td>
+              <td><span class="status approved">Approved</span></td>
+              <td>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="pending" data-type="emergency" data-employee="sarah wilson">
+              <td>EMP006</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=6" style="width: 32px; height: 32px; border-radius: 50%;" alt="Sarah Wilson">
+                  <span>Sarah Wilson</span>
+                </div>
+              </td>
+              <td>HR</td>
+              <td><span class="leave-type emergency">Emergency Leave</span></td>
+              <td>2026-02-11</td>
+              <td>2026-02-11</td>
+              <td>1</td>
+              <td>Family emergency - urgent</td>
+              <td>2026-02-10</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn-action approve" onclick="approveLeave(this)" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject">
+                  <i class="fa-solid fa-times"></i>
+                </button>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="approved" data-type="annual" data-employee="david miller">
+              <td>EMP007</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=7" style="width: 32px; height: 32px; border-radius: 50%;" alt="David Miller">
+                  <span>David Miller</span>
+                </div>
+              </td>
+              <td>Sales</td>
+              <td><span class="leave-type annual">Annual Leave</span></td>
+              <td>2026-03-01</td>
+              <td>2026-03-10</td>
+              <td>10</td>
+              <td>Pre-planned vacation</td>
+              <td>2026-01-15</td>
+              <td><span class="status approved">Approved</span></td>
+              <td>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button class="btn-action cancel" onclick="cancelLeave(this)" title="Cancel">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr data-status="pending" data-type="maternity" data-employee="lisa anderson">
+              <td>EMP008</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://i.pravatar.cc/40?img=8" style="width: 32px; height: 32px; border-radius: 50%;" alt="Lisa Anderson">
+                  <span>Lisa Anderson</span>
+                </div>
+              </td>
+              <td>Customer Service</td>
+              <td><span class="leave-type maternity">Maternity Leave</span></td>
+              <td>2026-03-15</td>
+              <td>2026-06-15</td>
+              <td>92</td>
+              <td>Maternity leave as per policy</td>
+              <td>2026-02-01</td>
+              <td><span class="status pending">Pending</span></td>
+              <td>
+                <button class="btn-action approve" onclick="approveLeave(this)" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject">
+                  <i class="fa-solid fa-times"></i>
+                </button>
+                <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Leave Balance Summary -->
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fa-solid fa-chart-pie"></i> Leave Summary Statistics</h2>
+      </div>
+      
+      <div class="leave-summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">Total Requests (This Month)</div>
+          <div class="summary-value">8</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Approved</div>
+          <div class="summary-value" style="color: #10b981;">4</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Pending</div>
+          <div class="summary-value" style="color: #f59e0b;">4</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Rejected</div>
+          <div class="summary-value" style="color: #ef4444;">1</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal for Leave Details -->
+<div id="leaveDetailsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fa-solid fa-info-circle"></i> Leave Request Details</h2>
+      <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Details will be populated by JavaScript -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+// Filter leaves based on selected criteria
+function filterLeaves() {
+  const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+  const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
+  const searchEmployee = document.getElementById('searchEmployee').value.toLowerCase();
+  const dateFrom = document.getElementById('dateFrom').value;
+  
+  const rows = document.querySelectorAll('#leaveTableBody tr');
+  
+  rows.forEach(row => {
+    const status = row.getAttribute('data-status');
+    const type = row.getAttribute('data-type');
+    const employee = row.getAttribute('data-employee');
+    const startDate = row.cells[4].textContent;
+    
+    let showRow = true;
+    
+    // Status filter
+    if (statusFilter !== 'all' && status !== statusFilter) {
+      showRow = false;
+    }
+    
+    // Type filter
+    if (typeFilter !== 'all' && type !== typeFilter) {
+      showRow = false;
+    }
+    
+    // Employee search
+    if (searchEmployee && !employee.includes(searchEmployee)) {
+      showRow = false;
+    }
+    
+    // Date filter
+    if (dateFrom && startDate < dateFrom) {
+      showRow = false;
+    }
+    
+    row.style.display = showRow ? '' : 'none';
+  });
+}
+
+// Clear all filters
+function clearFilters() {
+  document.getElementById('statusFilter').value = 'all';
+  document.getElementById('typeFilter').value = 'all';
+  document.getElementById('searchEmployee').value = '';
+  document.getElementById('dateFrom').value = '';
+  filterLeaves();
+}
+
+// Approve leave
+function approveLeave(button) {
+  const row = button.closest('tr');
+  const employeeName = row.cells[1].textContent.trim();
+  
+  if (confirm(`Approve leave request for ${employeeName}?`)) {
+    const statusCell = row.querySelector('.status');
+    statusCell.className = 'status approved';
+    statusCell.textContent = 'Approved';
+    row.setAttribute('data-status', 'approved');
+    
+    // Update action buttons
+    row.cells[10].innerHTML = `
+      <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+      <button class="btn-action cancel" onclick="cancelLeave(this)" title="Cancel">
+        <i class="fa-solid fa-ban"></i>
+      </button>
+    `;
+    
+    alert('Leave request approved successfully!');
+  }
+}
+
+// Reject leave
+function rejectLeave(button) {
+  const row = button.closest('tr');
+  const employeeName = row.cells[1].textContent.trim();
+  
+  const reason = prompt(`Reject leave request for ${employeeName}?\n\nPlease provide a reason:`);
+  
+  if (reason) {
+    const statusCell = row.querySelector('.status');
+    statusCell.className = 'status denied';
+    statusCell.textContent = 'Rejected';
+    row.setAttribute('data-status', 'rejected');
+    
+    // Update action buttons
+    row.cells[10].innerHTML = `
+      <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+    `;
+    
+    alert('Leave request rejected!');
+  }
+}
+
+// Cancel approved leave
+function cancelLeave(button) {
+  const row = button.closest('tr');
+  const employeeName = row.cells[1].textContent.trim();
+  
+  if (confirm(`Cancel approved leave for ${employeeName}?`)) {
+    const statusCell = row.querySelector('.status');
+    statusCell.className = 'status denied';
+    statusCell.textContent = 'Cancelled';
+    row.setAttribute('data-status', 'rejected');
+    
+    row.cells[10].innerHTML = `
+      <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+    `;
+    
+    alert('Leave cancelled successfully!');
+  }
+}
+
+// View leave details in modal
+function viewLeaveDetails(button) {
+  const row = button.closest('tr');
+  const modal = document.getElementById('leaveDetailsModal');
+  const modalBody = document.getElementById('modalBody');
+  
+  const details = `
+    <div class="leave-details">
+      <div class="detail-row">
+        <strong>Employee ID:</strong> ${row.cells[0].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Employee Name:</strong> ${row.cells[1].textContent.trim()}
+      </div>
+      <div class="detail-row">
+        <strong>Department:</strong> ${row.cells[2].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Leave Type:</strong> ${row.cells[3].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Start Date:</strong> ${row.cells[4].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>End Date:</strong> ${row.cells[5].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Total Days:</strong> ${row.cells[6].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Reason:</strong> ${row.cells[7].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Applied On:</strong> ${row.cells[8].textContent}
+      </div>
+      <div class="detail-row">
+        <strong>Status:</strong> ${row.cells[9].textContent}
+      </div>
+    </div>
+  `;
+  
+  modalBody.innerHTML = details;
+  modal.style.display = 'block';
+}
+
+// Close modal
+function closeModal() {
+  document.getElementById('leaveDetailsModal').style.display = 'none';
+}
+
+// Open new leave request modal
+function openNewLeaveModal() {
+  alert('New Leave Request form would open here.\n\nThis would include:\n- Employee selection\n- Leave type\n- Date range\n- Reason\n- Supporting documents upload');
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  const modal = document.getElementById('leaveDetailsModal');
+  if (event.target == modal) {
+    modal.style.display = 'none';
+  }
+}
+</script>
+
+</body>
 </html>
