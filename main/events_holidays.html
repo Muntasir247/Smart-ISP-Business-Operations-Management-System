@@ -12,19 +12,93 @@
     />
 
     <style>
+      /* ===== HERO HEADER ===== */
+      .events-hero {
+        background: #091c45;
+        padding: 35px 30px;
+        border-radius: 12px;
+        color: white;
+        text-align: center;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      }
+
+      .events-hero h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+      }
+
+      .events-hero p {
+        margin: 8px 0 0;
+        font-size: 15px;
+        opacity: 0.9;
+      }
+
+      /* ===== QUICK STATS ===== */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border: 2px solid #e5e7eb;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-3px);
+        border-color: #091c45;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      }
+
+      .stat-card .stat-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .stat-card.holidays .stat-icon { color: #dc2626; }
+      .stat-card.events .stat-icon { color: #0ea5e9; }
+      .stat-card.upcoming .stat-icon { color: #f59e0b; }
+      .stat-card.total .stat-icon { color: #16a34a; }
+
+      .stat-card .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #091c45;
+        margin: 8px 0;
+      }
+
+      .stat-card .stat-label {
+        font-size: 13px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+      }
+
       /* ===== PAGE LAYOUT ===== */
       .events-container {
         display: grid;
-        grid-template-columns: 320px 1fr;
+        grid-template-columns: 380px 1fr;
         gap: 20px;
+        margin-bottom: 25px;
       }
 
       .calendar-box,
       .events-box {
         background: #ffffff;
         border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        padding: 22px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
       }
 
       /* ===== CALENDAR ===== */
@@ -32,70 +106,209 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 18px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e5e7eb;
       }
 
       .calendar-header h3 {
         margin: 0;
-        font-size: 16px;
-        color: #081435;
+        font-size: 18px;
+        color: #091c45;
+        font-weight: 700;
+      }
+
+      .calendar-header button {
+        background: #091c45;
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .calendar-header button:hover {
+        background: #1e40af;
+        transform: scale(1.05);
       }
 
       .calendar-wrapper {
-        max-height: 420px;
+        max-height: 450px;
         overflow-y: auto;
       }
 
       .calendar-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 6px;
+        gap: 8px;
         text-align: center;
         font-size: 13px;
       }
 
       .calendar-day {
-        font-weight: bold;
-        color: #6b7280;
+        font-weight: 700;
+        color: #091c45;
+        padding: 8px 0;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .calendar-date {
-        padding: 8px 0;
-        border-radius: 6px;
+        padding: 10px 0;
+        border-radius: 8px;
         cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        position: relative;
       }
 
       .calendar-date:hover {
         background: #e5e7eb;
+        transform: scale(1.05);
+      }
+
+      .calendar-date.today {
+        background: #091c45;
+        color: white;
+        font-weight: 700;
       }
 
       .holiday {
         background: #fee2e2;
-        color: #b91c1c;
-        font-weight: bold;
+        color: #dc2626;
+        font-weight: 700;
+        position: relative;
+      }
+
+      .holiday::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: #dc2626;
+        border-radius: 50%;
       }
 
       .event {
-        background: #e0f2fe;
-        color: #08212f;
-        font-weight: bold;
+        background: #dbeafe;
+        color: #0c4a6e;
+        font-weight: 700;
+        position: relative;
       }
+
+      .event::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: #0ea5e9;
+        border-radius: 50%;
+      }
+
+      /* ===== LEGEND ===== */
+      .calendar-legend {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 12px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+      }
+
+      .legend-color.holiday { background: #fee2e2; border: 1px solid #dc2626; }
+      .legend-color.event { background: #dbeafe; border: 1px solid #0ea5e9; }
+      .legend-color.today { background: #091c45; }
 
       /* ===== EVENT LIST ===== */
       .events-box h3 {
-        margin-top: 0;
-        color: #0b142c;
+        margin: 0 0 18px 0;
+        color: #091c45;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .events-box h3::before {
+        content: '';
+        width: 4px;
+        height: 24px;
+        background: #091c45;
+        border-radius: 10px;
+      }
+
+      .search-filter-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
       }
 
       .search-box {
-        margin-bottom: 12px;
+        flex: 1;
       }
 
       .search-box input {
         width: 100%;
-        padding: 8px;
+        padding: 10px 14px;
         border-radius: 8px;
-        border: 1px solid #d1d5db;
+        border: 2px solid #e5e7eb;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #091c45;
+        box-shadow: 0 0 0 3px rgba(9, 28, 69, 0.1);
+      }
+
+      .filter-select {
+        padding: 10px 14px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .filter-select:hover {
+        border-color: #091c45;
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: #091c45;
+        box-shadow: 0 0 0 3px rgba(9, 28, 69, 0.1);
+      }
+
+      .event-list-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 5px;
       }
 
       .event-item {
@@ -103,18 +316,105 @@
         justify-content: space-between;
         align-items: center;
         background: #f8fafc;
-        padding: 12px 15px;
+        padding: 14px 16px;
         border-radius: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        border: 2px solid #e5e7eb;
+        transition: all 0.3s ease;
       }
 
-      .event-item small {
+      .event-item:hover {
+        border-color: #091c45;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateX(5px);
+      }
+
+      .event-item.holiday-item {
+        border-left: 4px solid #dc2626;
+        background: #fef2f2;
+      }
+
+      .event-item.event-item-type {
+        border-left: 4px solid #0ea5e9;
+        background: #f0f9ff;
+      }
+
+      .event-info strong {
+        display: block;
+        color: #091c45;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+
+      .event-info small {
         color: #6b7280;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .event-type-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 5px;
+      }
+
+      .event-type-badge.holiday {
+        background: #fca5a5;
+        color: #7f1d1d;
+      }
+
+      .event-type-badge.event {
+        background: #7dd3fc;
+        color: #0c4a6e;
+      }
+
+      .event-actions {
+        display: flex;
+        gap: 10px;
       }
 
       .event-actions i {
         cursor: pointer;
+        font-size: 16px;
+        padding: 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .event-actions .fa-trash {
         color: #ef4444;
+      }
+
+      .event-actions .fa-trash:hover {
+        background: #fee2e2;
+        transform: scale(1.1);
+      }
+
+      .event-actions .fa-edit {
+        color: #0ea5e9;
+      }
+
+      .event-actions .fa-edit:hover {
+        background: #dbeafe;
+        transform: scale(1.1);
+      }
+
+      .no-events {
+        text-align: center;
+        padding: 40px 20px;
+        color: #9ca3af;
+      }
+
+      .no-events i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
       }
 
       /* ===== FLOAT ADD BUTTON ===== */
@@ -122,122 +422,385 @@
         position: fixed;
         bottom: 30px;
         right: 30px;
-        width: 55px;
-        height: 55px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
-        background: #071430;
+        background: #091c45;
         color: white;
-        font-size: 26px;
+        font-size: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 8px 24px rgba(9, 28, 69, 0.3);
+        transition: all 0.3s ease;
+        z-index: 100;
+      }
+
+      .add-btn:hover {
+        background: #1e40af;
+        transform: scale(1.1) rotate(90deg);
+        box-shadow: 0 12px 32px rgba(9, 28, 69, 0.4);
       }
 
       /* ===== MODAL ===== */
       .modal {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.45);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
         display: none;
         align-items: center;
         justify-content: center;
-        z-index: 50;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .modal.show {
+        display: flex;
       }
 
       .modal-content {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        width: 320px;
+        padding: 30px;
+        border-radius: 16px;
+        width: 420px;
+        max-width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-content h3 {
+        margin: 0 0 20px 0;
+        color: #091c45;
+        font-size: 22px;
+        font-weight: 700;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e5e7eb;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: #374151;
+        font-weight: 600;
+        font-size: 14px;
       }
 
       .modal-content input,
-      .modal-content select {
+      .modal-content select,
+      .modal-content textarea {
         width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
+        padding: 10px 14px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        font-family: inherit;
       }
+
+      .modal-content input:focus,
+      .modal-content select:focus,
+      .modal-content textarea:focus {
+        outline: none;
+        border-color: #091c45;
+        box-shadow: 0 0 0 3px rgba(9, 28, 69, 0.1);
+      }
+
+      .modal-content textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: #091c45;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #1e40af;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(9, 28, 69, 0.3);
+      }
+
+      .btn-secondary {
+        background: #e5e7eb;
+        color: #374151;
+      }
+
+      .btn-secondary:hover {
+        background: #d1d5db;
+      }
+
       /* ===== HOLIDAY TABLE ===== */
-.holiday-table-box {
-  margin-top: 40px;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-}
+      .holiday-table-box {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
+      }
 
-/* Scrollable wrapper */
-.holiday-table-wrapper {
-  max-height: 350px; /* adjust height as needed */
-  overflow-y: auto;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-.holiday-table-box {
-  margin-top: 30px;
-}
+      .holiday-table-box h2 {
+        margin: 0 0 20px 0;
+        color: #091c45;
+        font-size: 22px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-.holiday-table-wrapper {
-  max-height: 400px; /* scrollable height */
-  overflow-y: auto;
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-}
+      .holiday-table-box h2::before {
+        content: '';
+        width: 4px;
+        height: 28px;
+        background: #091c45;
+        border-radius: 10px;
+      }
 
-.holiday-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+      .table-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
 
-.holiday-table th,
-.holiday-table td {
-  padding: 12px 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
+      .table-search {
+        flex: 1;
+        min-width: 250px;
+      }
 
-.holiday-table th {
-  background: #0c1839;
-  color: white;
-}
+      .table-search input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+      }
 
-.holiday-table-box h2 {
-  margin-bottom: 15px;
-  color: #0d1b41;
-}
+      .export-btn {
+        background: #16a34a;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-.holiday-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
+      .export-btn:hover {
+        background: #15803d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+      }
 
-.holiday-table thead {
-  background: #0b183c;
-  color: white;
-  position: sticky;
-  top: 0; /* keep header visible while scrolling */
-  z-index: 1;
-}
+      .holiday-table-wrapper {
+        max-height: 450px;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 10px;
+        border: 2px solid #e5e7eb;
+      }
 
-.holiday-table th,
-.holiday-table td {
-  padding: 12px;
-  text-align: left;
-}
+      .holiday-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
 
-.holiday-table tbody tr {
-  border-bottom: 1px solid #e5e7eb;
-}
+      .holiday-table thead {
+        background: #091c45;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
 
-.holiday-table tbody tr:hover {
-  background: #f1f5f9;
-}
+      .holiday-table th {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+      }
 
+      .holiday-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .holiday-table tbody tr {
+        transition: all 0.2s ease;
+      }
+
+      .holiday-table tbody tr:hover {
+        background: #f1f5f9;
+        transform: translateX(3px);
+      }
+
+      .holiday-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .holiday-name {
+        font-weight: 600;
+        color: #091c45;
+      }
+
+      .holiday-day {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #dbeafe;
+        color: #0c4a6e;
+      }
+
+      /* ===== COUNTDOWN ===== */
+      .countdown-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        border: 2px solid #0ea5e9;
+        text-align: center;
+      }
+
+      .countdown-section h3 {
+        margin: 0 0 15px 0;
+        color: #091c45;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .countdown-display {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .countdown-item {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-width: 80px;
+      }
+
+      .countdown-item .number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #0ea5e9;
+        display: block;
+      }
+
+      .countdown-item .label {
+        font-size: 12px;
+        color: #6b7280;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 5px;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 1024px) {
+        .events-container {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .stats-row {
+          grid-template-columns: 1fr;
+        }
+
+        .modal-content {
+          width: 95%;
+          padding: 20px;
+        }
+      }
+
+      /* Custom scrollbar */
+      .calendar-wrapper::-webkit-scrollbar,
+      .event-list-wrapper::-webkit-scrollbar,
+      .holiday-table-wrapper::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-track,
+      .event-list-wrapper::-webkit-scrollbar-track,
+      .holiday-table-wrapper::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-thumb,
+      .event-list-wrapper::-webkit-scrollbar-thumb,
+      .holiday-table-wrapper::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-thumb:hover,
+      .event-list-wrapper::-webkit-scrollbar-thumb:hover,
+      .holiday-table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
     </style>
   </head>
 
@@ -385,7 +948,7 @@
           </ul>
         </li>
 
-        <li class="has-submenu open">
+        <li class="has-submenu active">
           <a href="#"
             ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
             <i
@@ -565,131 +1128,287 @@
           <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
         </div>
         <div class="header-right">
+          <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
           <div class="notifications">
             <i class="fa-solid fa-bell"></i>
             <span class="badge" id="holidayBadge">0</span>
-            <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
-          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
           </div>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
         </div>
       </header>
 
       <div class="page-content">
-  <h1>Calendar</h1>
+        <!-- Hero Header -->
+        <div class="events-hero">
+          <h1><i class="fa-solid fa-calendar-days"></i> Events & Holidays Calendar</h1>
+          <p>Manage company events and track Bangladesh public holidays for 2026</p>
+        </div>
 
-  <div class="events-container">
-    <!-- CALENDAR -->
-    <div class="calendar-box">
-      <div class="calendar-header">
-        <button onclick="changeMonth(-1)">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <h3 id="monthYear"></h3>
-        <button onclick="changeMonth(1)">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
+        <!-- Quick Stats -->
+        <div class="stats-row">
+          <div class="stat-card holidays">
+            <div class="stat-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+            <div class="stat-value" id="totalHolidays">0</div>
+            <div class="stat-label">Total Holidays</div>
+          </div>
+          <div class="stat-card events">
+            <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="stat-value" id="totalEvents">0</div>
+            <div class="stat-label">Company Events</div>
+          </div>
+          <div class="stat-card upcoming">
+            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="stat-value" id="upcomingCount">0</div>
+            <div class="stat-label">Upcoming (30 Days)</div>
+          </div>
+          <div class="stat-card total">
+            <div class="stat-icon"><i class="fa-solid fa-list"></i></div>
+            <div class="stat-value" id="totalAll">0</div>
+            <div class="stat-label">All Items</div>
+          </div>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="countdown-section" id="countdownSection">
+          <h3><i class="fa-solid fa-hourglass-half"></i> Next Holiday Countdown</h3>
+          <div id="nextHolidayName" style="margin-bottom: 10px; font-size: 18px; color: #0c4a6e; font-weight: 600;"></div>
+          <div class="countdown-display" id="countdownDisplay"></div>
+        </div>
+
+        <!-- Calendar and Events -->
+        <div class="events-container">
+          <!-- CALENDAR -->
+          <div class="calendar-box">
+            <div class="calendar-header">
+              <button onclick="changeMonth(-1)">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <h3 id="monthYear"></h3>
+              <button onclick="changeMonth(1)">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="calendar-wrapper">
+              <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+            <div class="calendar-legend">
+              <div class="legend-item">
+                <div class="legend-color today"></div>
+                <span>Today</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color holiday"></div>
+                <span>Holiday</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color event"></div>
+                <span>Event</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EVENTS LIST -->
+          <div class="events-box">
+            <h3>Events & Holidays List</h3>
+            <div class="search-filter-row">
+              <div class="search-box">
+                <input
+                  type="text"
+                  placeholder="🔍 Search events..."
+                  oninput="filterEvents(this.value)"
+                  id="searchInput"
+                />
+              </div>
+              <select class="filter-select" id="typeFilter" onchange="filterEvents()">
+                <option value="all">All Types</option>
+                <option value="holiday">Holidays Only</option>
+                <option value="event">Events Only</option>
+              </select>
+            </div>
+            <div class="event-list-wrapper" id="eventList"></div>
+          </div>
+        </div>
+
+        <!-- Holiday Table -->
+        <div class="holiday-table-box">
+          <h2><i class="fa-solid fa-flag"></i> Bangladesh Public Holidays 2026</h2>
+          <div class="table-controls">
+            <div class="table-search">
+              <input
+                type="text"
+                placeholder="🔍 Search holidays..."
+                oninput="filterHolidayTable(this.value)"
+              />
+            </div>
+            <button class="export-btn" onclick="exportHolidaysToExcel()">
+              <i class="fa-solid fa-file-excel"></i> Export to Excel
+            </button>
+          </div>
+          <div class="holiday-table-wrapper">
+            <table class="holiday-table" id="holidayTable">
+              <thead>
+                <tr>
+                  <th>Sl</th>
+                  <th>Holiday Name</th>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Days Away</th>
+                </tr>
+              </thead>
+              <tbody id="holidayTableBody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <div class="calendar-wrapper">
-        <div class="calendar-grid" id="calendarGrid"></div>
-      </div>
     </div>
 
-    <!-- EVENTS -->
-    <div class="events-box">
-      <h3>Events & Holidays</h3>
-      <div class="search-box">
-        <input
-          type="text"
-          placeholder="Search events..."
-          oninput="filterEvents(this.value)"
-        />
-      </div>
-      <div id="eventList"></div>
+    <!-- Floating Add Button -->
+    <div class="add-btn" onclick="openAddModal()">
+      <i class="fa-solid fa-plus"></i>
     </div>
-  </div>
 
-  <!-- ===== HOLIDAY TABLE BELOW THE CARDS ===== -->
-  <div class="holiday-table-box">
-    <h2>2026 Public Holidays</h2>
-    <div class="holiday-table-wrapper">
-      <table class="holiday-table">
-        <thead>
-          <tr>
-            <th>Sl</th>
-            <th>Holiday Name</th>
-            <th>Date</th>
-            <th>Day</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>New Year's Day</td><td>01 January 2026</td><td>Thursday</td></tr>
-          <tr><td>2</td><td>Language Martyrs Day</td><td>21 February 2026</td><td>Saturday</td></tr>
-          <tr><td>3</td><td>Sheikh Mujibur Rahman Birthday</td><td>17 March 2026</td><td>Tuesday</td></tr>
-          <tr><td>4</td><td>Independence Day</td><td>26 March 2026</td><td>Thursday</td></tr>
-          <tr><td>5</td><td>Pohela Boishakh</td><td>14 April 2026</td><td>Tuesday</td></tr>
-          <tr><td>6</td><td>May Day</td><td>01 May 2026</td><td>Friday</td></tr>
-          <tr><td>7</td><td>Eid-ul-Fitr</td><td>21 April 2026</td><td>Tuesday</td></tr>
-          <tr><td>8</td><td>Eid-ul-Adha</td><td>28 June 2026</td><td>Sunday</td></tr>
-          <tr><td>9</td><td>National Mourning Day</td><td>15 August 2026</td><td>Saturday</td></tr>
-          <tr><td>10</td><td>Durga Puja</td><td>24 October 2026</td><td>Saturday</td></tr>
-          <tr><td>11</td><td>Victory Day</td><td>16 December 2026</td><td>Wednesday</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-    </div>
-    
-
-    <div class="add-btn" onclick="openAddModal()">+</div>
-
-    <!-- ADD MODAL -->
-    <div class="modal" id="addModal">
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal" id="eventModal">
       <div class="modal-content">
-        <h3>Add Event</h3>
-        <input id="newTitle" placeholder="Event title" />
-        <input id="newDate" type="date" />
-        <select id="newType">
-          <option value="event">Event</option>
-          <option value="holiday">Holiday</option>
-        </select>
-        <button onclick="addEvent()">Save</button>
+        <h3 id="modalTitle">
+          <i class="fa-solid fa-calendar-plus"></i> Add New Event
+        </h3>
+        <div class="form-group">
+          <label>Event Title *</label>
+          <input id="eventTitle" placeholder="e.g., Team Meeting, Birthday Party" />
+        </div>
+        <div class="form-group">
+          <label>Date *</label>
+          <input id="eventDate" type="date" />
+        </div>
+        <div class="form-group">
+          <label>Type *</label>
+          <select id="eventType">
+            <option value="event">Company Event</option>
+            <option value="holiday">Holiday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description (Optional)</label>
+          <textarea id="eventDescription" placeholder="Add details about this event..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">
+            <i class="fa-solid fa-times"></i> Cancel
+          </button>
+          <button class="btn btn-primary" onclick="saveEvent()">
+            <i class="fa-solid fa-check"></i> Save Event
+          </button>
+        </div>
       </div>
     </div>
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="assets/js/script.js"></script>
     <script>
-      
-      const events = [
-        { title: "New Year's Day", date: "2026-01-01", type: "holiday" },
-        { title: "Language Martyrs Day", date: "2026-02-21", type: "holiday" },
-        {
-          title: "Sheikh Mujibur Rahman Birthday",
-          date: "2026-03-17",
-          type: "holiday",
-        },
-        { title: "Independence Day", date: "2026-03-26", type: "holiday" },
-        { title: "Pohela Boishakh", date: "2026-04-14", type: "holiday" },
-        { title: "May Day", date: "2026-05-01", type: "holiday" },
-        { title: "Eid-ul-Fitr", date: "2026-04-21", type: "holiday" },
-        { title: "Eid-ul-Adha", date: "2026-06-28", type: "holiday" },
-        { title: "National Mourning Day", date: "2026-08-15", type: "holiday" },
-        { title: "Durga Puja", date: "2026-10-24", type: "holiday" },
-        { title: "Victory Day", date: "2026-12-16", type: "holiday" },
+      // Bangladesh Public Holidays 2026
+      const bdHolidays = [
+        { title: "New Year's Day", date: "2026-01-01", type: "holiday", day: "Thursday" },
+        { title: "Language Martyrs' Day (Shaheed Dibosh)", date: "2026-02-21", type: "holiday", day: "Saturday" },
+        { title: "Birthday of Sheikh Mujibur Rahman", date: "2026-03-17", type: "holiday", day: "Tuesday" },
+        { title: "Independence Day", date: "2026-03-26", type: "holiday", day: "Thursday" },
+        { title: "Bengali New Year (Pohela Boishakh)", date: "2026-04-14", type: "holiday", day: "Tuesday" },
+        { title: "Eid-ul-Fitr", date: "2026-04-21", type: "holiday", day: "Tuesday" },
+        { title: "May Day (International Workers' Day)", date: "2026-05-01", type: "holiday", day: "Friday" },
+        { title: "Eid-ul-Adha", date: "2026-06-28", type: "holiday", day: "Sunday" },
+        { title: "National Mourning Day", date: "2026-08-15", type: "holiday", day: "Saturday" },
+        { title: "Janmashtami", date: "2026-09-05", type: "holiday", day: "Saturday" },
+        { title: "Durga Puja", date: "2026-10-24", type: "holiday", day: "Saturday" },
+        { title: "Victory Day", date: "2026-12-16", type: "holiday", day: "Wednesday" },
+        { title: "Christmas Day", date: "2026-12-25", type: "holiday", day: "Friday" },
       ];
 
+      let events = [...bdHolidays];
       let currentDate = new Date(2026, 0);
       let filtered = [...events];
+      let editingIndex = -1;
 
+      // Initialize
+      function init() {
+        renderCalendar();
+        renderEventList();
+        updateStats();
+        updateCountdown();
+        renderHolidayTable();
+        setInterval(updateCountdown, 1000);
+      }
+
+      // Update Statistics
+      function updateStats() {
+        const holidays = events.filter(e => e.type === 'holiday').length;
+        const companyEvents = events.filter(e => e.type === 'event').length;
+        const today = new Date();
+        const thirtyDaysLater = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+        const upcoming = events.filter(e => {
+          const eventDate = new Date(e.date);
+          return eventDate >= today && eventDate <= thirtyDaysLater;
+        }).length;
+
+        document.getElementById('totalHolidays').innerText = holidays;
+        document.getElementById('totalEvents').innerText = companyEvents;
+        document.getElementById('upcomingCount').innerText = upcoming;
+        document.getElementById('totalAll').innerText = events.length;
+      }
+
+      // Countdown to Next Holiday
+      function updateCountdown() {
+        const now = new Date();
+        const upcomingHolidays = events
+          .filter(e => e.type === 'holiday' && new Date(e.date) > now)
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        if (upcomingHolidays.length === 0) {
+          document.getElementById('countdownSection').style.display = 'none';
+          return;
+        }
+
+        const nextHoliday = upcomingHolidays[0];
+        const targetDate = new Date(nextHoliday.date);
+        const diff = targetDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('nextHolidayName').innerHTML = 
+          `<i class="fa-solid fa-flag"></i> ${nextHoliday.title}`;
+
+        document.getElementById('countdownDisplay').innerHTML = `
+          <div class="countdown-item">
+            <span class="number">${days}</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${hours}</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${minutes}</span>
+            <span class="label">Minutes</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${seconds}</span>
+            <span class="label">Seconds</span>
+          </div>
+        `;
+      }
+
+      // Render Calendar
       function renderCalendar() {
         const grid = document.getElementById("calendarGrid");
-        const list = document.getElementById("eventList");
-        grid.innerHTML = list.innerHTML = "";
+        grid.innerHTML = "";
 
         const y = currentDate.getFullYear();
         const m = currentDate.getMonth();
-        monthYear.innerText = currentDate.toLocaleString("default", {
+        
+        document.getElementById('monthYear').innerText = currentDate.toLocaleString("default", {
           month: "long",
           year: "numeric",
         });
@@ -700,71 +1419,270 @@
 
         const first = new Date(y, m, 1).getDay();
         const days = new Date(y, m + 1, 0).getDate();
-        for (let i = 0; i < first; i++) grid.innerHTML += `<div></div>`;
+        
+        for (let i = 0; i < first; i++) {
+          grid.innerHTML += `<div></div>`;
+        }
 
-        const monthEvents = events.filter(
-          (e) => new Date(e.date).getMonth() === m,
-        );
-        holidayBadge.innerText = monthEvents.length;
+        const today = new Date();
+        const isCurrentMonth = today.getMonth() === m && today.getFullYear() === y;
+        const todayDate = today.getDate();
+
+        const monthEvents = events.filter(e => new Date(e.date).getMonth() === m);
+        document.getElementById('holidayBadge').innerText = monthEvents.length;
 
         for (let d = 1; d <= days; d++) {
           const ds = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
           const e = events.find((x) => x.date === ds);
-          grid.innerHTML += `
-      <div class="calendar-date ${e ? e.type : ""}">${d}</div>`;
+          const isToday = isCurrentMonth && d === todayDate;
+          
+          let classes = "calendar-date";
+          if (isToday) classes += " today";
+          else if (e) classes += ` ${e.type}`;
+
+          grid.innerHTML += `<div class="${classes}">${d}</div>`;
+        }
+      }
+
+      // Render Event List
+      function renderEventList() {
+        const list = document.getElementById("eventList");
+        list.innerHTML = "";
+
+        const m = currentDate.getMonth();
+        const monthEvents = filtered.filter(e => new Date(e.date).getMonth() === m);
+
+        if (monthEvents.length === 0) {
+          list.innerHTML = `
+            <div class="no-events">
+              <i class="fa-solid fa-calendar-xmark"></i>
+              <p>No events or holidays this month</p>
+            </div>
+          `;
+          return;
         }
 
-        filtered
-          .filter((e) => new Date(e.date).getMonth() === m)
+        monthEvents
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
           .forEach((e, i) => {
+            const eventDate = new Date(e.date);
+            const formattedDate = eventDate.toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric', 
+              year: 'numeric' 
+            });
+
             list.innerHTML += `
-      <div class="event-item">
-        <div>
-          <strong>${e.title}</strong><br>
-          <small>${e.date}</small>
-        </div>
-        <div class="event-actions">
-          <i class="fa-solid fa-trash" onclick="deleteEvent(${i})"></i>
-        </div>
-      </div>`;
+              <div class="event-item ${e.type === 'holiday' ? 'holiday-item' : 'event-item-type'}">
+                <div class="event-info">
+                  <strong>${e.title}</strong>
+                  <small>
+                    <i class="fa-solid fa-calendar"></i> ${formattedDate}
+                    ${e.day ? ` • ${e.day}` : ''}
+                  </small>
+                  <span class="event-type-badge ${e.type}">
+                    ${e.type === 'holiday' ? '🏖️ Holiday' : '📅 Event'}
+                  </span>
+                </div>
+                <div class="event-actions">
+                  ${e.type === 'event' ? `
+                    <i class="fa-solid fa-edit" onclick="editEvent(${events.indexOf(e)})"></i>
+                    <i class="fa-solid fa-trash" onclick="deleteEvent(${events.indexOf(e)})"></i>
+                  ` : ''}
+                </div>
+              </div>
+            `;
           });
       }
-      
 
-      function addEvent() {
-        events.push({
-          title: newTitle.value,
-          date: newDate.value,
-          type: newType.value,
+      // Render Holiday Table
+      function renderHolidayTable() {
+        const tbody = document.getElementById('holidayTableBody');
+        tbody.innerHTML = '';
+
+        const today = new Date();
+        const holidays = events.filter(e => e.type === 'holiday');
+
+        holidays
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .forEach((h, i) => {
+            const eventDate = new Date(h.date);
+            const formattedDate = eventDate.toLocaleDateString('en-US', { 
+              day: '2-digit',
+              month: 'long', 
+              year: 'numeric' 
+            });
+
+            const daysAway = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+            let daysAwayText = '';
+            if (daysAway < 0) {
+              daysAwayText = `${Math.abs(daysAway)} days ago`;
+            } else if (daysAway === 0) {
+              daysAwayText = 'Today';
+            } else {
+              daysAwayText = `${daysAway} days`;
+            }
+
+            tbody.innerHTML += `
+              <tr>
+                <td>${i + 1}</td>
+                <td class="holiday-name">${h.title}</td>
+                <td>${formattedDate}</td>
+                <td><span class="holiday-day">${h.day || ''}</span></td>
+                <td>${daysAwayText}</td>
+              </tr>
+            `;
+          });
+      }
+
+      // Filter Events
+      function filterEvents() {
+        const searchVal = document.getElementById('searchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('typeFilter').value;
+
+        filtered = events.filter(e => {
+          const matchSearch = e.title.toLowerCase().includes(searchVal);
+          const matchType = typeFilter === 'all' || e.type === typeFilter;
+          return matchSearch && matchType;
         });
-        filtered = [...events];
-        addModal.style.display = "none";
-        renderCalendar();
+
+        renderEventList();
       }
 
-      function deleteEvent(i) {
-        events.splice(i, 1);
-        filtered = [...events];
-        renderCalendar();
+      // Filter Holiday Table
+      function filterHolidayTable(query) {
+        const rows = document.querySelectorAll('#holidayTableBody tr');
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+        });
       }
 
-      function filterEvents(q) {
-        filtered = events.filter((e) =>
-          e.title.toLowerCase().includes(q.toLowerCase()),
-        );
-        renderCalendar();
+      // Export to Excel
+      function exportHolidaysToExcel() {
+        const holidays = events.filter(e => e.type === 'holiday').map((h, i) => ({
+          'Sl': i + 1,
+          'Holiday Name': h.title,
+          'Date': h.date,
+          'Day': h.day || ''
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(holidays);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "BD Holidays 2026");
+        XLSX.writeFile(workbook, "Bangladesh_Holidays_2026.xlsx");
       }
 
+      // Change Month
       function changeMonth(step) {
         currentDate.setMonth(currentDate.getMonth() + step);
         renderCalendar();
+        renderEventList();
       }
 
+      // Modal Functions
       function openAddModal() {
-        addModal.style.display = "flex";
+        editingIndex = -1;
+        document.getElementById('modalTitle').innerHTML = 
+          '<i class="fa-solid fa-calendar-plus"></i> Add New Event';
+        document.getElementById('eventTitle').value = '';
+        document.getElementById('eventDate').value = '';
+        document.getElementById('eventType').value = 'event';
+        document.getElementById('eventDescription').value = '';
+        document.getElementById('eventModal').classList.add('show');
       }
-      renderCalendar();
+
+      function editEvent(index) {
+        editingIndex = index;
+        const event = events[index];
+        document.getElementById('modalTitle').innerHTML = 
+          '<i class="fa-solid fa-edit"></i> Edit Event';
+        document.getElementById('eventTitle').value = event.title;
+        document.getElementById('eventDate').value = event.date;
+        document.getElementById('eventType').value = event.type;
+        document.getElementById('eventDescription').value = event.description || '';
+        document.getElementById('eventModal').classList.add('show');
+      }
+
+      function closeModal() {
+        document.getElementById('eventModal').classList.remove('show');
+      }
+
+      function saveEvent() {
+        const title = document.getElementById('eventTitle').value.trim();
+        const date = document.getElementById('eventDate').value;
+        const type = document.getElementById('eventType').value;
+        const description = document.getElementById('eventDescription').value.trim();
+
+        if (!title || !date) {
+          alert('Please fill in all required fields!');
+          return;
+        }
+
+        const eventDate = new Date(date);
+        const day = eventDate.toLocaleDateString('en-US', { weekday: 'long' });
+
+        const eventData = { title, date, type, day, description };
+
+        if (editingIndex >= 0) {
+          events[editingIndex] = eventData;
+        } else {
+          events.push(eventData);
+        }
+
+        filtered = [...events];
+        closeModal();
+        renderCalendar();
+        renderEventList();
+        updateStats();
+        renderHolidayTable();
+        showNotification(editingIndex >= 0 ? 'Event updated successfully!' : 'Event added successfully!');
+      }
+
+      function deleteEvent(index) {
+        if (confirm('Are you sure you want to delete this event?')) {
+          events.splice(index, 1);
+          filtered = [...events];
+          renderCalendar();
+          renderEventList();
+          updateStats();
+          renderHolidayTable();
+          showNotification('Event deleted successfully!');
+        }
+      }
+
+      function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #16a34a;
+          color: white;
+          padding: 15px 25px;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          z-index: 10000;
+          animation: slideIn 0.3s ease;
+        `;
+        notification.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('eventModal');
+        if (event.target == modal) {
+          closeModal();
+        }
+      }
+
+      // Initialize on load
+      init();
     </script>
-    
   </body>
 </html>
