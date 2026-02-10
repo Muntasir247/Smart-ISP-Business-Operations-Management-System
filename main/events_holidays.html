@@ -38,7 +38,7 @@
       .calendar-header h3 {
         margin: 0;
         font-size: 16px;
-        color: #1e3a8a;
+        color: #081435;
       }
 
       .calendar-wrapper {
@@ -77,14 +77,14 @@
 
       .event {
         background: #e0f2fe;
-        color: #0369a1;
+        color: #08212f;
         font-weight: bold;
       }
 
       /* ===== EVENT LIST ===== */
       .events-box h3 {
         margin-top: 0;
-        color: #1e3a8a;
+        color: #0b142c;
       }
 
       .search-box {
@@ -125,7 +125,7 @@
         width: 55px;
         height: 55px;
         border-radius: 50%;
-        background: #2563eb;
+        background: #071430;
         color: white;
         font-size: 26px;
         display: flex;
@@ -159,10 +159,90 @@
         padding: 8px;
         margin-bottom: 10px;
       }
+      /* ===== HOLIDAY TABLE ===== */
+.holiday-table-box {
+  margin-top: 40px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Scrollable wrapper */
+.holiday-table-wrapper {
+  max-height: 350px; /* adjust height as needed */
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+.holiday-table-box {
+  margin-top: 30px;
+}
+
+.holiday-table-wrapper {
+  max-height: 400px; /* scrollable height */
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.holiday-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.holiday-table th,
+.holiday-table td {
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.holiday-table th {
+  background: #0c1839;
+  color: white;
+}
+
+.holiday-table-box h2 {
+  margin-bottom: 15px;
+  color: #0d1b41;
+}
+
+.holiday-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.holiday-table thead {
+  background: #0b183c;
+  color: white;
+  position: sticky;
+  top: 0; /* keep header visible while scrolling */
+  z-index: 1;
+}
+
+.holiday-table th,
+.holiday-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.holiday-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.holiday-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
     </style>
   </head>
 
   <body>
+    <link rel="stylesheet" href="style.css" />
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="brand">
@@ -488,45 +568,79 @@
           <div class="notifications">
             <i class="fa-solid fa-bell"></i>
             <span class="badge" id="holidayBadge">0</span>
+            <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
           </div>
         </div>
       </header>
 
       <div class="page-content">
-        <h1>Calendar</h1>
+  <h1>Calendar</h1>
 
-        <div class="events-container">
-          <!-- CALENDAR -->
-          <div class="calendar-box">
-            <div class="calendar-header">
-              <button onclick="changeMonth(-1)">
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-              <h3 id="monthYear"></h3>
-              <button onclick="changeMonth(1)">
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-            <div class="calendar-wrapper">
-              <div class="calendar-grid" id="calendarGrid"></div>
-            </div>
-          </div>
-
-          <!-- EVENTS -->
-          <div class="events-box">
-            <h3>Events & Holidays</h3>
-            <div class="search-box">
-              <input
-                type="text"
-                placeholder="Search events..."
-                oninput="filterEvents(this.value)"
-              />
-            </div>
-            <div id="eventList"></div>
-          </div>
-        </div>
+  <div class="events-container">
+    <!-- CALENDAR -->
+    <div class="calendar-box">
+      <div class="calendar-header">
+        <button onclick="changeMonth(-1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <h3 id="monthYear"></h3>
+        <button onclick="changeMonth(1)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="calendar-wrapper">
+        <div class="calendar-grid" id="calendarGrid"></div>
       </div>
     </div>
+
+    <!-- EVENTS -->
+    <div class="events-box">
+      <h3>Events & Holidays</h3>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search events..."
+          oninput="filterEvents(this.value)"
+        />
+      </div>
+      <div id="eventList"></div>
+    </div>
+  </div>
+
+  <!-- ===== HOLIDAY TABLE BELOW THE CARDS ===== -->
+  <div class="holiday-table-box">
+    <h2>2026 Public Holidays</h2>
+    <div class="holiday-table-wrapper">
+      <table class="holiday-table">
+        <thead>
+          <tr>
+            <th>Sl</th>
+            <th>Holiday Name</th>
+            <th>Date</th>
+            <th>Day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>New Year's Day</td><td>01 January 2026</td><td>Thursday</td></tr>
+          <tr><td>2</td><td>Language Martyrs Day</td><td>21 February 2026</td><td>Saturday</td></tr>
+          <tr><td>3</td><td>Sheikh Mujibur Rahman Birthday</td><td>17 March 2026</td><td>Tuesday</td></tr>
+          <tr><td>4</td><td>Independence Day</td><td>26 March 2026</td><td>Thursday</td></tr>
+          <tr><td>5</td><td>Pohela Boishakh</td><td>14 April 2026</td><td>Tuesday</td></tr>
+          <tr><td>6</td><td>May Day</td><td>01 May 2026</td><td>Friday</td></tr>
+          <tr><td>7</td><td>Eid-ul-Fitr</td><td>21 April 2026</td><td>Tuesday</td></tr>
+          <tr><td>8</td><td>Eid-ul-Adha</td><td>28 June 2026</td><td>Sunday</td></tr>
+          <tr><td>9</td><td>National Mourning Day</td><td>15 August 2026</td><td>Saturday</td></tr>
+          <tr><td>10</td><td>Durga Puja</td><td>24 October 2026</td><td>Saturday</td></tr>
+          <tr><td>11</td><td>Victory Day</td><td>16 December 2026</td><td>Wednesday</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+    </div>
+    
 
     <div class="add-btn" onclick="openAddModal()">+</div>
 
@@ -543,8 +657,10 @@
         <button onclick="addEvent()">Save</button>
       </div>
     </div>
+    
     <script src="assets/js/script.js"></script>
     <script>
+      
       const events = [
         { title: "New Year's Day", date: "2026-01-01", type: "holiday" },
         { title: "Language Martyrs Day", date: "2026-02-21", type: "holiday" },
@@ -613,6 +729,7 @@
       </div>`;
           });
       }
+      
 
       function addEvent() {
         events.push({
@@ -648,5 +765,6 @@
       }
       renderCalendar();
     </script>
+    
   </body>
 </html>
