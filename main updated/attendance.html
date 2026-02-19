@@ -4,452 +4,1628 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="assets/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <title>Attendance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Smart ISP - Attendance</title>
     <style>
-      table th {
-        text-align: center;
+      :root {
+        --navy-primary: #0f1d3f;
+        --navy-dark: #0f1d3f;
+        --navy-darker: #0a1628;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --info: #3b82f6;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+      }
+
+      .sidebar.collapsed { margin-left: -250px; }
+      .sidebar .submenu { display: none; padding-left: 20px; }
+      .sidebar .has-submenu.active > .submenu { display: block; }
+      .sidebar a.active { background-color: #1f2937; color: #fff; }
+
+      /* Page Header */
+      .page-header {
+        background: white;
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .page-header h1 {
+        font-size: 28px; font-weight: 700; color: var(--gray-900);
+        margin-bottom: 6px; display: flex; align-items: center; gap: 12px;
+      }
+      .page-header h1 i { color: var(--navy-primary); }
+      .page-header p { color: var(--gray-500); font-size: 14px; }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px; margin-bottom: 24px;
+      }
+      .stat-card {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px; transition: all 0.2s ease;
+      }
+      .stat-card:hover { border-color: var(--navy-primary); box-shadow: 0 4px 12px rgba(15,29,63,0.08); }
+      .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+      .stat-icon {
+        width: 40px; height: 40px; border-radius: 10px; background: var(--gray-50);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; color: var(--navy-primary);
+      }
+      .stat-icon.green { background: #d1fae5; color: #065f46; }
+      .stat-icon.red { background: #fee2e2; color: #991b1b; }
+      .stat-icon.yellow { background: #fef3c7; color: #92400e; }
+      .stat-icon.blue { background: #dbeafe; color: #1e40af; }
+      .stat-icon.purple { background: #ede9fe; color: #5b21b6; }
+      .stat-value { font-size: 28px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+      .stat-label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+
+      /* Attendance Banner */
+      .att-banner {
+        background: linear-gradient(135deg, var(--navy-primary) 0%, var(--navy-darker) 100%);
+        border-radius: 16px; padding: 28px; color: white;
+        margin-bottom: 24px; position: relative; overflow: hidden;
+      }
+      .att-banner::before {
+        content: ""; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; background: rgba(255,255,255,0.05); border-radius: 50%;
+      }
+      .att-banner::after {
+        content: ""; position: absolute; bottom: -40px; left: 100px;
+        width: 160px; height: 160px; background: rgba(255,255,255,0.03); border-radius: 50%;
+      }
+      .banner-header {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 24px; position: relative; z-index: 1; flex-wrap: wrap; gap: 12px;
+      }
+      .banner-title h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+      .banner-title p { font-size: 13px; opacity: 0.8; }
+      .banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .banner-btn {
+        background: white; color: var(--navy-primary); border: none;
+        padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px;
+        cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;
+      }
+      .banner-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+      .banner-btn.outline {
+        background: rgba(255,255,255,0.12); color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+      }
+      .banner-btn.outline:hover { background: rgba(255,255,255,0.2); }
+      .banner-stats {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+        gap: 16px; position: relative; z-index: 1;
+      }
+      .banner-stat h4 {
+        font-size: 11px; opacity: 0.75; margin-bottom: 6px; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.5px;
+      }
+      .banner-stat p { font-size: 22px; font-weight: 700; }
+      .mini-bar { height: 5px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-top: 7px; overflow: hidden; }
+      .mini-fill { height: 100%; background: white; border-radius: 10px; }
+
+      /* Controls bar */
+      .controls-bar {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+      }
+      .ctrl-item { flex: 1; min-width: 150px; }
+      .ctrl-item label {
+        display: block; font-size: 12px; font-weight: 600;
+        color: var(--gray-600); margin-bottom: 6px;
+        text-transform: uppercase; letter-spacing: 0.3px;
+      }
+      .ctrl-select, .ctrl-input {
+        width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300);
+        border-radius: 8px; font-size: 14px; color: var(--gray-700);
+        background: white; cursor: pointer; transition: all 0.2s ease; font-family: inherit;
+      }
+      .ctrl-select:focus, .ctrl-input:focus {
+        outline: none; border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(15,29,63,0.1);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 10px 18px; border: none; border-radius: 8px;
+        font-size: 14px; font-weight: 600; cursor: pointer;
+        transition: all 0.2s ease; display: inline-flex;
+        align-items: center; gap: 8px; white-space: nowrap;
+      }
+      .btn-primary { background: var(--navy-primary); color: white; }
+      .btn-primary:hover { background: var(--navy-darker); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,29,63,0.2); }
+      .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
+      .btn-secondary:hover { background: var(--gray-200); }
+      .btn-success { background: var(--success); color: white; }
+      .btn-success:hover { background: #059669; }
+      .btn-danger { background: var(--danger); color: white; }
+      .btn-danger:hover { background: #dc2626; }
+      .btn-warning { background: var(--warning); color: white; }
+      .btn-warning:hover { background: #d97706; }
+      .btn-info { background: var(--info); color: white; }
+      .btn-info:hover { background: #2563eb; }
+      .btn-sm { padding: 7px 12px; font-size: 12px; }
+
+      /* View Tabs */
+      .view-tabs {
+        display: flex; background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+      }
+      .view-tab {
+        flex: 1; padding: 14px 16px; border: none; background: white;
+        cursor: pointer; font-size: 14px; font-weight: 600;
+        color: var(--gray-500); transition: all 0.2s ease;
+        display: flex; align-items: center; justify-content: center;
+        gap: 8px; border-right: 1px solid var(--gray-200);
+      }
+      .view-tab:last-child { border-right: none; }
+      .view-tab.active { background: var(--navy-primary); color: white; }
+      .view-tab:hover:not(.active) { background: var(--gray-50); color: var(--navy-primary); }
+
+      /* Table Section */
+      .table-section {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; overflow: hidden;
+      }
+      .table-header {
+        padding: 18px 24px; border-bottom: 1px solid var(--gray-200);
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 12px;
+      }
+      .table-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+      .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+      .data-table { width: 100%; border-collapse: collapse; }
+      .data-table thead { background: var(--gray-50); }
+      .data-table th {
+        padding: 12px 16px; text-align: left; font-size: 11px;
+        font-weight: 700; color: var(--gray-600); text-transform: uppercase;
+        letter-spacing: 0.5px; border-bottom: 1px solid var(--gray-200); white-space: nowrap;
+      }
+      .data-table td {
+        padding: 13px 16px; border-bottom: 1px solid var(--gray-100);
+        font-size: 14px; color: var(--gray-700);
+      }
+      .data-table tbody tr { transition: background 0.15s ease; }
+      .data-table tbody tr:hover { background: var(--gray-50); }
+
+      /* Employee mini info */
+      .emp-cell { display: flex; align-items: center; gap: 10px; }
+      .emp-avatar {
+        width: 34px; height: 34px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+      }
+      .emp-name { font-weight: 600; color: var(--gray-900); font-size: 14px; line-height: 1.2; }
+      .emp-dept { font-size: 11px; color: var(--gray-500); }
+
+      /* Status Badges */
+      .att-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+        cursor: pointer; transition: all 0.15s ease;
+      }
+      .att-badge:hover { filter: brightness(0.92); }
+      .att-present { background: #d1fae5; color: #065f46; }
+      .att-absent { background: #fee2e2; color: #991b1b; }
+      .att-late { background: #fef3c7; color: #92400e; }
+      .att-halfday { background: #dbeafe; color: #1e40af; }
+      .att-leave { background: #ede9fe; color: #5b21b6; }
+      .att-holiday { background: var(--gray-200); color: var(--gray-600); }
+      .att-wfh { background: #d0fdf4; color: #065f46; border: 1px solid #6ee7b7; }
+
+      /* Time inputs in table */
+      .time-cell {
+        font-size: 13px; color: var(--gray-700); font-weight: 500;
+        font-variant-numeric: tabular-nums;
+      }
+      .time-cell.late { color: var(--danger); }
+      .time-cell.early { color: var(--success); }
+      .time-cell.empty { color: var(--gray-400); font-style: italic; font-weight: 400; }
+
+      /* Work hours badge */
+      .hours-pill {
+        display: inline-block; padding: 3px 10px; border-radius: 20px;
+        font-size: 12px; font-weight: 700; background: var(--gray-100); color: var(--gray-700);
+      }
+      .hours-pill.good { background: #d1fae5; color: #065f46; }
+      .hours-pill.partial { background: #fef3c7; color: #92400e; }
+      .hours-pill.none { background: #fee2e2; color: #991b1b; }
+
+      /* Overtime badge */
+      .ot-pill {
+        display: inline-block; padding: 2px 8px; border-radius: 20px;
+        font-size: 11px; font-weight: 600; background: #ede9fe; color: #5b21b6;
+      }
+
+      /* Edit inline status select */
+      .status-select {
+        border: none; background: transparent; font-size: 12px;
+        font-weight: 600; cursor: pointer; padding: 0; outline: none;
+        font-family: inherit;
+      }
+
+      /* Calendar View */
+      #calendarView { display: none; }
+      .cal-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 20px 24px; border-bottom: 1px solid var(--gray-200);
+        flex-wrap: wrap; gap: 12px;
+      }
+      .cal-nav { display: flex; align-items: center; gap: 12px; }
+      .cal-nav button {
+        width: 34px; height: 34px; border: 1px solid var(--gray-300);
+        background: white; border-radius: 8px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--gray-600); font-size: 14px; transition: all 0.2s;
+      }
+      .cal-nav button:hover { background: var(--navy-primary); color: white; border-color: var(--navy-primary); }
+      .cal-month { font-size: 18px; font-weight: 700; color: var(--gray-900); min-width: 180px; text-align: center; }
+
+      .employee-selector {
+        padding: 16px 24px; border-bottom: 1px solid var(--gray-200);
+        display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      }
+      .employee-selector label { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+      .cal-grid { padding: 20px 24px; }
+      .cal-days-header {
+        display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px;
+      }
+      .cal-day-label {
+        text-align: center; font-size: 11px; font-weight: 700;
+        color: var(--gray-500); text-transform: uppercase; padding: 6px 0;
+      }
+      .cal-cells { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+      .cal-cell {
+        border: 1px solid var(--gray-200); border-radius: 8px;
+        padding: 8px 6px; min-height: 68px; transition: all 0.2s;
+        cursor: pointer; position: relative;
+      }
+      .cal-cell:hover { border-color: var(--navy-primary); box-shadow: 0 2px 8px rgba(15,29,63,0.1); }
+      .cal-cell.today { border-color: var(--navy-primary); background: #eff6ff; }
+      .cal-cell.other-month { opacity: 0.35; cursor: default; }
+      .cal-cell.weekend { background: var(--gray-50); }
+      .cal-cell.holiday { background: #fef3c7; border-color: var(--warning); }
+      .cal-date {
+        font-size: 13px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px;
+      }
+      .cal-cell.today .cal-date { color: var(--navy-primary); }
+      .cal-att-dot {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 20px; height: 20px; border-radius: 50%; font-size: 9px;
+        font-weight: 700; color: white; margin: 1px;
+      }
+      .cal-att-dot.present { background: var(--success); }
+      .cal-att-dot.absent { background: var(--danger); }
+      .cal-att-dot.late { background: var(--warning); }
+      .cal-att-dot.halfday { background: var(--info); }
+      .cal-att-dot.leave { background: #8b5cf6; }
+      .cal-att-dot.holiday { background: var(--gray-400); }
+      .cal-att-dot.wfh { background: #0d9488; }
+      .cal-holiday-label { font-size: 9px; color: #92400e; font-weight: 600; margin-top: 2px; }
+
+      /* Summary View */
+      #summaryView { display: none; }
+      .summary-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px; padding: 20px;
+      }
+      .emp-summary-card {
+        border: 1px solid var(--gray-200); border-radius: 12px;
+        padding: 18px; background: white; transition: all 0.2s;
+      }
+      .emp-summary-card:hover {
+        border-color: var(--navy-primary);
+        box-shadow: 0 4px 16px rgba(15,29,63,0.1);
+      }
+      .esc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+      .esc-avatar {
+        width: 44px; height: 44px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
+      }
+      .esc-name { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+      .esc-pos { font-size: 12px; color: var(--gray-500); }
+      .esc-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 12px; }
+      .esc-stat { text-align: center; }
+      .esc-stat-val { font-size: 18px; font-weight: 700; }
+      .esc-stat-val.present { color: var(--success); }
+      .esc-stat-val.absent { color: var(--danger); }
+      .esc-stat-val.late { color: var(--warning); }
+      .esc-stat-val.leave { color: #8b5cf6; }
+      .esc-stat-label { font-size: 10px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; }
+      .esc-progress { height: 6px; background: var(--gray-200); border-radius: 10px; overflow: hidden; }
+      .esc-progress-fill { height: 100%; background: var(--success); border-radius: 10px; }
+      .esc-rate { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: var(--gray-600); font-weight: 600; }
+
+      /* Pagination */
+      .pagination {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 16px 24px; border-top: 1px solid var(--gray-200); flex-wrap: wrap; gap: 12px;
+      }
+      .pagination-info { font-size: 13px; color: var(--gray-600); }
+      .pagination-controls { display: flex; gap: 8px; }
+      .pagination button {
+        padding: 8px 14px; background: white; border: 1px solid var(--gray-300);
+        border-radius: 6px; cursor: pointer; font-size: 13px;
+        font-weight: 600; color: var(--gray-700); transition: all 0.2s;
+      }
+      .pagination button:hover:not(:disabled) { background: var(--navy-primary); color: white; border-color: var(--navy-primary); }
+      .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+      /* Mark Attendance Modal */
+      .modal {
+        display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px); animation: fadeIn 0.2s ease;
+      }
+      .modal.show { display: flex; align-items: center; justify-content: center; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .modal-content {
+        background: white; border-radius: 16px; width: 90%;
+        max-width: 560px; max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;
+      }
+      .modal-content.wide { max-width: 900px; }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .modal-header {
+        padding: 22px 24px 16px; border-bottom: 1px solid var(--gray-200);
+        display: flex; justify-content: space-between; align-items: center;
+        position: sticky; top: 0; background: white; z-index: 10;
+      }
+      .modal-header h2 { font-size: 18px; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px; }
+      .close {
+        background: transparent; border: none; font-size: 20px;
+        cursor: pointer; color: var(--gray-400); width: 32px; height: 32px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 6px; transition: all 0.2s;
+      }
+      .close:hover { background: var(--gray-100); color: var(--gray-700); }
+      .modal-body { padding: 22px; }
+      .modal-footer {
+        padding: 16px 24px; border-top: 1px solid var(--gray-200);
+        display: flex; gap: 8px; justify-content: flex-end;
+        position: sticky; bottom: 0; background: white;
+      }
+
+      /* Bulk mark table inside modal */
+      .bulk-att-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      .bulk-att-table th {
+        background: var(--gray-50); padding: 10px 12px; text-align: left;
+        font-size: 11px; font-weight: 700; color: var(--gray-600);
+        text-transform: uppercase; letter-spacing: 0.4px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .bulk-att-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+      .bulk-att-table tbody tr:hover { background: var(--gray-50); }
+
+      .bulk-status-select {
+        padding: 6px 10px; border: 1px solid var(--gray-300);
+        border-radius: 6px; font-size: 12px; font-weight: 600;
+        cursor: pointer; outline: none; font-family: inherit; background: white;
+      }
+      .bulk-status-select:focus { border-color: var(--navy-primary); }
+
+      .time-input {
+        padding: 6px 10px; border: 1px solid var(--gray-300);
+        border-radius: 6px; font-size: 12px; width: 90px;
+        outline: none; font-family: inherit;
+      }
+      .time-input:focus { border-color: var(--navy-primary); }
+
+      /* Notification */
+      .notification {
+        position: fixed; top: 80px; right: 20px; background: white;
+        border: 1px solid var(--gray-200); border-left: 4px solid var(--success);
+        padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 3000; animation: slideInRight 0.3s ease; max-width: 340px;
+      }
+      .notification.error { border-left-color: var(--danger); }
+      .notification.warning { border-left-color: var(--warning); }
+      @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+      .notification-content { display: flex; align-items: flex-start; gap: 12px; }
+      .notification-icon { font-size: 20px; }
+      .notification-icon.success { color: var(--success); }
+      .notification-icon.error { color: var(--danger); }
+      .notification-icon.warning { color: var(--warning); }
+      .notification-title { font-weight: 700; font-size: 14px; color: var(--gray-900); margin-bottom: 2px; }
+      .notification-text { font-size: 13px; color: var(--gray-600); }
+
+      /* Quick Actions */
+      .quick-actions {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;
+      }
+      .qa-title { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+      .qa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+      .qa-btn {
+        padding: 12px 10px; background: var(--gray-50); border: 1px solid var(--gray-200);
+        border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: center;
+        font-size: 13px; font-weight: 600; color: var(--gray-700);
+        display: flex; flex-direction: column; align-items: center; gap: 6px;
+      }
+      .qa-btn:hover { background: var(--navy-primary); color: white; border-color: var(--navy-primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15,29,63,0.15); }
+      .qa-btn i { font-size: 18px; }
+
+      /* Form */
+      .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+      .form-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.3px; }
+      .form-control { padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; color: var(--gray-800); background: white; transition: all 0.2s; font-family: inherit; }
+      .form-control:focus { outline: none; border-color: var(--navy-primary); box-shadow: 0 0 0 3px rgba(15,29,63,0.1); }
+
+      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+      /* Empty */
+      .empty-state { text-align: center; padding: 50px 20px; }
+      .empty-state i { font-size: 56px; color: var(--gray-300); margin-bottom: 14px; }
+      .empty-state h3 { font-size: 17px; color: var(--gray-700); margin-bottom: 6px; }
+      .empty-state p { font-size: 13px; color: var(--gray-500); }
+
+      /* Detail panel inside record modal */
+      .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: 8px; margin-bottom: 8px; }
+      .detail-lbl { font-size: 12px; font-weight: 600; color: var(--gray-500); display: flex; align-items: center; gap: 8px; }
+      .detail-val { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+
+      @media (max-width: 768px) {
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .banner-stats { grid-template-columns: 1fr 1fr; }
+        .view-tab span { display: none; }
+        .form-row { grid-template-columns: 1fr; }
+        .cal-cells { gap: 2px; }
+        .cal-cell { min-height: 50px; padding: 4px; }
       }
     </style>
   </head>
   <body>
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="brand">
-        <i class="fa-solid fa-circle-nodes"></i> Smart ISP
-      </div>
+      <div class="brand"><i class="fa-solid fa-circle-nodes"></i> Smart ISP</div>
       <ul class="menu">
-        <!-- Dashboard -->
-        <li>
-          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-        </li>
+        <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
 
-        <!-- Configuration -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-cogs"></i> Configuration
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-cogs"></i> Configuration <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Client -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-user"></i> Client
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
+          <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
           <ul class="submenu">
-            <li>
-              <a href="new_request.html"
-                ><i class="fa-regular fa-circle"></i> New Request</a
-              >
-            </li>
-            <li>
-              <a href="add_new_client.html"
-                ><i class="fa-regular fa-circle"></i> Add New</a
-              >
-            </li>
-            <li>
-              <a href="client_list.html"
-                ><i class="fa-regular fa-circle"></i> Client List</a
-              >
-            </li>
-            <li>
-              <a href="left_client.html"
-                ><i class="fa-regular fa-circle"></i> Left Client</a
-              >
-            </li>
-            <li>
-              <a href="scheduler.html"
-                ><i class="fa-regular fa-circle"></i> Scheduler</a
-              >
-            </li>
-            <li>
-              <a href="change_request.html"
-                ><i class="fa-regular fa-circle"></i> Change Request</a
-              >
-            </li>
-            <li>
-              <a href="portal_manage.html"
-                ><i class="fa-regular fa-circle"></i> Portal Manage</a
-              >
-            </li>
+            <li><a href="new_request.html"><i class="fa-regular fa-circle"></i> New Request</a></li>
+            <li><a href="add_new_client.html"><i class="fa-regular fa-circle"></i> Add New</a></li>
+            <li><a href="client_list.html"><i class="fa-regular fa-circle"></i> Client List</a></li>
+            <li><a href="left_client.html"><i class="fa-regular fa-circle"></i> Left Client</a></li>
+            <li><a href="scheduler.html"><i class="fa-regular fa-circle"></i> Scheduler</a></li>
+            <li><a href="change_request.html"><i class="fa-regular fa-circle"></i> Change Request</a></li>
+            <li><a href="portal_manage.html"><i class="fa-regular fa-circle"></i> Portal Manage</a></li>
           </ul>
         </li>
 
-        <!-- Billing -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="billing.html"
-                ><i class="fa-regular fa-circle"></i> Billing</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="billing.html"><i class="fa-regular fa-circle"></i> Billing</a></li></ul>
         </li>
 
-        <!-- Mikrotik Server -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-server"></i> Mikrotik Server
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
+          <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="Bulk_Client_Import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li></ul>
+        </li>
+
+        <li class="has-submenu active">
+          <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
           <ul class="submenu">
-            <li>
-              <a href="Bulk_Client_Import.html"
-                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
-              >
-            </li>
+            <li><a href="employee_list.html"><i class="fa-regular fa-circle"></i> Employee List</a></li>
+            <li><a href="add_employee.html"><i class="fa-regular fa-circle"></i> Add Employee</a></li>
+            <li><a href="attendance.html" class="active"><i class="fa-regular fa-circle"></i> Attendance</a></li>
+            <li><a href="salary_sheet.html"><i class="fa-regular fa-circle"></i> Salary Sheet</a></li>
+            <li><a href="department.html"><i class="fa-regular fa-circle"></i> Department</a></li>
+            <li><a href="position.html"><i class="fa-regular fa-circle"></i> Position</a></li>
+            <li><a href="payhead.html"><i class="fa-regular fa-circle"></i> Payhead</a></li>
+            <li><a href="payroll.html"><i class="fa-regular fa-circle"></i> Payroll</a></li>
+            <li><a href="resign_rule.html"><i class="fa-regular fa-circle"></i> Resign Rule</a></li>
+            <li><a href="resignation.html"><i class="fa-regular fa-circle"></i> Resignation</a></li>
+            <li><a href="rejoin.html"><i class="fa-regular fa-circle"></i> Rejoin</a></li>
           </ul>
         </li>
 
-        <!-- HR & Payroll (Your Part) -->
-        <li class="has-submenu open">
-          <a href="#"
-            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="employee_list.html"
-                ><i class="fa-regular fa-circle"></i> Employee List</a
-              >
-            </li>
-            <li>
-              <a href="add_employee.html"
-                ><i class="fa-regular fa-circle"></i> Add Employee</a
-              >
-            </li>
-            <li>
-              <a href="attendance.html" class="active"
-                ><i class="fa-regular fa-circle"></i> Attendance</a
-              >
-            </li>
-            <li>
-              <a href="salary_sheet.html"
-                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
-              >
-            </li>
-            <li>
-              <a href="department.html"
-                ><i class="fa-regular fa-circle"></i> Department</a
-              >
-            </li>
-            <li>
-              <a href="position.html"
-                ><i class="fa-regular fa-circle"></i> Position</a
-              >
-            </li>
-            <li>
-              <a href="payhead.html"
-                ><i class="fa-regular fa-circle"></i> Payhead</a
-              >
-            </li>
-            <li>
-              <a href="payroll.html"
-                ><i class="fa-regular fa-circle"></i> Payroll</a
-              >
-            </li>
-            <li>
-              <a href="resign_rule.html"
-                ><i class="fa-regular fa-circle"></i> Resign Rule</a
-              >
-            </li>
-            <li>
-              <a href="resignation.html"
-                ><i class="fa-regular fa-circle"></i> Resignation</a
-              >
-            </li>
-            <li>
-              <a href="rejoin.html"
-                ><i class="fa-regular fa-circle"></i> Rejoin</a
-              >
-            </li>
-          </ul>
-        </li>
-
-        <!-- Leave Management -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-door-open"></i> Leave Management
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
+          <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="leave_management.html"><i class="fa-regular fa-circle"></i> Leave Management</a></li></ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="events_holidays.html"><i class="fa-regular fa-circle"></i> Events & Holidays</a></li></ul>
+        </li>
+
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
           <ul class="submenu">
-            <li>
-              <a href="leave_management.html"
-                ><i class="fa-regular fa-circle"></i> Leave Management</a
-              >
-            </li>
+            <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+            <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
+            <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
+            <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
+            <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
+            <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
+            <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
           </ul>
         </li>
 
-        <!-- Events & Holidays -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="events_holidays.html"
-                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Support & Ticketing -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-headset"></i> Support & Ticketing
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="ticket_list.html"
-                ><i class="fa-regular fa-circle"></i> Ticket List</a
-              >
-            </li>
-            <li>
-              <a href="new_ticket.html"
-                ><i class="fa-regular fa-circle"></i> New Ticket</a
-              >
-            </li>
-            <li>
-              <a href="complain_list.html"
-                ><i class="fa-regular fa-circle"></i> Complain List</a
-              >
-            </li>
-            <li>
-              <a href="complain_category.html"
-                ><i class="fa-regular fa-circle"></i> Complain Category</a
-              >
-            </li>
-            <li>
-              <a href="support_team.html"
-                ><i class="fa-regular fa-circle"></i> Support Team</a
-              >
-            </li>
-            <li>
-              <a href="ticket_reports.html"
-                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
-              >
-            </li>
-            <li>
-              <a href="service_history.html"
-                ><i class="fa-regular fa-circle"></i> Service History</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Task Management -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-list-check"></i> Task Management
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Bandwidth Buy -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Purchase -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-basket-shopping"></i> Purchase
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
 
-        <!-- Inventory -->
         <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
-        </li>
-
-        <!-- Assets -->
-        <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-laptop-medical"></i> Assets
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
-        </li>
-
-        <!-- Income -->
-        <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i>
-          </a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
+          <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
         </li>
       </ul>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="main-content">
-      <!-- Header -->
       <header>
         <div class="header-left">
           <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
           <div class="search-box">
-            <input type="text" placeholder="Search Customer" />
+            <input type="text" id="searchInput" placeholder="Search employee..." />
             <i class="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
         <div class="header-right">
-          <div class="monitor">
-            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
-          </div>
-          <div class="releases">
-            <i class="fa-solid fa-wrench"></i> Releases
-            <span class="badge">0</span>
-          </div>
-          <div class="notifications">
-            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
-          </div>
+          <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
+          <div class="notifications"><i class="fa-solid fa-bell"></i> <span class="badge">0</span></div>
           <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
         </div>
       </header>
 
       <div class="page-content">
-        <div class="card">
-          <h2>Attendance</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Employee</th>
-                <th>Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Rahim</td>
-                <td>2026-02-05</td>
-                <td>Present</td>
-              </tr>
-              <tr>
-                <td>Karim</td>
-                <td>2026-02-05</td>
-                <td>Absent</td>
-              </tr>
-              <tr>
-                <td>Salman</td>
-                <td>2026-02-05</td>
-                <td>Present</td>
-              </tr>
-            </tbody>
-          </table>
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1><i class="fa-solid fa-fingerprint"></i> Attendance Management</h1>
+          <p>Track daily attendance, check-in/out times, work hours, and generate attendance reports</p>
+        </div>
+
+        <!-- Banner -->
+        <div class="att-banner">
+          <div class="banner-header">
+            <div class="banner-title">
+              <h2><i class="fa-solid fa-calendar-check"></i> Today's Attendance</h2>
+              <p id="todayDateStr"></p>
+            </div>
+            <div class="banner-actions">
+              <button class="banner-btn" onclick="openBulkMarkModal()">
+                <i class="fa-solid fa-list-check"></i> Mark Attendance
+              </button>
+              <button class="banner-btn outline" onclick="exportToExcel()">
+                <i class="fa-solid fa-file-excel"></i> Export
+              </button>
+            </div>
+          </div>
+          <div class="banner-stats">
+            <div class="banner-stat">
+              <h4>Present</h4>
+              <p id="bPresent">0</p>
+              <div class="mini-bar"><div class="mini-fill" id="bPresentBar" style="width:0%"></div></div>
+            </div>
+            <div class="banner-stat">
+              <h4>Absent</h4>
+              <p id="bAbsent">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>Late</h4>
+              <p id="bLate">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>On Leave</h4>
+              <p id="bLeave">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>WFH</h4>
+              <p id="bWfh">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon green"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+            <div class="stat-value" id="statPresent">0</div>
+            <div class="stat-label">Present Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon red"><i class="fa-solid fa-user-xmark"></i></div>
+            </div>
+            <div class="stat-value" id="statAbsent">0</div>
+            <div class="stat-label">Absent Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon yellow"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            </div>
+            <div class="stat-value" id="statLate">0</div>
+            <div class="stat-label">Late Arrivals</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon blue"><i class="fa-solid fa-house-laptop"></i></div>
+            </div>
+            <div class="stat-value" id="statWfh">0</div>
+            <div class="stat-label">Work From Home</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon purple"><i class="fa-solid fa-umbrella-beach"></i></div>
+            </div>
+            <div class="stat-value" id="statLeave">0</div>
+            <div class="stat-label">On Leave</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="qa-title">Quick Actions</div>
+          <div class="qa-grid">
+            <button class="qa-btn" onclick="openBulkMarkModal()">
+              <i class="fa-solid fa-list-check"></i> Mark Today
+            </button>
+            <button class="qa-btn" onclick="markAllPresent()">
+              <i class="fa-solid fa-users-line"></i> All Present
+            </button>
+            <button class="qa-btn" onclick="exportToExcel()">
+              <i class="fa-solid fa-file-excel"></i> Export Excel
+            </button>
+            <button class="qa-btn" onclick="switchToView('summary')">
+              <i class="fa-solid fa-chart-pie"></i> Monthly Summary
+            </button>
+            <button class="qa-btn" onclick="switchToView('calendar')">
+              <i class="fa-solid fa-calendar-days"></i> Calendar View
+            </button>
+            <button class="qa-btn" onclick="openSingleMarkModal(null)">
+              <i class="fa-solid fa-user-clock"></i> Mark Single
+            </button>
+          </div>
+        </div>
+
+        <!-- View Tabs -->
+        <div class="view-tabs">
+          <button class="view-tab active" id="tab-daily" onclick="switchToView('daily')">
+            <i class="fa-solid fa-table-list"></i> <span>Daily Register</span>
+          </button>
+          <button class="view-tab" id="tab-calendar" onclick="switchToView('calendar')">
+            <i class="fa-solid fa-calendar-days"></i> <span>Calendar View</span>
+          </button>
+          <button class="view-tab" id="tab-summary" onclick="switchToView('summary')">
+            <i class="fa-solid fa-chart-bar"></i> <span>Monthly Summary</span>
+          </button>
+        </div>
+
+        <!-- DAILY VIEW -->
+        <div id="dailyView">
+          <!-- Filter Controls -->
+          <div class="controls-bar">
+            <div class="ctrl-item">
+              <label>Date</label>
+              <input type="date" class="ctrl-input" id="filterDate" />
+            </div>
+            <div class="ctrl-item">
+              <label>Status</label>
+              <select class="ctrl-select" id="filterStatus">
+                <option value="all">All Status</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Leave">Leave</option>
+                <option value="WFH">Work From Home</option>
+                <option value="Holiday">Holiday</option>
+              </select>
+            </div>
+            <div class="ctrl-item">
+              <label>Department</label>
+              <select class="ctrl-select" id="filterDept">
+                <option value="all">All Departments</option>
+                <option value="Technology">Technology</option>
+                <option value="HR">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="Support">Support</option>
+                <option value="Sales">Sales</option>
+                <option value="Admin">Administration</option>
+                <option value="Operations">Operations</option>
+              </select>
+            </div>
+            <button class="btn btn-secondary" onclick="clearFilters()">
+              <i class="fa-solid fa-rotate-right"></i> Reset
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="table-section">
+            <div class="table-header">
+              <div class="table-title" id="dailyTableTitle">Daily Attendance Register</div>
+              <div class="table-actions">
+                <button class="btn btn-primary" onclick="openBulkMarkModal()">
+                  <i class="fa-solid fa-list-check"></i> Mark Attendance
+                </button>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Employee</th>
+                    <th>Dept</th>
+                    <th>Status</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Work Hours</th>
+                    <th>Overtime</th>
+                    <th>Note</th>
+                    <th style="text-align:center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info"><span id="paginationInfo">Showing 0 records</span></div>
+              <div class="pagination-controls">
+                <button onclick="prevPage()" id="prevBtn"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                <button onclick="nextPage()" id="nextBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CALENDAR VIEW -->
+        <div id="calendarView">
+          <div class="table-section">
+            <div class="cal-header">
+              <div class="cal-nav">
+                <button onclick="calPrev()"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="cal-month" id="calMonthLabel"></div>
+                <button onclick="calNext()"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--success);margin-right:4px;"></span>Present</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--danger);margin-right:4px;"></span>Absent</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--warning);margin-right:4px;"></span>Late</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#8b5cf6;margin-right:4px;"></span>Leave</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--info);margin-right:4px;"></span>Half Day</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0d9488;margin-right:4px;"></span>WFH</span>
+                </div>
+              </div>
+            </div>
+            <div class="employee-selector">
+              <label><i class="fa-solid fa-user"></i> Employee:</label>
+              <select class="ctrl-select" id="calEmpSelect" style="width:250px;" onchange="renderCalendar()">
+                <option value="all">All Employees (Overview)</option>
+              </select>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-days-header">
+                <div class="cal-day-label">Sun</div>
+                <div class="cal-day-label">Mon</div>
+                <div class="cal-day-label">Tue</div>
+                <div class="cal-day-label">Wed</div>
+                <div class="cal-day-label">Thu</div>
+                <div class="cal-day-label">Fri</div>
+                <div class="cal-day-label">Sat</div>
+              </div>
+              <div class="cal-cells" id="calCells"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUMMARY VIEW -->
+        <div id="summaryView">
+          <div class="controls-bar">
+            <div class="ctrl-item">
+              <label>Month</label>
+              <select class="ctrl-select" id="summaryMonth">
+                <option value="0">January</option><option value="1">February</option>
+                <option value="2">March</option><option value="3">April</option>
+                <option value="4">May</option><option value="5">June</option>
+                <option value="6">July</option><option value="7">August</option>
+                <option value="8">September</option><option value="9">October</option>
+                <option value="10">November</option><option value="11">December</option>
+              </select>
+            </div>
+            <div class="ctrl-item">
+              <label>Year</label>
+              <select class="ctrl-select" id="summaryYear">
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="renderSummary()">
+              <i class="fa-solid fa-magnifying-glass"></i> Show Report
+            </button>
+          </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== BULK MARK MODAL ===== -->
+    <div id="bulkMarkModal" class="modal">
+      <div class="modal-content wide">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-list-check"></i> Mark Attendance — <span id="bulkDateLabel"></span></h2>
+          <button class="close" onclick="closeBulkMarkModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="padding:0;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-200);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <label style="font-size:13px;font-weight:600;color:var(--gray-600);">Set all to:</label>
+            <button class="btn btn-success btn-sm" onclick="setAllStatus('Present')"><i class="fa-solid fa-check"></i> Present</button>
+            <button class="btn btn-danger btn-sm" onclick="setAllStatus('Absent')"><i class="fa-solid fa-times"></i> Absent</button>
+            <button class="btn btn-warning btn-sm" onclick="setAllStatus('Late')"><i class="fa-solid fa-clock"></i> Late</button>
+            <button class="btn btn-info btn-sm" onclick="setAllStatus('WFH')"><i class="fa-solid fa-house-laptop"></i> WFH</button>
+          </div>
+          <div style="overflow-x:auto;max-height:500px;">
+            <table class="bulk-att-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Check In</th>
+                  <th>Check Out</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="bulkAttBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeBulkMarkModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveBulkAttendance()"><i class="fa-solid fa-save"></i> Save Attendance</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SINGLE MARK MODAL ===== -->
+    <div id="singleMarkModal" class="modal">
+      <div class="modal-content" style="max-width:480px;">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-user-clock"></i> Edit Attendance Record</h2>
+          <button class="close" onclick="closeSingleMarkModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div id="singleEmpInfo" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--gray-50);border-radius:10px;margin-bottom:18px;"></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" class="form-control" id="s_date">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select class="form-control" id="s_status">
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Leave">Leave</option>
+                <option value="WFH">Work From Home</option>
+                <option value="Holiday">Holiday</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Check In Time</label>
+              <input type="time" class="form-control" id="s_checkIn">
+            </div>
+            <div class="form-group">
+              <label>Check Out Time</label>
+              <input type="time" class="form-control" id="s_checkOut">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Note / Reason</label>
+            <input type="text" class="form-control" id="s_note" placeholder="Optional note or reason">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeSingleMarkModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveSingleAttendance()"><i class="fa-solid fa-save"></i> Save</button>
         </div>
       </div>
     </div>
 
     <script src="assets/js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+    // ============================= DATA =============================
+    const employees = [
+      { id:"EMP001", name:"Rakibul Hasan",    dept:"Technology",      position:"Senior Engineer" },
+      { id:"EMP002", name:"Nasrin Akter",      dept:"HR",              position:"Manager" },
+      { id:"EMP003", name:"Tanvir Ahmed",      dept:"Support",         position:"Technician" },
+      { id:"EMP004", name:"Shahnaz Begum",     dept:"Finance",         position:"Manager" },
+      { id:"EMP005", name:"Mahmudul Islam",    dept:"Sales",           position:"Executive" },
+      { id:"EMP006", name:"Fariha Noor",       dept:"Admin",           position:"Officer" },
+      { id:"EMP007", name:"Imran Khan",        dept:"Technology",      position:"Engineer" },
+      { id:"EMP008", name:"Sadia Rahman",      dept:"Support",         position:"Executive" },
+      { id:"EMP009", name:"Rezaul Karim",      dept:"Operations",      position:"Manager" },
+      { id:"EMP010", name:"Lamia Sultana",     dept:"Sales",           position:"Executive" },
+      { id:"EMP011", name:"Asif Mahmud",       dept:"Technology",      position:"Manager" },
+      { id:"EMP012", name:"Moriam Khatun",     dept:"Finance",         position:"Officer" },
+    ];
+
+    // avatarColors matched to employee_list
+    const avatarColors = ['#0f1d3f','#1e3a8a','#065f46','#5b21b6','#9d174d','#92400e','#1e40af','#7f1d1d','#14532d','#0c4a6e','#1e3a8a','#92400e'];
+
+    function getColor(idx) { return avatarColors[idx % avatarColors.length]; }
+    function getInitials(name) { const p = name.split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
+
+    // Attendance store: key = "EMP001_2026-02-19"
+    let attendanceStore = {};
+
+    // Holidays
+    const holidays = {
+      "2026-02-21": "Language Day",
+      "2026-03-17": "Mujib Birthday",
+      "2026-03-26": "Independence Day",
+    };
+
+    // Prefill 30 days of realistic attendance data
+    const today = new Date();
+    function dateStr(d) { return d.toISOString().split('T')[0]; }
+
+    const statusPool = ["Present","Present","Present","Present","Present","Late","Absent","WFH","Leave","Half Day"];
+    const checkInTimes = ["09:00","09:05","09:10","09:15","09:20","09:30","09:45","10:00","10:15","08:55"];
+    const checkOutTimes = ["18:00","18:05","18:10","17:30","18:30","19:00","18:00","17:45","18:00","18:15"];
+
+    for (let d = 60; d >= 0; d--) {
+      const day = new Date(today);
+      day.setDate(today.getDate() - d);
+      const ds = dateStr(day);
+      const dow = day.getDay();
+      employees.forEach((emp, i) => {
+        const key = `${emp.id}_${ds}`;
+        if (attendanceStore[key]) return;
+        if (holidays[ds]) { attendanceStore[key] = { status:"Holiday", checkIn:"", checkOut:"", note: holidays[ds] }; return; }
+        if (dow === 5 || dow === 6) return; // Fri/Sat = weekend (Bangladesh)
+        const seed = (i * 7 + d * 3) % statusPool.length;
+        const st = statusPool[seed];
+        const ciIdx = (i + d) % checkInTimes.length;
+        const coIdx = (i + d + 2) % checkOutTimes.length;
+        attendanceStore[key] = {
+          status: st,
+          checkIn: (st === "Present" || st === "Late" || st === "WFH" || st === "Half Day") ? checkInTimes[ciIdx] : "",
+          checkOut: (st === "Present" || st === "WFH") ? checkOutTimes[coIdx] : st === "Late" ? checkOutTimes[coIdx] : st === "Half Day" ? "13:00" : "",
+          note: st === "Absent" ? "Not reported" : st === "Leave" ? "Approved leave" : st === "Late" ? "Traffic delay" : ""
+        };
+      });
+    }
+
+    // ============================= STATE =============================
+    let currentPage = 1;
+    const rowsPerPage = 12;
+    let filteredRecords = [];
+    let currentView = 'daily';
+    let calYear, calMonth;
+    let singleEditEmpId = null;
+    let bulkDate = dateStr(today);
+
+    // Calendar state
+    calYear = today.getFullYear();
+    calMonth = today.getMonth();
+
+    // ============================= INIT =============================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set today's date in filter
+      document.getElementById('filterDate').value = dateStr(today);
+      document.getElementById('todayDateStr').textContent =
+        today.toLocaleDateString('en-GB', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+
+      // Summary dropdowns
+      document.getElementById('summaryMonth').value = today.getMonth();
+      document.getElementById('summaryYear').value = today.getFullYear();
+
+      // Populate cal employee dropdown
+      const calSel = document.getElementById('calEmpSelect');
+      employees.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id; opt.textContent = `${e.name} (${e.dept})`;
+        calSel.appendChild(opt);
+      });
+
+      applyFilters();
+      updateBannerStats(dateStr(today));
+    });
+
+    // Sidebar
+    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
+      document.querySelector('.sidebar').classList.toggle('active');
+    });
+    document.querySelectorAll('.sidebar .has-submenu > a').forEach(menu => {
+      menu.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+    });
+
+    // ============================= BANNER STATS =============================
+    function updateBannerStats(ds) {
+      let pres=0, abs=0, late=0, leave=0, wfh=0;
+      employees.forEach(emp => {
+        const r = attendanceStore[`${emp.id}_${ds}`];
+        if (!r) return;
+        if (r.status === 'Present') pres++;
+        else if (r.status === 'Absent') abs++;
+        else if (r.status === 'Late') late++;
+        else if (r.status === 'Leave') leave++;
+        else if (r.status === 'WFH') wfh++;
+      });
+      const total = employees.length;
+      document.getElementById('bPresent').textContent = pres;
+      document.getElementById('bAbsent').textContent = abs;
+      document.getElementById('bLate').textContent = late;
+      document.getElementById('bLeave').textContent = leave;
+      document.getElementById('bWfh').textContent = wfh;
+      document.getElementById('bPresentBar').style.width = total > 0 ? `${(pres/total)*100}%` : '0%';
+      document.getElementById('statPresent').textContent = pres;
+      document.getElementById('statAbsent').textContent = abs;
+      document.getElementById('statLate').textContent = late;
+      document.getElementById('statWfh').textContent = wfh;
+      document.getElementById('statLeave').textContent = leave;
+    }
+
+    // ============================= FILTERS =============================
+    function applyFilters() {
+      const ds = document.getElementById('filterDate').value || dateStr(today);
+      const status = document.getElementById('filterStatus').value;
+      const dept = document.getElementById('filterDept').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+
+      document.getElementById('dailyTableTitle').textContent =
+        `Attendance — ${new Date(ds + 'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})}`;
+
+      filteredRecords = employees
+        .filter(emp => {
+          const rec = attendanceStore[`${emp.id}_${ds}`] || { status:'—', checkIn:'', checkOut:'', note:'' };
+          const matchStatus = status === 'all' || rec.status === status;
+          const matchDept = dept === 'all' || emp.dept === dept;
+          const matchSearch = !search || emp.name.toLowerCase().includes(search) || emp.id.toLowerCase().includes(search);
+          return matchStatus && matchDept && matchSearch;
+        })
+        .map(emp => ({ emp, rec: attendanceStore[`${emp.id}_${ds}`] || { status:'—', checkIn:'', checkOut:'', note:'' }, ds }));
+
+      currentPage = 1;
+      renderDailyTable();
+      updateBannerStats(ds);
+    }
+
+    function clearFilters() {
+      document.getElementById('filterDate').value = dateStr(today);
+      document.getElementById('filterStatus').value = 'all';
+      document.getElementById('filterDept').value = 'all';
+      document.getElementById('searchInput').value = '';
+      applyFilters();
+    }
+
+    document.getElementById('filterDate').addEventListener('change', applyFilters);
+    document.getElementById('filterStatus').addEventListener('change', applyFilters);
+    document.getElementById('filterDept').addEventListener('change', applyFilters);
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+    // ============================= DAILY TABLE =============================
+    function renderDailyTable() {
+      const tbody = document.getElementById('attendanceBody');
+      tbody.innerHTML = '';
+      const start = (currentPage - 1) * rowsPerPage;
+      const pageData = filteredRecords.slice(start, start + rowsPerPage);
+
+      if (pageData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><i class="fa-solid fa-calendar-xmark"></i><h3>No records found</h3><p>Adjust filters or mark attendance for this date</p></div></td></tr>`;
+        updatePagination();
+        return;
+      }
+
+      pageData.forEach(({ emp, rec, ds }, idx) => {
+        const color = getColor(employees.indexOf(emp));
+        const initials = getInitials(emp.name);
+        const hours = calcHours(rec.checkIn, rec.checkOut);
+        const ot = calcOT(rec.checkIn, rec.checkOut);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color:var(--gray-400);font-size:12px;">${start+idx+1}</td>
+          <td>
+            <div class="emp-cell">
+              <div class="emp-avatar" style="background:${color}">${initials}</div>
+              <div>
+                <div class="emp-name">${emp.name}</div>
+                <div class="emp-dept">${emp.id} &bull; ${emp.position}</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="font-size:12px;font-weight:600;color:var(--gray-600);">${emp.dept}</span></td>
+          <td>${getStatusBadge(rec.status, emp.id, ds)}</td>
+          <td><span class="time-cell ${rec.checkIn && rec.checkIn > '09:05' ? 'late' : rec.checkIn ? 'early' : 'empty'}">${rec.checkIn || '—'}</span></td>
+          <td><span class="time-cell ${rec.checkOut ? '' : 'empty'}">${rec.checkOut || '—'}</span></td>
+          <td>${getHoursPill(hours)}</td>
+          <td>${ot > 0 ? `<span class="ot-pill">+${ot}h OT</span>` : '<span style="color:var(--gray-400);font-size:12px;">—</span>'}</td>
+          <td style="font-size:12px;color:var(--gray-500);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${rec.note || '—'}</td>
+          <td style="text-align:center;">
+            <button class="btn btn-secondary btn-sm" onclick="openSingleMarkModal('${emp.id}', '${ds}')">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePagination();
+    }
+
+    function getStatusBadge(status, empId, ds) {
+      const map = {
+        'Present': ['att-present','fa-circle-check'],
+        'Absent':  ['att-absent', 'fa-circle-xmark'],
+        'Late':    ['att-late',   'fa-clock'],
+        'Half Day':['att-halfday','fa-circle-half-stroke'],
+        'Leave':   ['att-leave',  'fa-calendar-minus'],
+        'WFH':     ['att-wfh',    'fa-house-laptop'],
+        'Holiday': ['att-holiday','fa-star'],
+        '—':       ['att-absent', 'fa-circle-question'],
+      };
+      const [cls, icon] = map[status] || ['att-absent','fa-circle-question'];
+      return `<span class="att-badge ${cls}" onclick="openSingleMarkModal('${empId}','${ds}')">
+        <i class="fa-solid ${icon}"></i> ${status}
+      </span>`;
+    }
+
+    function calcHours(ci, co) {
+      if (!ci || !co) return 0;
+      const [ch,cm] = ci.split(':').map(Number);
+      const [oh,om] = co.split(':').map(Number);
+      return Math.max(0, (oh*60+om - ch*60-cm) / 60);
+    }
+
+    function calcOT(ci, co) {
+      const h = calcHours(ci, co);
+      return h > 8 ? Math.round((h - 8) * 10) / 10 : 0;
+    }
+
+    function getHoursPill(h) {
+      if (h === 0) return `<span class="hours-pill none">0h</span>`;
+      if (h >= 8) return `<span class="hours-pill good">${h.toFixed(1)}h</span>`;
+      if (h >= 4) return `<span class="hours-pill partial">${h.toFixed(1)}h</span>`;
+      return `<span class="hours-pill none">${h.toFixed(1)}h</span>`;
+    }
+
+    // ============================= PAGINATION =============================
+    function updatePagination() {
+      const total = filteredRecords.length;
+      const totalPages = Math.ceil(total / rowsPerPage);
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = Math.min(start + rowsPerPage, total);
+      document.getElementById('paginationInfo').textContent =
+        total === 0 ? 'No records' : `Showing ${start+1}–${end} of ${total} records`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+    }
+
+    function prevPage() { if (currentPage > 1) { currentPage--; renderDailyTable(); } }
+    function nextPage() {
+      const tp = Math.ceil(filteredRecords.length / rowsPerPage);
+      if (currentPage < tp) { currentPage++; renderDailyTable(); }
+    }
+
+    // ============================= VIEW SWITCH =============================
+    function switchToView(view) {
+      currentView = view;
+      ['daily','calendar','summary'].forEach(v => {
+        document.getElementById(v+'View').style.display = v === view ? 'block' : 'none';
+        document.getElementById('tab-'+v).classList.toggle('active', v === view);
+      });
+      if (view === 'calendar') renderCalendar();
+      if (view === 'summary') renderSummary();
+    }
+
+    // ============================= CALENDAR VIEW =============================
+    function renderCalendar() {
+      const label = new Date(calYear, calMonth, 1).toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+      document.getElementById('calMonthLabel').textContent = label;
+
+      const empId = document.getElementById('calEmpSelect').value;
+      const cells = document.getElementById('calCells');
+      cells.innerHTML = '';
+
+      const firstDay = new Date(calYear, calMonth, 1).getDay();
+      const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+      const prevMonthDays = new Date(calYear, calMonth, 0).getDate();
+
+      // Prev month fillers
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-cell other-month';
+        cell.innerHTML = `<div class="cal-date">${prevMonthDays - i}</div>`;
+        cells.appendChild(cell);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const dow = new Date(calYear, calMonth, d).getDay();
+        const isToday = ds === dateStr(today);
+        const isWeekend = dow === 5 || dow === 6;
+        const isHoliday = !!holidays[ds];
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell${isToday?' today':''}${isWeekend?' weekend':''}${isHoliday?' holiday':''}`;
+        cell.innerHTML = `<div class="cal-date">${d}</div>`;
+
+        if (isHoliday) {
+          cell.innerHTML += `<div class="cal-holiday-label">${holidays[ds]}</div>`;
+        } else if (!isWeekend) {
+          const dotsHtml = document.createElement('div');
+          dotsHtml.style.display = 'flex';
+          dotsHtml.style.flexWrap = 'wrap';
+          dotsHtml.style.gap = '1px';
+
+          if (empId === 'all') {
+            // Show mini dots for all employees
+            employees.forEach(emp => {
+              const rec = attendanceStore[`${emp.id}_${ds}`];
+              if (!rec) return;
+              const st = rec.status.toLowerCase().replace(' ','');
+              const dot = document.createElement('span');
+              dot.className = `cal-att-dot ${rec.status==='Present'?'present':rec.status==='Absent'?'absent':rec.status==='Late'?'late':rec.status==='Half Day'?'halfday':rec.status==='Leave'?'leave':rec.status==='WFH'?'wfh':'holiday'}`;
+              dot.title = `${emp.name}: ${rec.status}`;
+              dot.textContent = getInitials(emp.name)[0];
+              dotsHtml.appendChild(dot);
+            });
+          } else {
+            const rec = attendanceStore[`${empId}_${ds}`];
+            if (rec) {
+              const statusMap = {Present:'present',Absent:'absent',Late:'late','Half Day':'halfday',Leave:'leave',WFH:'wfh',Holiday:'holiday'};
+              const dot = document.createElement('span');
+              dot.className = `cal-att-dot ${statusMap[rec.status]||'holiday'}`;
+              dot.style.width='auto'; dot.style.height='auto';
+              dot.style.padding='2px 8px'; dot.style.borderRadius='4px';
+              dot.style.fontSize='11px'; dot.style.fontWeight='700';
+              dot.textContent = rec.status;
+              dotsHtml.appendChild(dot);
+              if (rec.checkIn) {
+                const t = document.createElement('div');
+                t.style.cssText='font-size:10px;color:var(--gray-500);margin-top:2px;';
+                t.textContent = `${rec.checkIn}${rec.checkOut?' – '+rec.checkOut:''}`;
+                cell.appendChild(t);
+              }
+            }
+          }
+          cell.appendChild(dotsHtml);
+        }
+
+        cell.addEventListener('click', () => {
+          if (empId !== 'all' && !isWeekend && !isHoliday) {
+            openSingleMarkModal(empId, ds);
+          }
+        });
+
+        cells.appendChild(cell);
+      }
+
+      // Next month fillers
+      const totalCells = firstDay + daysInMonth;
+      const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+      for (let i = 1; i <= remaining; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-cell other-month';
+        cell.innerHTML = `<div class="cal-date">${i}</div>`;
+        cells.appendChild(cell);
+      }
+    }
+
+    function calPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+    function calNext() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+    // ============================= SUMMARY VIEW =============================
+    function renderSummary() {
+      const month = parseInt(document.getElementById('summaryMonth').value);
+      const year = parseInt(document.getElementById('summaryYear').value);
+      const daysInMonth = new Date(year, month+1, 0).getDate();
+      const grid = document.getElementById('summaryGrid');
+      grid.innerHTML = '';
+
+      employees.forEach((emp, i) => {
+        let pres=0, abs=0, late=0, leave=0, wfh=0, halfday=0, workDays=0;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          const dow = new Date(year, month, d).getDay();
+          if (dow === 5 || dow === 6) continue;
+          if (holidays[ds]) continue;
+          workDays++;
+          const rec = attendanceStore[`${emp.id}_${ds}`];
+          if (!rec || rec.status === '—') { abs++; continue; }
+          switch (rec.status) {
+            case 'Present': pres++; break;
+            case 'Absent': abs++; break;
+            case 'Late': late++; break;
+            case 'Leave': leave++; break;
+            case 'WFH': wfh++; break;
+            case 'Half Day': halfday++; break;
+          }
+        }
+
+        const rate = workDays > 0 ? Math.round(((pres + late + wfh) / workDays) * 100) : 0;
+        const color = getColor(i);
+        const initials = getInitials(emp.name);
+
+        const card = document.createElement('div');
+        card.className = 'emp-summary-card';
+        card.innerHTML = `
+          <div class="esc-header">
+            <div class="esc-avatar" style="background:${color}">${initials}</div>
+            <div>
+              <div class="esc-name">${emp.name}</div>
+              <div class="esc-pos">${emp.position} &bull; ${emp.dept}</div>
+            </div>
+          </div>
+          <div class="esc-stats">
+            <div class="esc-stat"><div class="esc-stat-val present">${pres}</div><div class="esc-stat-label">Present</div></div>
+            <div class="esc-stat"><div class="esc-stat-val absent">${abs}</div><div class="esc-stat-label">Absent</div></div>
+            <div class="esc-stat"><div class="esc-stat-val late">${late}</div><div class="esc-stat-label">Late</div></div>
+            <div class="esc-stat"><div class="esc-stat-val leave">${leave}</div><div class="esc-stat-label">Leave</div></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:10px;font-size:12px;color:var(--gray-500);">
+            <span><i class="fa-solid fa-house-laptop" style="color:#0d9488;"></i> WFH: ${wfh}</span>
+            <span><i class="fa-solid fa-circle-half-stroke" style="color:var(--info);"></i> Half Day: ${halfday}</span>
+            <span><i class="fa-solid fa-calendar-days" style="color:var(--gray-400);"></i> Work Days: ${workDays}</span>
+          </div>
+          <div class="esc-progress"><div class="esc-progress-fill" style="width:${rate}%"></div></div>
+          <div class="esc-rate">
+            <span>Attendance Rate</span>
+            <span style="color:${rate>=90?'var(--success)':rate>=75?'var(--warning)':'var(--danger)'};">${rate}%</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ============================= BULK MARK =============================
+    function openBulkMarkModal() {
+      bulkDate = document.getElementById('filterDate').value || dateStr(today);
+      document.getElementById('bulkDateLabel').textContent =
+        new Date(bulkDate+'T00:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'long',year:'numeric'});
+
+      const tbody = document.getElementById('bulkAttBody');
+      tbody.innerHTML = '';
+
+      employees.forEach((emp, i) => {
+        const rec = attendanceStore[`${emp.id}_${bulkDate}`] || { status:'Present', checkIn:'09:00', checkOut:'18:00', note:'' };
+        const color = getColor(i);
+        const initials = getInitials(emp.name);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color:var(--gray-400);font-size:12px;">${i+1}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:28px;height:28px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">${initials}</div>
+              <div>
+                <div style="font-weight:600;font-size:13px;">${emp.name}</div>
+                <div style="font-size:11px;color:var(--gray-500);">${emp.id}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:12px;color:var(--gray-600);">${emp.dept}</td>
+          <td>
+            <select class="bulk-status-select" data-id="${emp.id}" id="bs_${emp.id}">
+              <option value="Present" ${rec.status==='Present'?'selected':''}>Present</option>
+              <option value="Absent" ${rec.status==='Absent'?'selected':''}>Absent</option>
+              <option value="Late" ${rec.status==='Late'?'selected':''}>Late</option>
+              <option value="Half Day" ${rec.status==='Half Day'?'selected':''}>Half Day</option>
+              <option value="Leave" ${rec.status==='Leave'?'selected':''}>Leave</option>
+              <option value="WFH" ${rec.status==='WFH'?'selected':''}>Work From Home</option>
+              <option value="Holiday" ${rec.status==='Holiday'?'selected':''}>Holiday</option>
+            </select>
+          </td>
+          <td><input type="time" class="time-input" id="bci_${emp.id}" value="${rec.checkIn||'09:00'}"></td>
+          <td><input type="time" class="time-input" id="bco_${emp.id}" value="${rec.checkOut||'18:00'}"></td>
+          <td><input type="text" class="time-input" style="width:130px;" id="bn_${emp.id}" value="${rec.note||''}" placeholder="Note..."></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('bulkMarkModal').classList.add('show');
+    }
+
+    function closeBulkMarkModal() { document.getElementById('bulkMarkModal').classList.remove('show'); }
+
+    function setAllStatus(status) {
+      employees.forEach(emp => {
+        document.getElementById(`bs_${emp.id}`).value = status;
+        if (status === 'Absent' || status === 'Leave') {
+          document.getElementById(`bci_${emp.id}`).value = '';
+          document.getElementById(`bco_${emp.id}`).value = '';
+        } else if (status === 'Present' || status === 'WFH') {
+          document.getElementById(`bci_${emp.id}`).value = '09:00';
+          document.getElementById(`bco_${emp.id}`).value = '18:00';
+        } else if (status === 'Late') {
+          document.getElementById(`bci_${emp.id}`).value = '10:00';
+          document.getElementById(`bco_${emp.id}`).value = '18:00';
+        }
+      });
+    }
+
+    function saveBulkAttendance() {
+      employees.forEach(emp => {
+        const status = document.getElementById(`bs_${emp.id}`).value;
+        const checkIn = document.getElementById(`bci_${emp.id}`).value;
+        const checkOut = document.getElementById(`bco_${emp.id}`).value;
+        const note = document.getElementById(`bn_${emp.id}`).value;
+        attendanceStore[`${emp.id}_${bulkDate}`] = { status, checkIn, checkOut, note };
+      });
+      closeBulkMarkModal();
+      applyFilters();
+      showNotification('Attendance saved for all employees', 'success');
+    }
+
+    function markAllPresent() {
+      const ds = document.getElementById('filterDate').value || dateStr(today);
+      employees.forEach(emp => {
+        attendanceStore[`${emp.id}_${ds}`] = { status:'Present', checkIn:'09:00', checkOut:'18:00', note:'' };
+      });
+      applyFilters();
+      showNotification('All employees marked Present', 'success');
+    }
+
+    // ============================= SINGLE MARK =============================
+    function openSingleMarkModal(empId, ds) {
+      if (!empId) {
+        // Open for first employee with today's date
+        singleEditEmpId = employees[0].id;
+        ds = dateStr(today);
+      } else {
+        singleEditEmpId = empId;
+      }
+      ds = ds || dateStr(today);
+
+      const emp = employees.find(e => e.id === singleEditEmpId);
+      const rec = attendanceStore[`${singleEditEmpId}_${ds}`] || { status:'Present', checkIn:'09:00', checkOut:'18:00', note:'' };
+      const color = getColor(employees.indexOf(emp));
+      const initials = getInitials(emp.name);
+
+      document.getElementById('singleEmpInfo').innerHTML = `
+        <div style="width:44px;height:44px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;flex-shrink:0;">${initials}</div>
+        <div>
+          <div style="font-weight:700;font-size:15px;color:var(--gray-900);">${emp.name}</div>
+          <div style="font-size:12px;color:var(--gray-500);">${emp.id} &bull; ${emp.position} &bull; ${emp.dept}</div>
+        </div>
+      `;
+
+      document.getElementById('s_date').value = ds;
+      document.getElementById('s_status').value = rec.status;
+      document.getElementById('s_checkIn').value = rec.checkIn || '';
+      document.getElementById('s_checkOut').value = rec.checkOut || '';
+      document.getElementById('s_note').value = rec.note || '';
+
+      document.getElementById('singleMarkModal').classList.add('show');
+    }
+
+    function closeSingleMarkModal() { document.getElementById('singleMarkModal').classList.remove('show'); }
+
+    function saveSingleAttendance() {
+      const ds = document.getElementById('s_date').value;
+      const status = document.getElementById('s_status').value;
+      const checkIn = document.getElementById('s_checkIn').value;
+      const checkOut = document.getElementById('s_checkOut').value;
+      const note = document.getElementById('s_note').value;
+
+      if (!ds) { showNotification('Please select a date', 'error'); return; }
+
+      attendanceStore[`${singleEditEmpId}_${ds}`] = { status, checkIn, checkOut, note };
+      closeSingleMarkModal();
+
+      const emp = employees.find(e => e.id === singleEditEmpId);
+      showNotification(`Attendance updated for ${emp.name}`, 'success');
+      applyFilters();
+      if (currentView === 'calendar') renderCalendar();
+    }
+
+    // ============================= EXPORT =============================
+    function exportToExcel() {
+      const ds = document.getElementById('filterDate').value || dateStr(today);
+      const data = employees.map(emp => {
+        const rec = attendanceStore[`${emp.id}_${ds}`] || {};
+        const h = calcHours(rec.checkIn, rec.checkOut);
+        return {
+          'Employee ID': emp.id,
+          'Name': emp.name,
+          'Department': emp.dept,
+          'Position': emp.position,
+          'Date': ds,
+          'Status': rec.status || '—',
+          'Check In': rec.checkIn || '',
+          'Check Out': rec.checkOut || '',
+          'Work Hours': h > 0 ? h.toFixed(1) : '',
+          'Overtime': calcOT(rec.checkIn, rec.checkOut) > 0 ? calcOT(rec.checkIn, rec.checkOut) : '',
+          'Note': rec.note || ''
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
+      XLSX.writeFile(wb, `SmartISP_Attendance_${ds}.xlsx`);
+      showNotification('Attendance exported to Excel', 'success');
+    }
+
+    // ============================= NOTIFICATION =============================
+    function showNotification(message, type = 'success') {
+      const icons = { success:'check-circle', error:'exclamation-circle', warning:'triangle-exclamation' };
+      const titles = { success:'Success', error:'Error', warning:'Warning' };
+      const n = document.createElement('div');
+      n.className = `notification ${type}`;
+      n.innerHTML = `
+        <div class="notification-content">
+          <div class="notification-icon ${type}"><i class="fa-solid fa-${icons[type]}"></i></div>
+          <div class="notification-message">
+            <div class="notification-title">${titles[type]}</div>
+            <div class="notification-text">${message}</div>
+          </div>
+        </div>`;
+      document.body.appendChild(n);
+      setTimeout(() => { n.style.animation='slideInRight 0.3s ease reverse'; setTimeout(()=>n.remove(),300); }, 3500);
+    }
+
+    // Close modals on outside click
+    window.addEventListener('click', e => {
+      if (e.target === document.getElementById('bulkMarkModal')) closeBulkMarkModal();
+      if (e.target === document.getElementById('singleMarkModal')) closeSingleMarkModal();
+    });
+    </script>
   </body>
 </html>
