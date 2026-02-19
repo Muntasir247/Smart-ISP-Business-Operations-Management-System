@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Promee International - New Request</title>
     <link rel="stylesheet" href="assets/css/style.css" />
-    <!-- FontAwesome for Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <title>Department</title>
+    <style>
+      table th {
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
             <!-- Sidebar -->
@@ -24,7 +28,7 @@
         </li>
 
         <!-- Client -->
-        <li class="has-submenu open">
+        <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-user"></i> Client
             <i
@@ -34,7 +38,7 @@
           </a>
           <ul class="submenu">
             <li>
-              <a href="new_request.html" class="active"
+              <a href="new_request.html"
                 ><i class="fa-regular fa-circle"></i> New Request</a
               >
             </li>
@@ -108,7 +112,7 @@
         </li>
 
         <!-- HR & Payroll (Your Part) -->
-        <li class="has-submenu">
+        <li class="has-submenu open">
           <a href="#"
             ><i class="fa-solid fa-users-gear"></i> HR & Payroll
             <i
@@ -138,7 +142,7 @@
               >
             </li>
             <li>
-              <a href="department.html"
+              <a href="department.html" class="active"
                 ><i class="fa-regular fa-circle"></i> Department</a
               >
             </li>
@@ -354,7 +358,7 @@
     <!-- Main Content Area -->
     <div class="main-content">
       <!-- Header -->
-     <header>
+      <header>
         <div class="header-left">
           <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
           <div class="search-box">
@@ -379,221 +383,24 @@
         </div>
       </header>
 
-      <!-- Page Content -->
       <div class="page-content">
-        <div class="content-header">
-          <h1><i class="fa-solid fa-user-plus"></i> New Connection Request</h1>
-          <p>
-            Process new client connection requests and schedule installations
-          </p>
-        </div>
+        <div class="card">
+          <h2>Department</h2>
 
-        <div class="card-grid">
-          <!-- Request Form -->
-          <div class="card">
-            <div class="card-header">
-              <h3><i class="fa-solid fa-file-lines"></i> Request Details</h3>
-            </div>
-            <div class="card-body">
-              <form class="request-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="client-name">Client Name *</label>
-                    <input
-                      type="text"
-                      id="client-name"
-                      required
-                      placeholder="Enter client name"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="client-phone">Phone Number *</label>
-                    <input
-                      type="tel"
-                      id="client-phone"
-                      required
-                      placeholder="Enter phone number"
-                    />
-                  </div>
-                </div>
+          <form>
+            <input id="deptInput" placeholder="New Department" required />
+            <button>Add Department</button>
+          </form>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="client-email">Email Address</label>
-                    <input
-                      type="email"
-                      id="client-email"
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="client-address">Installation Address *</label>
-                    <input
-                      type="text"
-                      id="client-address"
-                      required
-                      placeholder="Enter installation address"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="package-type">Package Type *</label>
-                    <select id="package-type" required>
-                      <option value="">Select Package</option>
-                      <option value="basic">Basic - 5 Mbps</option>
-                      <option value="standard">Standard - 10 Mbps</option>
-                      <option value="premium">Premium - 20 Mbps</option>
-                      <option value="ultra">Ultra - 50 Mbps</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="connection-type">Connection Type *</label>
-                    <select id="connection-type" required>
-                      <option value="">Select Type</option>
-                      <option value="fiber">Fiber Optic</option>
-                      <option value="wireless">Wireless</option>
-                      <option value="copper">Copper</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="preferred-date"
-                      >Preferred Installation Date *</label
-                    >
-                    <input type="date" id="preferred-date" required />
-                  </div>
-                  <div class="form-group">
-                    <label for="preferred-time">Preferred Time Slot *</label>
-                    <select id="preferred-time" required>
-                      <option value="">Select Time</option>
-                      <option value="morning">Morning (9AM - 12PM)</option>
-                      <option value="afternoon">Afternoon (12PM - 4PM)</option>
-                      <option value="evening">Evening (4PM - 7PM)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="notes">Additional Notes</label>
-                  <textarea
-                    id="notes"
-                    rows="3"
-                    placeholder="Any special requirements or instructions..."
-                  ></textarea>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-primary btn-navy">
-                    <i class="fa-solid fa-check"></i> Submit Request
-                  </button>
-                  <button type="reset" class="btn btn-secondary btn-navy">
-                    <i class="fa-solid fa-undo"></i> Clear Form
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Recent Requests -->
-          <div class="card">
-            <div class="card-header">
-              <h3>
-                <i class="fa-solid fa-clock-rotate-left"></i> Recent Requests
-              </h3>
-            </div>
-            <div class="card-body">
-              <div class="request-list">
-                <div class="request-item">
-                  <div class="request-info">
-                    <h4>John Doe</h4>
-                    <p><i class="fa-solid fa-phone"></i> +8801234567890</p>
-                    <p>
-                      <i class="fa-solid fa-location-dot"></i> Dhanmondi, Dhaka
-                    </p>
-                    <p><i class="fa-solid fa-wifi"></i> Premium - 20 Mbps</p>
-                  </div>
-                  <div class="request-status">
-                    <span class="status-badge pending">Pending</span>
-                    <small>2 hours ago</small>
-                  </div>
-                </div>
-
-                <div class="request-item">
-                  <div class="request-info">
-                    <h4>Sarah Ahmed</h4>
-                    <p><i class="fa-solid fa-phone"></i> +8801987654321</p>
-                    <p>
-                      <i class="fa-solid fa-location-dot"></i> Gulshan, Dhaka
-                    </p>
-                    <p><i class="fa-solid fa-wifi"></i> Standard - 10 Mbps</p>
-                  </div>
-                  <div class="request-status">
-                    <span class="status-badge scheduled">Scheduled</span>
-                    <small>5 hours ago</small>
-                  </div>
-                </div>
-
-                <div class="request-item">
-                  <div class="request-info">
-                    <h4>Mohammad Rahman</h4>
-                    <p><i class="fa-solid fa-phone"></i> +8801555123456</p>
-                    <p>
-                      <i class="fa-solid fa-location-dot"></i> Mirpur, Dhaka
-                    </p>
-                    <p><i class="fa-solid fa-wifi"></i> Basic - 5 Mbps</p>
-                  </div>
-                  <div class="request-status">
-                    <span class="status-badge completed">Completed</span>
-                    <small>1 day ago</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Statistics Cards -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fa-solid fa-hourglass-half"></i>
-            </div>
-            <div class="stat-info">
-              <h3>12</h3>
-              <p>Pending Requests</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fa-solid fa-calendar-check"></i>
-            </div>
-            <div class="stat-info">
-              <h3>8</h3>
-              <p>Scheduled Today</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fa-solid fa-check-circle"></i>
-            </div>
-            <div class="stat-info">
-              <h3>45</h3>
-              <p>Completed This Week</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon">
-              <i class="fa-solid fa-chart-line"></i>
-            </div>
-            <div class="stat-info">
-              <h3>+15%</h3>
-              <p>Growth This Month</p>
-            </div>
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="deptTable"></tbody>
+          </table>
         </div>
       </div>
     </div>

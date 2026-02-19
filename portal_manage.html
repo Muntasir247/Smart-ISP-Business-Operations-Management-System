@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart ISP - Portal Management</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Promee International - Portal Management</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
     <!-- FontAwesome for Icons -->
     <link
       rel="stylesheet"
@@ -12,46 +12,26 @@
     />
   </head>
   <body>
-    <!-- Sidebar -->
+            <!-- Sidebar -->
     <aside class="sidebar">
       <div class="brand">
-        <i class="fa-solid fa-circle-nodes"></i> Smart ISP
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
       </div>
       <ul class="menu">
+        <!-- Dashboard -->
         <li>
           <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
         </li>
 
-        <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-cogs"></i> Configuration
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
-        </li>
-
+        <!-- Client -->
         <li class="has-submenu open">
           <a href="#"
             ><i class="fa-solid fa-user"></i> Client
             <i
               class="fa-solid fa-caret-right"
-              style="
-                float: right;
-                font-size: 10px;
-                margin-top: 5px;
-                transform: rotate(90deg);
-              "
-            ></i
-          ></a>
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="new_request.html"
@@ -91,31 +71,33 @@
           </ul>
         </li>
 
+        <!-- Billing -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
               >
             </li>
           </ul>
         </li>
 
+        <!-- Mikrotik Server -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-server"></i> Mikrotik Server
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="Bulk_Client_Import.html"
@@ -125,84 +107,167 @@
           </ul>
         </li>
 
+        <!-- HR & Payroll (Your Part) -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-users-gear"></i> HR & Payroll
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
               >
             </li>
           </ul>
         </li>
 
+        <!-- Leave Management -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-door-open"></i> Leave Management
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
               >
             </li>
           </ul>
         </li>
 
+        <!-- Events & Holidays -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
               >
             </li>
           </ul>
         </li>
 
+        <!-- Support & Ticketing -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-headset"></i> Support & Ticketing
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
-            <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
-            <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
-            <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
-            <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
-            <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
-            <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
-            <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
           </ul>
         </li>
 
+        <!-- Task Management -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-list-check"></i> Task Management
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="dropdown1.html"
@@ -212,31 +277,15 @@
           </ul>
         </li>
 
-        <li class="has-submenu">
-          <a href="#"
-            ><i class="fa-solid fa-cart-shopping"></i> Bandwidth Buy
-            <i
-              class="fa-solid fa-caret-right"
-              style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
-          <ul class="submenu">
-            <li>
-              <a href="dropdown1.html"
-                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
-              >
-            </li>
-          </ul>
-        </li>
-
+        <!-- Purchase -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-basket-shopping"></i> Purchase
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="dropdown1.html"
@@ -246,14 +295,15 @@
           </ul>
         </li>
 
+        <!-- Inventory -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-boxes-stacked"></i> Inventory
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="dropdown1.html"
@@ -263,14 +313,15 @@
           </ul>
         </li>
 
+        <!-- Assets -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-laptop-medical"></i> Assets
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="dropdown1.html"
@@ -280,14 +331,15 @@
           </ul>
         </li>
 
+        <!-- Income -->
         <li class="has-submenu">
           <a href="#"
             ><i class="fa-solid fa-money-bill-trend-up"></i> Income
             <i
               class="fa-solid fa-caret-right"
               style="float: right; font-size: 10px; margin-top: 5px"
-            ></i
-          ></a>
+            ></i>
+          </a>
           <ul class="submenu">
             <li>
               <a href="dropdown1.html"
@@ -321,6 +373,8 @@
           <div class="notifications">
             <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
           </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
           <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
         </div>
       </header>
@@ -384,53 +438,75 @@
                   <h4><i class="fa-solid fa-globe"></i> General Settings</h4>
                   <div class="form-group">
                     <label for="portal-status">
-                      <input type="checkbox" id="portal-status" checked> Enable Client Portal
+                      <input type="checkbox" id="portal-status" checked />
+                      Enable Client Portal
                     </label>
                   </div>
                   <div class="form-group">
                     <label for="auto-registration">
-                      <input type="checkbox" id="auto-registration" checked> Allow Self-Registration
+                      <input type="checkbox" id="auto-registration" checked />
+                      Allow Self-Registration
                     </label>
                   </div>
                   <div class="form-group">
                     <label for="portal-url">Portal URL</label>
-                    <input type="text" id="portal-url" value="https://portal.smartisp.com" readonly>
+                    <input
+                      type="text"
+                      id="portal-url"
+                      value="https://portal.smartisp.com"
+                      readonly
+                    />
                   </div>
                 </div>
 
                 <div class="form-section">
                   <h4><i class="fa-solid fa-lock"></i> Security Settings</h4>
                   <div class="form-group">
-                    <label for="session-timeout">Session Timeout (minutes)</label>
-                    <input type="number" id="session-timeout" value="30" min="5" max="120">
+                    <label for="session-timeout"
+                      >Session Timeout (minutes)</label
+                    >
+                    <input
+                      type="number"
+                      id="session-timeout"
+                      value="30"
+                      min="5"
+                      max="120"
+                    />
                   </div>
                   <div class="form-group">
                     <label for="password-policy">
-                      <input type="checkbox" id="password-policy" checked> Enforce Strong Passwords
+                      <input type="checkbox" id="password-policy" checked />
+                      Enforce Strong Passwords
                     </label>
                   </div>
                   <div class="form-group">
                     <label for="two-factor">
-                      <input type="checkbox" id="two-factor"> Enable Two-Factor Authentication
+                      <input type="checkbox" id="two-factor" /> Enable
+                      Two-Factor Authentication
                     </label>
                   </div>
                 </div>
 
                 <div class="form-section">
-                  <h4><i class="fa-solid fa-bell"></i> Notification Settings</h4>
+                  <h4>
+                    <i class="fa-solid fa-bell"></i> Notification Settings
+                  </h4>
                   <div class="form-group">
                     <label for="email-notifications">
-                      <input type="checkbox" id="email-notifications" checked> Email Notifications
+                      <input type="checkbox" id="email-notifications" checked />
+                      Email Notifications
                     </label>
                   </div>
                   <div class="form-group">
                     <label for="sms-notifications">
-                      <input type="checkbox" id="sms-notifications"> SMS Notifications
+                      <input type="checkbox" id="sms-notifications" /> SMS
+                      Notifications
                     </label>
                   </div>
                   <div class="form-group">
                     <label for="payment-reminders">
-                      <input type="checkbox" id="payment-reminders" checked> Payment Reminders
+                      <input type="checkbox" id="payment-reminders" checked />
+                      Payment Reminders
                     </label>
                   </div>
                 </div>
@@ -455,32 +531,38 @@
                 <div class="access-controls">
                   <div class="control-item">
                     <label for="view-billing">
-                      <input type="checkbox" id="view-billing" checked> View Billing Information
+                      <input type="checkbox" id="view-billing" checked /> View
+                      Billing Information
                     </label>
                   </div>
                   <div class="control-item">
                     <label for="make-payments">
-                      <input type="checkbox" id="make-payments" checked> Make Online Payments
+                      <input type="checkbox" id="make-payments" checked /> Make
+                      Online Payments
                     </label>
                   </div>
                   <div class="control-item">
                     <label for="view-usage">
-                      <input type="checkbox" id="view-usage" checked> View Data Usage
+                      <input type="checkbox" id="view-usage" checked /> View
+                      Data Usage
                     </label>
                   </div>
                   <div class="control-item">
                     <label for="submit-tickets">
-                      <input type="checkbox" id="submit-tickets" checked> Submit Support Tickets
+                      <input type="checkbox" id="submit-tickets" checked />
+                      Submit Support Tickets
                     </label>
                   </div>
                   <div class="control-item">
                     <label for="change-package">
-                      <input type="checkbox" id="change-package"> Request Package Changes
+                      <input type="checkbox" id="change-package" /> Request
+                      Package Changes
                     </label>
                   </div>
                   <div class="control-item">
                     <label for="update-profile">
-                      <input type="checkbox" id="update-profile" checked> Update Profile Information
+                      <input type="checkbox" id="update-profile" checked />
+                      Update Profile Information
                     </label>
                   </div>
                 </div>
@@ -498,11 +580,25 @@
                 </div>
                 <div class="form-group">
                   <label for="max-attempts">Max Login Attempts</label>
-                  <input type="number" id="max-attempts" value="5" min="3" max="10">
+                  <input
+                    type="number"
+                    id="max-attempts"
+                    value="5"
+                    min="3"
+                    max="10"
+                  />
                 </div>
                 <div class="form-group">
-                  <label for="lockout-duration">Account Lockout Duration (minutes)</label>
-                  <input type="number" id="lockout-duration" value="15" min="5" max="60">
+                  <label for="lockout-duration"
+                    >Account Lockout Duration (minutes)</label
+                  >
+                  <input
+                    type="number"
+                    id="lockout-duration"
+                    value="15"
+                    min="5"
+                    max="60"
+                  />
                 </div>
               </div>
             </div>
@@ -536,7 +632,11 @@
               </div>
               <div class="filter-group">
                 <label for="filter-search">Search</label>
-                <input type="text" id="filter-search" placeholder="Search by name or email">
+                <input
+                  type="text"
+                  id="filter-search"
+                  placeholder="Search by name or email"
+                />
               </div>
               <button class="btn btn-navy">
                 <i class="fa-solid fa-search"></i> Filter
@@ -567,13 +667,22 @@
                     <td>2024-01-15 09:30 AM</td>
                     <td><span class="status-badge active">Active</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info btn-navy" title="View Details">
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
                         <i class="fa-solid fa-eye"></i>
                       </button>
-                      <button class="btn btn-sm btn-warning btn-navy" title="Reset Password">
+                      <button
+                        class="btn btn-sm btn-warning btn-navy"
+                        title="Reset Password"
+                      >
                         <i class="fa-solid fa-key"></i>
                       </button>
-                      <button class="btn btn-sm btn-danger btn-navy" title="Lock Account">
+                      <button
+                        class="btn btn-sm btn-danger btn-navy"
+                        title="Lock Account"
+                      >
                         <i class="fa-solid fa-lock"></i>
                       </button>
                     </td>
@@ -587,13 +696,22 @@
                     <td>2024-01-14 02:15 PM</td>
                     <td><span class="status-badge active">Active</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info btn-navy" title="View Details">
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
                         <i class="fa-solid fa-eye"></i>
                       </button>
-                      <button class="btn btn-sm btn-warning btn-navy" title="Reset Password">
+                      <button
+                        class="btn btn-sm btn-warning btn-navy"
+                        title="Reset Password"
+                      >
                         <i class="fa-solid fa-key"></i>
                       </button>
-                      <button class="btn btn-sm btn-danger btn-navy" title="Lock Account">
+                      <button
+                        class="btn btn-sm btn-danger btn-navy"
+                        title="Lock Account"
+                      >
                         <i class="fa-solid fa-lock"></i>
                       </button>
                     </td>
@@ -607,13 +725,22 @@
                     <td>2024-01-10 11:45 AM</td>
                     <td><span class="status-badge locked">Locked</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info btn-navy" title="View Details">
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
                         <i class="fa-solid fa-eye"></i>
                       </button>
-                      <button class="btn btn-sm btn-success btn-navy" title="Unlock Account">
+                      <button
+                        class="btn btn-sm btn-success btn-navy"
+                        title="Unlock Account"
+                      >
                         <i class="fa-solid fa-unlock"></i>
                       </button>
-                      <button class="btn btn-sm btn-warning btn-navy" title="Reset Password">
+                      <button
+                        class="btn btn-sm btn-warning btn-navy"
+                        title="Reset Password"
+                      >
                         <i class="fa-solid fa-key"></i>
                       </button>
                     </td>
@@ -627,13 +754,22 @@
                     <td>Never</td>
                     <td><span class="status-badge inactive">Inactive</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info btn-navy" title="View Details">
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
                         <i class="fa-solid fa-eye"></i>
                       </button>
-                      <button class="btn btn-sm btn-success btn-navy" title="Send Activation">
+                      <button
+                        class="btn btn-sm btn-success btn-navy"
+                        title="Send Activation"
+                      >
                         <i class="fa-solid fa-envelope"></i>
                       </button>
-                      <button class="btn btn-sm btn-danger btn-navy" title="Delete">
+                      <button
+                        class="btn btn-sm btn-danger btn-navy"
+                        title="Delete"
+                      >
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </td>
@@ -652,7 +788,9 @@
           <div class="card-body">
             <div class="analytics-grid">
               <div class="analytics-item">
-                <h4><i class="fa-solid fa-sign-in-alt"></i> Login Statistics</h4>
+                <h4>
+                  <i class="fa-solid fa-sign-in-alt"></i> Login Statistics
+                </h4>
                 <div class="analytics-data">
                   <p>Daily Average: <strong>45 users</strong></p>
                   <p>Peak Hours: <strong>8PM - 10PM</strong></p>
@@ -660,7 +798,9 @@
                 </div>
               </div>
               <div class="analytics-item">
-                <h4><i class="fa-solid fa-mouse-pointer"></i> Popular Features</h4>
+                <h4>
+                  <i class="fa-solid fa-mouse-pointer"></i> Popular Features
+                </h4>
                 <div class="analytics-data">
                   <p>1. View Bills: <strong>78%</strong></p>
                   <p>2. Check Usage: <strong>65%</strong></p>
@@ -682,6 +822,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="assets/js/script.js"></script>
   </body>
 </html>
