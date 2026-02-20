@@ -1,5 +1,26 @@
 /* ===== Leave Management Specific Styles ===== */
 
+/* Employee Name Cell with Initials Avatar */
+.emp-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.emp-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+
 /* Statistics Grid */
 .leave-stats-grid {
     display: grid;
@@ -133,41 +154,19 @@
     margin: 0 2px;
 }
 
-.btn-action:active {
-    transform: scale(0.95);
-}
+.btn-action:active { transform: scale(0.95); }
 
-.btn-action.approve {
-    color: #10b981;
-}
+.btn-action.approve { color: #10b981; }
+.btn-action.approve:hover { background: #d1fae5; }
 
-.btn-action.approve:hover {
-    background: #d1fae5;
-}
+.btn-action.reject { color: #ef4444; }
+.btn-action.reject:hover { background: #fee2e2; }
 
-.btn-action.reject {
-    color: #ef4444;
-}
+.btn-action.view { color: #3b82f6; }
+.btn-action.view:hover { background: #dbeafe; }
 
-.btn-action.reject:hover {
-    background: #fee2e2;
-}
-
-.btn-action.view {
-    color: #3b82f6;
-}
-
-.btn-action.view:hover {
-    background: #dbeafe;
-}
-
-.btn-action.cancel {
-    color: #f59e0b;
-}
-
-.btn-action.cancel:hover {
-    background: #fef3c7;
-}
+.btn-action.cancel { color: #f59e0b; }
+.btn-action.cancel:hover { background: #fef3c7; }
 
 /* Leave Summary Grid */
 .leave-summary-grid {
@@ -185,9 +184,7 @@
     transition: background 0.2s;
 }
 
-.summary-item:hover {
-    background: #f3f4f6;
-}
+.summary-item:hover { background: #f3f4f6; }
 
 .summary-label {
     font-size: 13px;
@@ -207,19 +204,14 @@
     display: none;
     position: fixed;
     z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.5);
     animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal-content {
     background-color: #fefefe;
@@ -232,14 +224,8 @@
 }
 
 @keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
@@ -270,11 +256,7 @@
     line-height: 1;
 }
 
-.close:hover,
-.close:focus {
-    color: #1f2937;
-    transform: rotate(90deg);
-}
+.close:hover { color: #1f2937; transform: rotate(90deg); }
 
 .modal-body {
     padding: 20px;
@@ -292,11 +274,7 @@
 }
 
 /* Leave Details */
-.leave-details {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+.leave-details { display: flex; flex-direction: column; gap: 12px; }
 
 .detail-row {
     display: flex;
@@ -306,15 +284,8 @@
     border-left: 3px solid #3b82f6;
 }
 
-.detail-row strong {
-    min-width: 150px;
-    color: #374151;
-    font-weight: 600;
-}
-
-.detail-row:nth-child(even) {
-    background: #ffffff;
-}
+.detail-row strong { min-width: 150px; color: #374151; font-weight: 600; }
+.detail-row:nth-child(even) { background: #ffffff; }
 
 /* Leave Header */
 .leave-header {
@@ -324,11 +295,7 @@
     margin-bottom: 20px;
 }
 
-.leave-header h1 {
-    font-size: 24px;
-    color: #1e3a8a;
-    font-weight: 600;
-}
+.leave-header h1 { font-size: 24px; color: #1e3a8a; font-weight: 600; }
 
 .leave-btn {
     background: #0d1b2a;
@@ -343,120 +310,42 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    text-decoration: none;
 }
 
-.leave-btn:hover {
-    background: #1a2f4a;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
+.leave-btn:hover { background: #1a2f4a; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+.leave-btn:active { transform: translateY(0); }
 
-.leave-btn:active {
-    transform: translateY(0);
-}
+#leaveTable tbody tr { transition: background-color 0.2s; }
+#leaveTable tbody tr:hover { background-color: #f9fafb; }
+#leaveTable tbody td { vertical-align: middle; }
 
-/* Table Enhancements for Leave Management */
-#leaveTable tbody tr {
-    transition: background-color 0.2s;
-}
-
-#leaveTable tbody tr:hover {
-    background-color: #f9fafb;
-}
-
-#leaveTable tbody td {
-    vertical-align: middle;
-}
-
-/* Responsive adjustments for leave management */
+/* Responsive */
 @media (max-width: 1024px) {
-    .leave-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .leave-filter-section {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .leave-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .leave-filter-section { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-    .leave-stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .leave-filter-section {
-        grid-template-columns: 1fr;
-    }
-    
-    .leave-summary-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .leave-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-    }
-    
-    .leave-btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-    
-    .detail-row {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .detail-row strong {
-        min-width: auto;
-    }
+    .leave-stats-grid { grid-template-columns: 1fr; }
+    .leave-filter-section { grid-template-columns: 1fr; }
+    .leave-summary-grid { grid-template-columns: 1fr 1fr; }
+    .leave-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .leave-btn { width: 100%; justify-content: center; }
+    .modal-content { width: 95%; margin: 10% auto; }
+    .detail-row { flex-direction: column; gap: 5px; }
+    .detail-row strong { min-width: auto; }
 }
 
 @media (max-width: 576px) {
-    .stats-info p {
-        font-size: 24px;
-    }
-    
-    .summary-value {
-        font-size: 28px;
-    }
-    
-    .leave-summary-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Make table scrollable on mobile */
-    .data-table-container {
-        overflow-x: auto;
-    }
-    
-    #leaveTable {
-        min-width: 1000px;
-    }
+    .stats-info p { font-size: 24px; }
+    .summary-value { font-size: 28px; }
+    .leave-summary-grid { grid-template-columns: 1fr; }
+    .data-table-container { overflow-x: auto; }
+    #leaveTable { min-width: 1000px; }
 }
 
-/* Loading Animation */
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(59, 130, 246, 0.3);
-    border-radius: 50%;
-    border-top-color: #3b82f6;
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Success/Error Messages */
+/* Alert Styles */
 .alert {
     padding: 12px 16px;
     border-radius: 6px;
@@ -466,44 +355,13 @@
     gap: 10px;
 }
 
-.alert-success {
-    background: #d1fae5;
-    color: #065f46;
-    border-left: 4px solid #10b981;
-}
+.alert-success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+.alert-error { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+.alert-info { background: #dbeafe; color: #1e40af; border-left: 4px solid #3b82f6; }
 
-.alert-error {
-    background: #fee2e2;
-    color: #991b1b;
-    border-left: 4px solid #ef4444;
-}
-
-.alert-info {
-    background: #dbeafe;
-    color: #1e40af;
-    border-left: 4px solid #3b82f6;
-}
-
-/* Print Styles */
 @media print {
-    .sidebar,
-    header,
-    .leave-btn,
-    .btn-action,
-    .leave-filter-section {
-        display: none !important;
-    }
-    
-    .main-content {
-        margin: 0;
-    }
-    
-    .page-content {
-        padding: 0;
-    }
-    
-    .card {
-        box-shadow: none;
-        border: 1px solid #e5e7eb;
-    }
+    .sidebar, header, .leave-btn, .btn-action, .leave-filter-section { display: none !important; }
+    .main-content { margin: 0; }
+    .page-content { padding: 0; }
+    .card { box-shadow: none; border: 1px solid #e5e7eb; }
 }
