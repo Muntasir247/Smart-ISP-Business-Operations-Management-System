@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Promee International – Apply Leave</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="leave_management.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      /* ── Apply Leave Page Styles ── */
+      .apply-leave-grid {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 24px;
+        align-items: start;
+      }
+
+      @media (max-width: 1024px) {
+        .apply-leave-grid { grid-template-columns: 1fr; }
+      }
+
+      /* Form Card */
+      .form-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        overflow: hidden;
+      }
+
+      .form-card-header {
+        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a5f 100%);
+        padding: 22px 28px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .form-card-header i { font-size: 22px; opacity: 0.9; }
+      .form-card-header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+      .form-card-header p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.75; }
+
+      .form-card-body { padding: 28px; }
+
+      /* Form Grid */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .form-grid .form-group.full { grid-column: 1 / -1; }
+
+      @media (max-width: 640px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .form-grid .form-group.full { grid-column: 1; }
+      }
+
+      .form-group { display: flex; flex-direction: column; }
+
+      .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .form-group label .required { color: #ef4444; }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 10px 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 7px;
+        font-size: 14px;
+        color: #1f2937;
+        background: #fafafa;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        font-family: inherit;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+      }
+
+      .form-group textarea { resize: vertical; min-height: 100px; }
+
+      .form-group input.error,
+      .form-group select.error,
+      .form-group textarea.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+      }
+
+      .error-msg {
+        font-size: 12px;
+        color: #ef4444;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .error-msg.show { display: block; }
+
+      /* Days Count Display */
+      .days-display {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border: 1.5px solid #bfdbfe;
+        border-radius: 7px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .days-display i { color: #3b82f6; font-size: 18px; }
+      .days-display .days-count { font-size: 22px; font-weight: 700; color: #1e40af; }
+      .days-display .days-label { font-size: 13px; color: #6b7280; }
+
+      /* Leave Type Cards */
+      .leave-type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      @media (max-width: 640px) {
+        .leave-type-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      .leave-type-card {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: #fafafa;
+        position: relative;
+      }
+
+      .leave-type-card:hover { border-color: #93c5fd; background: #eff6ff; }
+
+      .leave-type-card.selected {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      }
+
+      .leave-type-card .ltc-icon { font-size: 20px; margin-bottom: 6px; }
+      .leave-type-card .ltc-name { font-size: 12px; font-weight: 600; color: #374151; }
+      .leave-type-card .ltc-balance { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+      .leave-type-card .ltc-check {
+        position: absolute;
+        top: 6px; right: 6px;
+        width: 18px; height: 18px;
+        background: #3b82f6;
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+      }
+
+      .leave-type-card.selected .ltc-check { display: flex; }
+
+      /* File Upload */
+      .file-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #fafafa;
+      }
+
+      .file-upload-area:hover { border-color: #3b82f6; background: #eff6ff; }
+      .file-upload-area.dragover { border-color: #3b82f6; background: #dbeafe; }
+
+      .file-upload-area i { font-size: 28px; color: #9ca3af; margin-bottom: 8px; }
+      .file-upload-area p { margin: 0; font-size: 14px; color: #6b7280; }
+      .file-upload-area span { font-size: 12px; color: #9ca3af; }
+
+      .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+
+      .file-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .file-item i { color: #3b82f6; }
+      .file-item span { flex: 1; color: #374151; }
+      .file-item .remove-file { cursor: pointer; color: #ef4444; font-size: 14px; }
+
+      /* Submit Buttons */
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 10px;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .btn-submit:hover { background: linear-gradient(135deg, #1e40af, #1d4ed8); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+      .btn-submit:active { transform: translateY(0); }
+
+      .btn-draft {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1.5px solid #e5e7eb;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-draft:hover { background: #e5e7eb; }
+
+      /* Sidebar Panel */
+      .info-panel { display: flex; flex-direction: column; gap: 16px; }
+
+      .info-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        overflow: hidden;
+      }
+
+      .info-card-header {
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e3a8a;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+      }
+
+      .info-card-body { padding: 16px 18px; }
+
+      /* Balance Bars */
+      .balance-item { margin-bottom: 14px; }
+      .balance-item:last-child { margin-bottom: 0; }
+
+      .balance-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .balance-header .b-name { font-weight: 600; color: #374151; }
+      .balance-header .b-count { color: #6b7280; font-size: 12px; }
+
+      .balance-bar {
+        height: 6px;
+        background: #e5e7eb;
+        border-radius: 99px;
+        overflow: hidden;
+      }
+
+      .balance-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition: width 0.5s ease;
+      }
+
+      /* Employee Info */
+      .emp-info-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 4px 0 12px;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 12px;
+      }
+
+      .emp-info-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .emp-info-name { font-weight: 700; color: #1f2937; font-size: 15px; }
+      .emp-info-role { font-size: 12px; color: #6b7280; margin-top: 2px; }
+      .emp-info-id { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+
+      .emp-detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 5px 0;
+        border-bottom: 1px solid #f9fafb;
+      }
+
+      .emp-detail-row .edr-label { color: #6b7280; }
+      .emp-detail-row .edr-value { font-weight: 600; color: #1f2937; }
+
+      /* Policy Tips */
+      .policy-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 7px;
+        background: #f8fafc;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: #4b5563;
+        align-items: flex-start;
+      }
+
+      .policy-item:last-child { margin-bottom: 0; }
+      .policy-item i { color: #3b82f6; margin-top: 2px; flex-shrink: 0; }
+
+      /* Success Toast */
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #1f2937;
+        color: white;
+        padding: 16px 22px;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 9999;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        min-width: 280px;
+      }
+
+      .toast.show { transform: translateY(0); opacity: 1; }
+      .toast i { font-size: 20px; color: #34d399; }
+      .toast .toast-title { font-weight: 600; font-size: 14px; }
+      .toast .toast-msg { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+
+      /* Page Header */
+      .page-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .page-header-bar h1 { font-size: 22px; color: #1e3a8a; font-weight: 700; margin: 0; }
+
+      .breadcrumb {
+        font-size: 13px;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .breadcrumb a { color: #3b82f6; text-decoration: none; }
+      .breadcrumb a:hover { text-decoration: underline; }
+
+      .back-btn {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1.5px solid #e5e7eb;
+        padding: 8px 16px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s;
+      }
+
+      .back-btn:hover { background: #e5e7eb; }
+
+      /* Section divider */
+      .form-section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 8px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f3f4f6;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand"><i class="fa-solid fa-circle-nodes"></i> Promee International</div>
+      <ul class="menu">
+        <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu">
+            <li><a href="new_request.html"><i class="fa-regular fa-circle"></i> New Request</a></li>
+            <li><a href="add_new_client.html"><i class="fa-regular fa-circle"></i> Add New</a></li>
+            <li><a href="client_list.html"><i class="fa-regular fa-circle"></i> Client List</a></li>
+            <li><a href="left_client.html"><i class="fa-regular fa-circle"></i> Left Client</a></li>
+            <li><a href="scheduler.html"><i class="fa-regular fa-circle"></i> Scheduler</a></li>
+            <li><a href="change_request.html"><i class="fa-regular fa-circle"></i> Change Request</a></li>
+            <li><a href="portal_manage.html"><i class="fa-regular fa-circle"></i> Portal Manage</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="billing.html"><i class="fa-regular fa-circle"></i> Billing</a></li></ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="Bulk_Client_Import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li></ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu">
+            <li><a href="employee_list.html"><i class="fa-regular fa-circle"></i> Employee List</a></li>
+            <li><a href="add_employee.html"><i class="fa-regular fa-circle"></i> Add Employee</a></li>
+            <li><a href="attendance.html"><i class="fa-regular fa-circle"></i> Attendance</a></li>
+            <li><a href="salary_sheet.html"><i class="fa-regular fa-circle"></i> Salary Sheet</a></li>
+            <li><a href="department.html"><i class="fa-regular fa-circle"></i> Department</a></li>
+            <li><a href="position.html"><i class="fa-regular fa-circle"></i> Position</a></li>
+            <li><a href="payhead.html"><i class="fa-regular fa-circle"></i> Payhead</a></li>
+            <li><a href="payroll.html"><i class="fa-regular fa-circle"></i> Payroll</a></li>
+            <li><a href="resign_rule.html"><i class="fa-regular fa-circle"></i> Resign Rule</a></li>
+            <li><a href="resignation.html"><i class="fa-regular fa-circle"></i> Resignation</a></li>
+            <li><a href="rejoin.html"><i class="fa-regular fa-circle"></i> Rejoin</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu open">
+          <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu">
+            <li><a href="leave_management.html"><i class="fa-regular fa-circle"></i> Leave Management</a></li>
+            <li><a href="apply_leave.html" class="active"><i class="fa-regular fa-circle"></i> Apply Leave</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="events_holidays.html"><i class="fa-regular fa-circle"></i> Events & Holidays</a></li></ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu">
+            <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+            <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
+            <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
+            <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
+            <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
+            <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
+            <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+          <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+        </li>
+        <li class="has-submenu"><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Inventory</a></li>
+          <li><a href="stock_in.html"><i class="fa-regular fa-circle"></i> Stock In</a></li>
+          <li><a href="stock_out.html"><i class="fa-regular fa-circle"></i> Stock Out</a></li>
+          <li><a href="suppliers.html"><i class="fa-regular fa-circle"></i> Suppliers</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu"><a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="assets.html"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+          <li><a href="asset_assign.html"><i class="fa-regular fa-circle"></i> Assign Asset</a></li>
+          <li><a href="asset_maintenance.html"><i class="fa-regular fa-circle"></i> Maintenance</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu open"><a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income Overview</a></li>
+          <li><a href="income_entry.html"><i class="fa-regular fa-circle"></i> Income Entry</a></li>
+          <li><a href="income_report.html" class="active"><i class="fa-regular fa-circle"></i> Reports</a></li>
+        </ul>
+      </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor"><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+          <div class="releases"><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
+          <div class="notifications"><i class="fa-solid fa-bell"></i> <span class="badge">0</span></div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <!-- Page Header -->
+        <div class="page-header-bar">
+          <div>
+            <h1><i class="fa-solid fa-paper-plane" style="color:#3b82f6;margin-right:8px"></i>Apply for Leave</h1>
+            <div class="breadcrumb">
+              <a href="index.html">Dashboard</a>
+              <i class="fa-solid fa-chevron-right" style="font-size:10px"></i>
+              <a href="leave_management.html">Leave Management</a>
+              <i class="fa-solid fa-chevron-right" style="font-size:10px"></i>
+              <span>Apply Leave</span>
+            </div>
+          </div>
+          <a href="leave_management.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+          </a>
+        </div>
+
+        <div class="apply-leave-grid">
+          <!-- LEFT: Form -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <i class="fa-solid fa-file-circle-plus"></i>
+              <div>
+                <h2>Leave Application Form</h2>
+                <p>Fill in the details below to submit your leave request</p>
+              </div>
+            </div>
+            <div class="form-card-body">
+
+              <!-- Employee Info Section -->
+              <div class="form-section-title"><i class="fa-solid fa-user" style="margin-right:6px"></i>Employee Information</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Employee ID <span class="required">*</span></label>
+                  <input type="text" id="empId" placeholder="e.g. EMP001" value="EMP016" />
+                  <span class="error-msg" id="empIdError">Employee ID is required.</span>
+                </div>
+                <div class="form-group">
+                  <label>Employee Name <span class="required">*</span></label>
+                  <input type="text" id="empName" placeholder="Full name" value="Your Name" />
+                  <span class="error-msg" id="empNameError">Employee name is required.</span>
+                </div>
+                <div class="form-group">
+                  <label>Department <span class="required">*</span></label>
+                  <select id="department">
+                    <option value="">-- Select Department --</option>
+                    <option>Engineering</option>
+                    <option>Marketing</option>
+                    <option>Operations</option>
+                    <option>Finance</option>
+                    <option>IT Support</option>
+                    <option>HR</option>
+                    <option>Sales</option>
+                    <option>Customer Service</option>
+                    <option>Logistics</option>
+                    <option>Design</option>
+                  </select>
+                  <span class="error-msg" id="deptError">Please select a department.</span>
+                </div>
+                <div class="form-group">
+                  <label>Reporting Manager <span class="required">*</span></label>
+                  <select id="manager">
+                    <option value="">-- Select Manager --</option>
+                    <option>Ahmed Karim (ENG-MGR)</option>
+                    <option>Sarah Wilson (HR-MGR)</option>
+                    <option>David Miller (SALES-MGR)</option>
+                    <option>Priya Chakraborty (FIN-MGR)</option>
+                    <option>Kevin Thomas (OPS-MGR)</option>
+                    <option>Sophia Lee (IT-MGR)</option>
+                  </select>
+                  <span class="error-msg" id="managerError">Please select your reporting manager.</span>
+                </div>
+              </div>
+
+              <!-- Leave Type Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-tags" style="margin-right:6px"></i>Leave Type</div>
+              <div class="leave-type-grid" id="leaveTypeGrid">
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'sick')" data-type="sick">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">🤒</div>
+                  <div class="ltc-name">Sick Leave</div>
+                  <div class="ltc-balance">12 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'casual')" data-type="casual">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">☀️</div>
+                  <div class="ltc-name">Casual Leave</div>
+                  <div class="ltc-balance">7 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'annual')" data-type="annual">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">🏖️</div>
+                  <div class="ltc-name">Annual Leave</div>
+                  <div class="ltc-balance">18 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'maternity')" data-type="maternity">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">👶</div>
+                  <div class="ltc-name">Maternity Leave</div>
+                  <div class="ltc-balance">90 days entitlement</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'emergency')" data-type="emergency">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">🚨</div>
+                  <div class="ltc-name">Emergency Leave</div>
+                  <div class="ltc-balance">3 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'unpaid')" data-type="unpaid">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon">📋</div>
+                  <div class="ltc-name">Unpaid Leave</div>
+                  <div class="ltc-balance">On request</div>
+                </div>
+              </div>
+              <input type="hidden" id="selectedLeaveType" />
+              <span class="error-msg" id="leaveTypeError" style="display:none;margin-top:8px">Please select a leave type.</span>
+
+              <!-- Date Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-calendar" style="margin-right:6px"></i>Leave Duration</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Start Date <span class="required">*</span></label>
+                  <input type="date" id="startDate" onchange="calculateDays()" />
+                  <span class="error-msg" id="startDateError">Please select a start date.</span>
+                </div>
+                <div class="form-group">
+                  <label>End Date <span class="required">*</span></label>
+                  <input type="date" id="endDate" onchange="calculateDays()" />
+                  <span class="error-msg" id="endDateError">Please select an end date.</span>
+                </div>
+                <div class="form-group">
+                  <label>Session</label>
+                  <select id="session">
+                    <option value="full">Full Day</option>
+                    <option value="first_half">First Half</option>
+                    <option value="second_half">Second Half</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Total Leave Days</label>
+                  <div class="days-display" id="daysDisplay">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span class="days-count" id="daysCount">0</span>
+                    <div>
+                      <div class="days-label">Working days</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reason Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-pen-to-square" style="margin-right:6px"></i>Details</div>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Reason for Leave <span class="required">*</span></label>
+                  <textarea id="reason" placeholder="Please describe the reason for your leave request in detail..."></textarea>
+                  <span class="error-msg" id="reasonError">Please provide a reason for the leave.</span>
+                </div>
+
+                <div class="form-group">
+                  <label>Contact During Leave</label>
+                  <input type="tel" id="contactNumber" placeholder="Phone number" />
+                </div>
+
+                <div class="form-group">
+                  <label>Alternate Contact (Email)</label>
+                  <input type="email" id="altEmail" placeholder="alternate@email.com" />
+                </div>
+
+                <div class="form-group full">
+                  <label>Work Handover Plan</label>
+                  <textarea id="handover" placeholder="Who will handle your work? Any specific tasks to be transferred..." style="min-height:80px"></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group full">
+                  <label>Supporting Documents <span style="font-weight:400;color:#9ca3af">(Optional – Medical certificate, etc.)</span></label>
+                  <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()"
+                    ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Click to upload or drag & drop files here</p>
+                    <span>PDF, JPG, PNG – Max 5MB each</span>
+                  </div>
+                  <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(event)" />
+                  <div class="file-list" id="fileList"></div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="form-actions" style="margin-top:24px">
+                <button class="btn-draft" onclick="saveDraft()"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+                <button class="btn-submit" onclick="submitLeave()"><i class="fa-solid fa-paper-plane"></i> Submit Leave Request</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT: Info Panel -->
+          <div class="info-panel">
+
+            <!-- Employee Card -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-id-card"></i> My Profile</div>
+              <div class="info-card-body">
+                <div class="emp-info-card">
+                  <div class="emp-info-avatar">YN</div>
+                  <div>
+                    <div class="emp-info-name">Your Name</div>
+                    <div class="emp-info-role">Software Engineer</div>
+                    <div class="emp-info-id">ID: EMP016</div>
+                  </div>
+                </div>
+                <div class="emp-detail-row"><span class="edr-label">Department</span><span class="edr-value">Engineering</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Join Date</span><span class="edr-value">01 Mar 2023</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Manager</span><span class="edr-value">Ahmed Karim</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Service</span><span class="edr-value">2 yrs 11 mos</span></div>
+              </div>
+            </div>
+
+            <!-- Leave Balance -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-chart-pie"></i> Leave Balance (2026)</div>
+              <div class="info-card-body">
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🤒 Sick Leave</span>
+                    <span class="b-count">12 / 14 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" style="width:85%;background:#ef4444"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">☀️ Casual Leave</span>
+                    <span class="b-count">7 / 10 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" style="width:70%;background:#3b82f6"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🏖️ Annual Leave</span>
+                    <span class="b-count">18 / 24 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" style="width:75%;background:#10b981"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🚨 Emergency Leave</span>
+                    <span class="b-count">3 / 5 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" style="width:60%;background:#f59e0b"></div></div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Policy Notes -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-circle-info"></i> Leave Policy</div>
+              <div class="info-card-body">
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Submit requests at least 3 days in advance for planned leaves.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Sick leave must be supported by a medical certificate for 3+ consecutive days.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Emergency leave applications can be submitted on the day itself.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Annual leave cannot be carried forward beyond 5 days into the next year.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Maternity leave entitlement is 90 days per childbirth as per Bangladesh Labour Law.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <div>
+        <div class="toast-title">Leave Request Submitted!</div>
+        <div class="toast-msg">Your application is pending manager approval.</div>
+      </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+      let selectedType = '';
+      let uploadedFiles = [];
+
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('startDate').min = today;
+      document.getElementById('endDate').min = today;
+
+      function selectLeaveType(card, type) {
+        document.querySelectorAll('.leave-type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedType = type;
+        document.getElementById('selectedLeaveType').value = type;
+        document.getElementById('leaveTypeError').style.display = 'none';
+      }
+
+      function calculateDays() {
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+
+        if (start && end) {
+          const s = new Date(start);
+          const e = new Date(end);
+          if (e < s) {
+            document.getElementById('endDate').value = start;
+            document.getElementById('daysCount').textContent = '1';
+            return;
+          }
+          // Count working days (Mon–Sat; skip Sunday for BD context)
+          let count = 0;
+          const cur = new Date(s);
+          while (cur <= e) {
+            if (cur.getDay() !== 0) count++; // exclude Sunday
+            cur.setDate(cur.getDate() + 1);
+          }
+          document.getElementById('daysCount').textContent = count;
+          document.getElementById('endDateError').classList.remove('show');
+        }
+      }
+
+      // File Upload Handlers
+      function handleDragOver(e) {
+        e.preventDefault();
+        document.getElementById('fileUploadArea').classList.add('dragover');
+      }
+
+      function handleDragLeave() {
+        document.getElementById('fileUploadArea').classList.remove('dragover');
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById('fileUploadArea').classList.remove('dragover');
+        addFiles(e.dataTransfer.files);
+      }
+
+      function handleFileSelect(e) {
+        addFiles(e.target.files);
+      }
+
+      function addFiles(files) {
+        Array.from(files).forEach(file => {
+          if (file.size > 5 * 1024 * 1024) {
+            alert(`${file.name} exceeds 5MB limit.`);
+            return;
+          }
+          uploadedFiles.push(file);
+          renderFiles();
+        });
+      }
+
+      function renderFiles() {
+        const list = document.getElementById('fileList');
+        list.innerHTML = uploadedFiles.map((f, i) => `
+          <div class="file-item">
+            <i class="fa-solid fa-file-${f.type.includes('pdf') ? 'pdf' : 'image'}"></i>
+            <span>${f.name} <span style="color:#9ca3af">(${(f.size/1024).toFixed(1)} KB)</span></span>
+            <span class="remove-file" onclick="removeFile(${i})"><i class="fa-solid fa-xmark"></i></span>
+          </div>`).join('');
+      }
+
+      function removeFile(index) {
+        uploadedFiles.splice(index, 1);
+        renderFiles();
+      }
+
+      // Validation
+      function validate() {
+        let valid = true;
+
+        const fields = [
+          { id: 'empId', errId: 'empIdError', msg: 'Employee ID is required.' },
+          { id: 'empName', errId: 'empNameError', msg: 'Employee name is required.' },
+          { id: 'department', errId: 'deptError', msg: 'Please select a department.' },
+          { id: 'manager', errId: 'managerError', msg: 'Please select your reporting manager.' },
+          { id: 'startDate', errId: 'startDateError', msg: 'Please select a start date.' },
+          { id: 'endDate', errId: 'endDateError', msg: 'Please select an end date.' },
+          { id: 'reason', errId: 'reasonError', msg: 'Please provide a reason for the leave.' },
+        ];
+
+        fields.forEach(f => {
+          const el = document.getElementById(f.id);
+          const err = document.getElementById(f.errId);
+          if (!el.value.trim()) {
+            el.classList.add('error');
+            err.classList.add('show');
+            valid = false;
+          } else {
+            el.classList.remove('error');
+            err.classList.remove('show');
+          }
+        });
+
+        if (!selectedType) {
+          document.getElementById('leaveTypeError').style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('leaveTypeError').style.display = 'none';
+        }
+
+        return valid;
+      }
+
+      function submitLeave() {
+        if (!validate()) {
+          // Scroll to first error
+          document.querySelector('.error, .error-msg.show') && 
+          document.querySelector('.error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        // Show success toast
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+
+        // Reset form after delay
+        setTimeout(() => {
+          document.getElementById('empId').value = '';
+          document.getElementById('empName').value = '';
+          document.getElementById('department').value = '';
+          document.getElementById('manager').value = '';
+          document.getElementById('startDate').value = '';
+          document.getElementById('endDate').value = '';
+          document.getElementById('reason').value = '';
+          document.getElementById('handover').value = '';
+          document.getElementById('contactNumber').value = '';
+          document.getElementById('altEmail').value = '';
+          document.getElementById('daysCount').textContent = '0';
+          document.querySelectorAll('.leave-type-card').forEach(c => c.classList.remove('selected'));
+          selectedType = '';
+          uploadedFiles = [];
+          renderFiles();
+        }, 1500);
+      }
+
+      function saveDraft() {
+        const toast = document.getElementById('toast');
+        toast.querySelector('.toast-title').textContent = 'Draft Saved!';
+        toast.querySelector('.toast-msg').textContent = 'Your application has been saved as a draft.';
+        toast.querySelector('i').style.color = '#fbbf24';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.querySelector('.toast-title').textContent = 'Leave Request Submitted!';
+          toast.querySelector('.toast-msg').textContent = 'Your application is pending manager approval.';
+          toast.querySelector('i').style.color = '#34d399';
+        }, 3000);
+      }
+
+      // Live remove error styling on input
+      document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('input', () => {
+          el.classList.remove('error');
+          const errEl = document.getElementById(el.id + 'Error');
+          if (errEl) errEl.classList.remove('show');
+        });
+      });
+    </script>
+  </body>
+</html>
