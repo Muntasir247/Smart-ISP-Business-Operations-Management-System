@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Promee International - Resign Rule</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --primary-color: #0d1b2a; /* Dark Navy sidebar */
+    --accent-color: #1b263b; /* Slightly lighter navy for header */
+    --text-color: #333;
+    --text-light: #fff;
+    --bg-color: #f4f6f9;
+    --border-color: #ddd;
+    --active-menu-bg: #102a43;
+    --table-header-bg: #0d1b2a;
+    --btn-primary: #007bff;
+    --btn-secondary: #6c757d;
+    --bg:        #f1f3f7;
+      --surface:   #FDFCFA;
+      --sidebar-bg:#19181a;
+      --sidebar-text:#b4cde9;
+      --sidebar-active:#b4cde9;
+      --ink:       #102a43;
+      --ink2:      #5A5A52;
+      --ink3:      #9A9A90;
+      --gold:      #204b71;
+      --gold-light:#b4cde9;
+      --teal:      #2A7A6A;
+      --teal-light:#D6EDEA;
+      --danger:    #C0392B;
+      --danger-light:#FDECEA;
+      --border:    #E2DDD4;
+      --shadow:    0 2px 12px rgba(24, 24, 26, 0.08);
+      --shadow-lg: 0 8px 40px rgba(24, 24, 26, 0.12);
+      --radius:    12px;
+      --font-display: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+}
+
+
+
+    html, body { height: 100%; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.6; }
+
+    /* ───────── HEADER FIX ───────── */
+
+/* Badge */
+.badge {
+  background: red;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50px;
+  margin-left: 4px;
+}
+
+/* ── Home / Log Out buttons ── */
+.header-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.header-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.header-btn i {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+/* ── LAYOUT ── */
+    .layout-wrapper { display: flex; height: 100vh; overflow: hidden; }
+
+    /* ── SIDEBAR ── */
+  .sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.brand {
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand i {
+    margin-right: 10px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.menu li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.menu li a {
+    display: block;
+    padding: 12px 20px;
+    color: #b0b8c1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.menu li a:hover, .menu li a.active {
+    background-color: var(--active-menu-bg);
+    color: #fff;
+    border-left: 4px solid #3498db;
+}
+
+.menu li a i {
+    width: 25px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+/* Sidebar Submenus */
+.submenu {
+    list-style: none;
+    padding-left: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.has-submenu.open .submenu {
+    max-height: 500px; /* Arbitrary large height for transition */
+}
+
+/* Rotate caret on open */
+.has-submenu.open > a .fa-caret-right {
+    transform: rotate(90deg);
+    transition: transform 0.3s;
+}
+
+.submenu li a {
+    padding-left: 45px;
+    font-size: 13px;
+    border: none;
+    color: #b0b8c1;
+    background: transparent;
+}
+
+.submenu li a:hover {
+    color: white;
+}
+
+.submenu li a i {
+    font-size: 8px; 
+    width: 15px; 
+    text-align: center; 
+    margin-right: 10px;
+}
+
+    /* ── MAIN ── */
+    .main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;             /* VERY important in flex layouts */ 
+    /*padding-right: 8px;*/
+}
+.main-inner {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px; /* remove right padding */
+}
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 56px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .breadcrumb { font-size: 12.5px; color: var(--ink3); }
+    .breadcrumb span { color: var(--ink); font-weight: 500; }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center;
+      position: relative; transition: background 0.2s;
+    }
+    .topbar-btn:hover { background: var(--bg); }
+    .notif-dot {
+      position: absolute; top: 8px; right: 8px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+    }
+    .user-chip { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #a07828);
+      color: #fff; font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px;
+    }
+    .user-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+    /* ── CONTENT ── */
+    .main-inner {
+      flex: 1; overflow-y: auto; padding: 32px;
+    }
+    .main-inner::-webkit-scrollbar { width: 5px; }
+    .main-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px;
+    }
+    .page-header h1 {
+      font-family: var(--font-display); font-size: 30px; letter-spacing: -0.5px;
+      color: var(--ink); line-height: 1.15; font-style: italic;
+    }
+    .page-header h1 em { font-style: normal; color: var(--gold); }
+    .page-header p { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 8px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      border: none; cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-primary:hover { background: #2d2d2a; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,26,24,0.2); }
+    .btn-gold { background: var(--gold); color: #fff; }
+    .btn-gold:hover { background: #b8943a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.35); }
+    .btn-outline { background: transparent; color: var(--ink2); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-danger { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+    .btn-icon { padding: 6px 9px; }
+
+    .form-label { font-size: 11.5px; font-weight: 700; color: var(--ink2); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+    .required { color: var(--gold); }
+    .form-control {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 10px 14px;
+      font-family: var(--font-body); font-size: 13.5px; color: var(--ink);
+      outline: none; width: 100%; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus { border-color: var(--gold); background: var(--surface); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+    .form-control::placeholder { color: var(--ink3); }
+    .form-group { margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── RESIGN RULE SPECIFIC STYLES ── */
+    .rule-card { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:14px; border:1px solid var(--border); transition:transform 0.2s,box-shadow 0.2s; }
+    .rule-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+    .rule-card-top { padding:18px 22px; display:flex; align-items:center; gap:14px; cursor:pointer; }
+    .rule-num { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,var(--gold),#a07828); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; flex-shrink:0; }
+    .rule-title { font-size:15px; font-weight:600; color:var(--ink); }
+    .rule-meta { font-size:12px; color:var(--ink3); margin-top:2px; }
+    .rule-expand { margin-left:auto; color:var(--ink3); transition:transform 0.2s; }
+    .rule-card.open .rule-expand { transform:rotate(180deg); }
+    .rule-body { padding:0 22px; max-height:0; overflow:hidden; transition:max-height 0.3s ease,padding 0.3s; }
+    .rule-card.open .rule-body { max-height:500px; padding-bottom:18px; }
+    .rule-detail { background:var(--bg); border-radius:10px; padding:16px; }
+    .rule-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--ink2); }
+    .rule-item:last-child { border-bottom:none; }
+    .rule-item i { color:var(--gold); flex-shrink:0; margin-top:2px; }
+
+    .policy-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:28px; }
+    .policy-box { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; border-top:4px solid var(--c); }
+    .policy-box-icon { font-size:24px; margin-bottom:10px; }
+    .policy-box-title { font-size:12px; font-weight:600; color:var(--ink2); text-transform:uppercase; letter-spacing:0.5px; }
+    .policy-box-val { font-family:var(--font-display); font-size:28px; font-weight:600; color:var(--c); letter-spacing:-1px; margin-top:4px; }
+    .policy-box-sub { font-size:11px; color:var(--ink3); margin-top:4px; }
+
+    .edit-rule-panel { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; border:1px solid var(--border); }
+    .edit-rule-header { background:linear-gradient(135deg,var(--gold),#a07828); color:#fff; padding:18px 22px; }
+    .edit-rule-header h3 { font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  </style>
+</head>
+<body>
+
+<div class="layout-wrapper">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-circle-nodes"></i> Promee International
+    </div>
+    <ul class="menu">
+      <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="#"><i class="fa-regular fa-circle"></i> New Request</a></li>
+          <li><a href="#"><i class="fa-regular fa-circle"></i> Add New</a></li>
+          <li><a href="#"><i class="fa-regular fa-circle"></i> Client List</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu"><li><a href="#"><i class="fa-regular fa-circle"></i> Billing</a></li></ul>
+      </li>
+
+      <li class="has-submenu open">
+        <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+            <li>
+              <a href="employee_list.html" 
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html" 
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="payslip.html">
+                <i class="fa-regular fa-circle"></i> Payslip
+              </a>
+            </li>
+            <li>
+              <a href="resign_rule.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+          </ul>
+        </li>
+
+      <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Inventory</a></li>
+            <li><a href="stock_in.html"><i class="fa-regular fa-circle"></i> Stock In</a></li>
+            <li><a href="stock_out.html"><i class="fa-regular fa-circle"></i> Stock Out</a></li>
+            <li><a href="suppliers.html"><i class="fa-regular fa-circle"></i> Suppliers</a></li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="assets.html" class="active"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+            <li><a href="asset_assign.html"><i class="fa-regular fa-circle"></i> Assign Asset</a></li>
+            <li><a href="asset_maintenance.html"><i class="fa-regular fa-circle"></i> Maintenance</a></li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income Overview</a></li>
+            <li><a href="income_entry.html"><i class="fa-regular fa-circle"></i> Income Entry</a></li>
+            <li><a href="income_report.html"><i class="fa-regular fa-circle"></i> Reports</a></li>
+          </ul>
+        </li>
+    </ul>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main-content">
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search Customer" />
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="monitor">
+          <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+        </div>
+        <div class="releases">
+          <i class="fa-solid fa-wrench"></i> Releases
+          <span class="badge">0</span>
+        </div>
+        <div class="notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="badge">0</span>
+        </div>
+        <a href="login.html" class="header-btn">
+          <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="login.html" class="header-btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Log Out
+        </a>
+        <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+      </div>
+    </header>
+
+    <div class="main-inner">
+      <div class="page-header">
+        <div>
+          <h1>Resignation Rules <em>& Policy</em></h1>
+          <p>Define and manage company resignation policies and notice period rules</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline"><i class="fa-solid fa-file-pdf"></i> Export Policy</button>
+          <button class="btn btn-primary" onclick="saveAll()"><i class="fa-solid fa-save"></i> Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Key Policy Boxes -->
+      <div class="policy-grid">
+        <div class="policy-box" style="--c:#3498db">
+          <div class="policy-box-icon">📋</div>
+          <div class="policy-box-title">Standard Notice Period</div>
+          <div class="policy-box-val">30 <span style="font-size:16px">Days</span></div>
+          <div class="policy-box-sub">For all full-time employees</div>
+        </div>
+        <div class="policy-box" style="--c:#27ae60">
+          <div class="policy-box-icon">🤝</div>
+          <div class="policy-box-title">Manager Notice Period</div>
+          <div class="policy-box-val">60 <span style="font-size:16px">Days</span></div>
+          <div class="policy-box-sub">For manager & above positions</div>
+        </div>
+        <div class="policy-box" style="--c:#e67e22">
+          <div class="policy-box-icon">💰</div>
+          <div class="policy-box-title">Notice Pay-In-Lieu</div>
+          <div class="policy-box-val">Yes</div>
+          <div class="policy-box-sub">Allowed with approval</div>
+        </div>
+        <div class="policy-box" style="--c:#9b59b6">
+          <div class="policy-box-icon">🔄</div>
+          <div class="policy-box-title">Probation Notice</div>
+          <div class="policy-box-val">7 <span style="font-size:16px">Days</span></div>
+          <div class="policy-box-sub">During probation period</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:18px">
+        <div>
+          <!-- Rules accordion -->
+          <div id="rulesContainer">
+            <div class="rule-card open">
+              <div class="rule-card-top" onclick="toggleRule(this)">
+                <div class="rule-num">1</div>
+                <div><div class="rule-title">Notice Period Rules</div><div class="rule-meta">By employment type and seniority</div></div>
+                <i class="fa-solid fa-chevron-down rule-expand"></i>
+              </div>
+              <div class="rule-body">
+                <div class="rule-detail">
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Full-time employees must serve a minimum 30-day notice period before leaving.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Managers and senior-level positions require 60-day notice.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Part-time / contractual employees require 14-day notice.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>During probation period, only 7 days notice is required from either party.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Notice period may be waived by mutual agreement with management approval.</div>
+                </div>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-card-top" onclick="toggleRule(this)">
+                <div class="rule-num">2</div>
+                <div><div class="rule-title">Final Settlement & Dues</div><div class="rule-meta">Salary clearance and dues</div></div>
+                <i class="fa-solid fa-chevron-down rule-expand"></i>
+              </div>
+              <div class="rule-body">
+                <div class="rule-detail">
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Final salary must be paid within 7 working days after last working day.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Unused annual leave (up to 30 days) will be encashed at basic salary rate.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Provident fund contribution will be released as per company policy.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Any outstanding loans or advances will be deducted from final settlement.</div>
+                </div>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-card-top" onclick="toggleRule(this)">
+                <div class="rule-num">3</div>
+                <div><div class="rule-title">Exit Clearance Process</div><div class="rule-meta">Mandatory clearance departments</div></div>
+                <i class="fa-solid fa-chevron-down rule-expand"></i>
+              </div>
+              <div class="rule-body">
+                <div class="rule-detail">
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>IT: Return all company assets — laptop, phone, access cards, dongles.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Finance: Clear all outstanding expenses, petty cash, company card balance.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>HR: Submit resignation letter, complete knowledge transfer documentation.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Manager: Handover all pending work, credentials, and project documentation.</div>
+                  <div class="rule-item"><i class="fa-solid fa-circle-check"></i>Security: Deactivate system access, email, and building entry on last day.</div>
+                </div>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-card-top" onclick="toggleRule(this)">
+                <div class="rule-num">4</div>
+                <div><div class="rule-title">Immediate Termination Conditions</div><div class="rule-meta">Grounds for instant dismissal</div></div>
+                <i class="fa-solid fa-chevron-down rule-expand"></i>
+              </div>
+              <div class="rule-body">
+                <div class="rule-detail">
+                  <div class="rule-item"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>Gross misconduct or violation of company code of conduct.</div>
+                  <div class="rule-item"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>Unauthorized disclosure of confidential company information.</div>
+                  <div class="rule-item"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>Fraud, theft, or dishonesty in any form.</div>
+                  <div class="rule-item"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>Consecutive unexplained absence for more than 5 days.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Policy Panel -->
+        <div>
+          <div class="edit-rule-panel">
+            <div class="edit-rule-header"><h3><i class="fa-solid fa-pen-to-square"></i> Edit Policy Values</h3></div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+              <div class="form-group">
+                <label class="form-label">Full-Time Notice Period (Days)</label>
+                <input class="form-control" type="number" value="30">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Manager Notice Period (Days)</label>
+                <input class="form-control" type="number" value="60">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Probation Notice Period (Days)</label>
+                <input class="form-control" type="number" value="7">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Part-Time Notice Period (Days)</label>
+                <input class="form-control" type="number" value="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Allow Notice Pay-In-Lieu?</label>
+                <select class="form-control">
+                  <option selected>Yes — With management approval</option>
+                  <option>No — Must serve notice</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Encashable Leave Days</label>
+                <input class="form-control" type="number" value="30">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Final Settlement Deadline (Days after last day)</label>
+                <input class="form-control" type="number" value="7">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Exit Interview Required?</label>
+                <select class="form-control">
+                  <option selected>Yes — Mandatory</option>
+                  <option>Optional</option>
+                  <option>No</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" style="width:100%" onclick="saveAll()"><i class="fa-solid fa-save"></i> Save Policy Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/sidebar.js"></script>
+<script>
+  // Sidebar submenu toggle
+  document.querySelectorAll('.has-submenu > a').forEach(link => {
+    link.addEventListener('click', e => {
+      const li = link.parentElement;
+      const isOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-submenu').forEach(el => el.classList.remove('open'));
+      if (!isOpen) li.classList.add('open');
+      e.preventDefault();
+    });
+  });
+
+  function toggleRule(el) {
+    const card = el.closest('.rule-card');
+    card.classList.toggle('open');
+  }
+  
+  function saveAll() { 
+    alert('Resignation policy saved successfully!'); 
+  }
+</script>
+</body>
+</html>
