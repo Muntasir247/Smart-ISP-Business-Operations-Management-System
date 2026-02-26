@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Promee International - Position</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary-color: #0d1b2a;
+      --accent-color:  #1b263b;
+      --text-color: #333;
+      --text-light: #fff;
+      --bg-color: #f4f6f9;
+      --border-color: #ddd;
+      --active-menu-bg: #102a43;
+      --table-header-bg: #0d1b2a;
+      --btn-primary: #007bff;
+      --btn-secondary: #6c757d;
+      --bg:        #f1f3f7;
+      --surface:   #FDFCFA;
+      --sidebar-bg:#19181a;
+      --sidebar-text:#b4cde9;
+      --sidebar-active:#b4cde9;
+      --ink:       #102a43;
+      --ink2:      #5A5A52;
+      --ink3:      #9A9A90;
+      --gold:      #204b71;
+      --gold-light:#b4cde9;
+      --teal:      #2A7A6A;
+      --teal-light:#D6EDEA;
+      --danger:    #C0392B;
+      --danger-light:#FDECEA;
+      --border:    #E2DDD4;
+      --shadow:    0 2px 12px rgba(24, 24, 26, 0.08);
+      --shadow-lg: 0 8px 40px rgba(24, 24, 26, 0.12);
+      --radius:    12px;
+      --font-display: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html, body { height: 100%; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.6; }
+
+    /* ── HEADER ── */
+
+    /* ── LAYOUT ── */
+    .layout-wrapper { display: flex; height: 100vh; overflow: hidden; width: 100%; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 250px;
+      background-color: var(--primary-color);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .brand { padding: 15px 20px; font-size: 18px; font-weight: bold; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .brand i { margin-right: 10px; }
+    .menu { list-style: none; padding: 0; margin-top: 10px; }
+    .menu li { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .menu li a { display: block; padding: 12px 20px; color: #b0b8c1; text-decoration: none; font-size: 14px; transition: background 0.2s, color 0.2s; }
+    .menu li a:hover, .menu li a.active { background-color: var(--active-menu-bg); color: #fff; border-left: 4px solid #3498db; }
+    .menu li a i { width: 25px; text-align: center; margin-right: 5px; }
+    .submenu { list-style: none; padding-left: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background-color: rgba(0,0,0,0.2); }
+    .has-submenu.open .submenu { max-height: 500px; }
+    .has-submenu.open > a .fa-caret-right { transform: rotate(90deg); transition: transform 0.3s; }
+    .submenu li a { padding-left: 45px; font-size: 13px; border: none; color: #b0b8c1; background: transparent; }
+    .submenu li a:hover { color: white; }
+    .submenu li a i { font-size: 8px; width: 15px; text-align: center; margin-right: 10px; }
+
+    /* ── MAIN ── */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 56px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .breadcrumb { font-size: 12.5px; color: var(--ink3); }
+    .breadcrumb span { color: var(--ink); font-weight: 500; }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; transition: background 0.2s; }
+    .topbar-btn:hover { background: var(--bg); }
+    .notif-dot { position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+    .user-chip { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #a07828); color: #fff; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px; }
+    .user-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+    /* ── CONTENT ── */
+    .main-inner { flex: 1; overflow-y: auto; padding: 32px; }
+    .main-inner::-webkit-scrollbar { width: 5px; }
+    .main-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+    .page-header h1 { font-family: var(--font-display); font-size: 30px; letter-spacing: -0.5px; color: var(--ink); line-height: 1.15; font-style: italic; }
+    .page-header h1 em { font-style: normal; color: var(--gold); }
+    .page-header p { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-primary:hover { background: #2d2d2a; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,26,24,0.2); }
+    .btn-gold { background: var(--gold); color: #fff; }
+    .btn-gold:hover { background: #b8943a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.35); }
+    .btn-outline { background: transparent; color: var(--ink2); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-danger { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+    .btn-icon { padding: 6px 9px; }
+
+    /* ── STAT CARDS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; color: var(--ink3); }
+    .stat-val { font-family: var(--font-display); font-size: 28px; line-height: 1.1; margin-top: 2px; color: var(--ink); }
+
+    /* ── POSITION TABLE ── */
+    .position-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .position-table { width: 100%; border-collapse: collapse; }
+    .position-table thead { background: var(--ink); color: #fff; }
+    .position-table th { padding: 14px 18px; text-align: left; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; }
+    .position-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    .position-table tbody tr:hover { background: var(--bg); }
+    .position-table tbody tr:last-child { border-bottom: none; }
+    .position-table td { padding: 16px 18px; font-size: 13.5px; }
+
+    .position-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+    .position-badge.senior { background: #FFF7ED; color: #F59E0B; }
+    .position-badge.mid    { background: #EEF4FF; color: #3B82F6; }
+    .position-badge.junior { background: #ECFDF5; color: #10B981; }
+    .position-badge.intern { background: #FDF4FF; color: #A855F7; }
+
+    .dept-tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 500; background: var(--teal-light); color: var(--teal); }
+
+    /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,24,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-lg); width: 520px; max-width: 95vw; overflow: hidden; animation: modalIn 0.25s ease; border: 1px solid var(--border); }
+    @keyframes modalIn { from { opacity:0; transform:translateY(16px) scale(0.98); } }
+    .modal-header { padding: 22px 26px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to right, rgba(201,168,76,0.06), transparent); }
+    .modal-header h3 { font-family: var(--font-display); font-size: 18px; color: var(--ink); font-weight: 400; }
+    .modal-close { width: 30px; height: 30px; border-radius: 7px; background: var(--bg); border: 1px solid var(--border); color: var(--ink3); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .modal-close:hover { background: var(--danger-light); color: var(--danger); border-color: rgba(192,57,43,0.2); }
+    .modal-body { padding: 24px 26px; }
+    .modal-footer { padding: 16px 26px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); }
+
+    .form-label { font-size: 11.5px; font-weight: 700; color: var(--ink2); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+    .required { color: var(--gold); }
+    .form-control { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: var(--font-body); font-size: 13.5px; color: var(--ink); outline: none; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-control:focus { border-color: var(--gold); background: var(--surface); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+    .form-control::placeholder { color: var(--ink3); }
+    .form-group { margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .level-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 6px; }
+    .level-opt { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+    .level-opt:hover { border-color: var(--gold); background: var(--gold-light); }
+    .level-opt.selected { border-color: var(--gold); background: var(--gold-light); }
+    .level-opt i { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="layout-wrapper">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-circle-nodes"></i> Promee International
+    </div>
+    <ul class="menu">
+      <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="#"><i class="fa-regular fa-circle"></i> New Request</a></li>
+          <li><a href="#"><i class="fa-regular fa-circle"></i> Add New</a></li>
+          <li><a href="#"><i class="fa-regular fa-circle"></i> Client List</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu"><li><a href="#"><i class="fa-regular fa-circle"></i> Billing</a></li></ul>
+      </li>
+
+      <li class="has-submenu open">
+        <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="employee_list.html"><i class="fa-regular fa-circle"></i> Employee List</a></li>
+          <li><a href="add_employee.html"><i class="fa-regular fa-circle"></i> Add Employee</a></li>
+          <li><a href="attendance.html"><i class="fa-regular fa-circle"></i> Attendance</a></li>
+          <li><a href="salary_sheet.html"><i class="fa-regular fa-circle"></i> Salary Sheet</a></li>
+          <li><a href="department.html"><i class="fa-regular fa-circle"></i> Department</a></li>
+          <li><a href="position.html" class="active"><i class="fa-regular fa-circle"></i> Position</a></li>
+          <li><a href="payhead.html"><i class="fa-regular fa-circle"></i> Payhead</a></li>
+          <li><a href="payroll.html"><i class="fa-regular fa-circle"></i> Payroll</a></li>
+          <li><a href="payslip.html"><i class="fa-regular fa-circle"></i> Payslip</a></li>
+          <li><a href="resign_rule.html"><i class="fa-regular fa-circle"></i> Resign Rule</a></li>
+          <li><a href="resignation.html"><i class="fa-regular fa-circle"></i> Resignation</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="leave_management.html"><i class="fa-regular fa-circle"></i> Leave Management</a></li></ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="events_holidays.html"><i class="fa-regular fa-circle"></i> Events & Holidays</a></li></ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+          <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
+          <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
+          <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
+          <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
+          <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
+          <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Inventory</a></li>
+          <li><a href="stock_in.html"><i class="fa-regular fa-circle"></i> Stock In</a></li>
+          <li><a href="stock_out.html"><i class="fa-regular fa-circle"></i> Stock Out</a></li>
+          <li><a href="suppliers.html"><i class="fa-regular fa-circle"></i> Suppliers</a></li>
+      </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="assets.html" class="active"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+          <li><a href="asset_assign.html"><i class="fa-regular fa-circle"></i> Assign Asset</a></li>
+          <li><a href="asset_maintenance.html"><i class="fa-regular fa-circle"></i> Maintenance</a></li>
+      </ul>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income Overview</a></li>
+          <li><a href="income_entry.html"><i class="fa-regular fa-circle"></i> Income Entry</a></li>
+          <li><a href="income_report.html"><i class="fa-regular fa-circle"></i> Reports</a></li>
+      </ul>
+      </li>
+
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main-content">
+
+    <!-- ── HEADER ── -->
+    <header>
+      <div class="header-left">
+        <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search Customer" />
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="monitor">
+          <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+        </div>
+        <div class="releases">
+          <i class="fa-solid fa-wrench"></i> Releases
+          <span class="badge">0</span>
+        </div>
+        <div class="notifications">
+          <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+        </div>
+        <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+        <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+      </div>
+    </header>
+
+    <div class="main-inner">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Position <em>Management</em></h1>
+          <p>Manage job positions, levels, and organizational hierarchy</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline"><i class="fa-solid fa-download"></i> Export</button>
+          <button class="btn btn-gold" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add Position</button>
+        </div>
+      </div>
+
+      <!-- Stat Row -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#EEF4FF;color:#3B82F6"><i class="fa-solid fa-briefcase"></i></div>
+          <div><div class="stat-label">Total Positions</div><div class="stat-val">12</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FFF7ED;color:#F59E0B"><i class="fa-solid fa-user-tie"></i></div>
+          <div><div class="stat-label">Senior Level</div><div class="stat-val">18</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-users"></i></div>
+          <div><div class="stat-label">Mid-Level</div><div class="stat-val">22</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FDF4FF;color:#A855F7"><i class="fa-solid fa-user-graduate"></i></div>
+          <div><div class="stat-label">Junior & Intern</div><div class="stat-val">12</div></div>
+        </div>
+      </div>
+
+      <!-- Position Table -->
+      <div class="position-table-wrap">
+        <table class="position-table">
+          <thead>
+            <tr>
+              <th>Position Title</th>
+              <th>Department</th>
+              <th>Level</th>
+              <th>Employees</th>
+              <th>Base Salary Range</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Senior Software Engineer</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">SSE</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-laptop-code" style="font-size:10px"></i> IT</span></td>
+              <td><span class="position-badge senior"><i class="fa-solid fa-star"></i> Senior</span></td>
+              <td>8</td>
+              <td style="color:var(--ink2);font-weight:500">৳80,000 - ৳120,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Senior Software Engineer')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Senior Software Engineer')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Software Engineer</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">SE</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-laptop-code" style="font-size:10px"></i> IT</span></td>
+              <td><span class="position-badge mid"><i class="fa-solid fa-circle"></i> Mid-Level</span></td>
+              <td>12</td>
+              <td style="color:var(--ink2);font-weight:500">৳50,000 - ৳75,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Software Engineer')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Software Engineer')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">HR Manager</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">HRM</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-users" style="font-size:10px"></i> HR</span></td>
+              <td><span class="position-badge senior"><i class="fa-solid fa-star"></i> Senior</span></td>
+              <td>2</td>
+              <td style="color:var(--ink2);font-weight:500">৳70,000 - ৳100,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('HR Manager')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('HR Manager')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">HR Executive</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">HRE</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-users" style="font-size:10px"></i> HR</span></td>
+              <td><span class="position-badge mid"><i class="fa-solid fa-circle"></i> Mid-Level</span></td>
+              <td>6</td>
+              <td style="color:var(--ink2);font-weight:500">৳35,000 - ৳55,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('HR Executive')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('HR Executive')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Sales Manager</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">SM</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-chart-line" style="font-size:10px"></i> Sales</span></td>
+              <td><span class="position-badge senior"><i class="fa-solid fa-star"></i> Senior</span></td>
+              <td>3</td>
+              <td style="color:var(--ink2);font-weight:500">৳75,000 - ৳110,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Sales Manager')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Sales Manager')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Sales Executive</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">SE</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-chart-line" style="font-size:10px"></i> Sales</span></td>
+              <td><span class="position-badge mid"><i class="fa-solid fa-circle"></i> Mid-Level</span></td>
+              <td>10</td>
+              <td style="color:var(--ink2);font-weight:500">৳30,000 - ৳50,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Sales Executive')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Sales Executive')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Accountant</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">ACC</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-calculator" style="font-size:10px"></i> Finance</span></td>
+              <td><span class="position-badge senior"><i class="fa-solid fa-star"></i> Senior</span></td>
+              <td>3</td>
+              <td style="color:var(--ink2);font-weight:500">৳60,000 - ৳85,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Accountant')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Accountant')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Junior Developer</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">JD</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-laptop-code" style="font-size:10px"></i> IT</span></td>
+              <td><span class="position-badge junior"><i class="fa-solid fa-seedling"></i> Junior</span></td>
+              <td>7</td>
+              <td style="color:var(--ink2);font-weight:500">৳25,000 - ৳40,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Junior Developer')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Junior Developer')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:600;color:var(--ink)">Marketing Intern</div>
+                <div style="font-size:11.5px;color:var(--ink3);margin-top:2px">MI</div>
+              </td>
+              <td><span class="dept-tag"><i class="fa-solid fa-chart-line" style="font-size:10px"></i> Sales</span></td>
+              <td><span class="position-badge intern"><i class="fa-solid fa-graduation-cap"></i> Intern</span></td>
+              <td>2</td>
+              <td style="color:var(--ink2);font-weight:500">৳15,000 - ৳20,000</td>
+              <td>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm btn-icon" onclick="openModal('Marketing Intern')"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('Marketing Intern')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- /main-inner -->
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle"><i class="fa-solid fa-plus" style="margin-right:8px"></i>Add New Position</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="form-label">Position Title <span class="required">*</span></label>
+        <input class="form-control" id="positionNameInput" placeholder="e.g. Senior Data Analyst">
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <div class="form-group">
+          <label class="form-label">Short Code</label>
+          <input class="form-control" placeholder="e.g. SDA">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Department <span class="required">*</span></label>
+          <select class="form-control">
+            <option value="">Select Department</option>
+            <option>Information Technology</option>
+            <option>Human Resources</option>
+            <option>Sales & Marketing</option>
+            <option>Accounts & Finance</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="form-label">Position Level <span class="required">*</span></label>
+        <div class="level-options">
+          <div class="level-opt" onclick="selectLevel(this)">
+            <i class="fa-solid fa-star" style="color:#F59E0B"></i> <span>Senior</span>
+          </div>
+          <div class="level-opt selected" onclick="selectLevel(this)">
+            <i class="fa-solid fa-circle" style="color:#3B82F6"></i> <span>Mid-Level</span>
+          </div>
+          <div class="level-opt" onclick="selectLevel(this)">
+            <i class="fa-solid fa-seedling" style="color:#10B981"></i> <span>Junior</span>
+          </div>
+          <div class="level-opt" onclick="selectLevel(this)">
+            <i class="fa-solid fa-graduation-cap" style="color:#A855F7"></i> <span>Intern</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <div class="form-group">
+          <label class="form-label">Min Salary (৳)</label>
+          <input type="number" class="form-control" placeholder="e.g. 50000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Salary (৳)</label>
+          <input type="number" class="form-control" placeholder="e.g. 75000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Job Description</label>
+        <textarea class="form-control" rows="3" placeholder="Key responsibilities and requirements..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="savePosition()"><i class="fa-solid fa-check"></i> Save Position</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/script.js">
+  document.querySelectorAll('.has-submenu > a').forEach(link => {
+    link.addEventListener('click', e => {
+      const li = link.parentElement;
+      const isOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-submenu').forEach(el => el.classList.remove('open'));
+      if (!isOpen) li.classList.add('open');
+      e.preventDefault();
+    });
+  });
+
+  function openModal(name) {
+    document.getElementById('modalTitle').innerHTML = name
+      ? `<i class="fa-solid fa-pen" style="margin-right:8px"></i>Edit Position — ${name}`
+      : '<i class="fa-solid fa-plus" style="margin-right:8px"></i>Add New Position';
+    document.getElementById('positionNameInput').value = name || '';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  function savePosition() { closeModal(); }
+
+  function selectLevel(el) {
+    document.querySelectorAll('.level-opt').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function confirmDelete(name) {
+    if (confirm(`Delete "${name}" position? This cannot be undone.`)) {
+      alert(`"${name}" deleted.`);
+    }
+  }
+
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
+</script>
+</body>
+
+</html>
