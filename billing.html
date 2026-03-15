@@ -48,10 +48,9 @@
 
       .sidebar .submenu {
         display: none;
-        padding-left: 20px;
       }
 
-      .sidebar .has-submenu.active > .submenu {
+      .sidebar .has-submenu.open > .submenu {
         display: block;
       }
 
@@ -60,7 +59,7 @@
         color: #fff;
       }
 
-      .sidebar .has-submenu > a.active i.fa-caret-right {
+      .sidebar .has-submenu.open > a i.fa-caret-right {
         transform: rotate(90deg);
         transition: transform 0.3s;
       }
