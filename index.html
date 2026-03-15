@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Promee International - Dashboard</title>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <li>
+          <a href="index.html" class="active"
+            ><i class="fa-solid fa-gauge"></i> Dashboard</a
+          >
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR &amp; Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events &amp; Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events &amp; Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support &amp; Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="task_management.html"
+                ><i class="fa-regular fa-circle"></i> Task List</a
+              >
+            </li>
+            <!-- <li>
+              <a href="task_category.html"
+                ><i class="fa-regular fa-circle"></i> Task Category</a
+              >
+            </li>
+            <li>
+              <a href="task_assign.html"
+                ><i class="fa-regular fa-circle"></i> Task Assignment</a
+              >
+            </li>
+            <li>
+              <a href="task_report.html"
+                ><i class="fa-regular fa-circle"></i> Task Report</a
+              >
+            </li> -->
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="purchase.html"
+                ><i class="fa-regular fa-circle"></i> Purchase Orders</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Inventory</a></li>
+            <li><a href="stock_in.html"><i class="fa-regular fa-circle"></i> Stock In</a></li>
+            <li><a href="stock_out.html"><i class="fa-regular fa-circle"></i> Stock Out</a></li>
+            <li><a href="suppliers.html"><i class="fa-regular fa-circle"></i> Suppliers</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="assets.html" class="active"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+            <li><a href="asset_assign.html"><i class="fa-regular fa-circle"></i> Assign Asset</a></li>
+            <li><a href="asset_maintenance.html"><i class="fa-regular fa-circle"></i> Maintenance</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income Overview</a></li>
+            <li><a href="income_entry.html"><i class="fa-regular fa-circle"></i> Income Entry</a></li>
+            <li><a href="income_report.html"><i class="fa-regular fa-circle"></i> Reports</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div>
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div>
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div>
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="index.html" class="header-btn"
+            ><i class="fa-solid fa-house"></i> Home</a
+          >
+          <a href="login.html" class="header-btn"
+            ><i class="fa-solid fa-right-from-bracket"></i> Log Out</a
+          >
+          <div>
+            <i class="fa-solid fa-user-circle" style="font-size: 22px"></i>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <h1 style="color: #1a3c5e; margin-bottom: 8px">
+          Welcome to Promee International Dashboard
+        </h1>
+        <p style="color: #888; font-size: 14px">
+          Use the sidebar to navigate between modules.
+        </p>
+        <div
+          style="
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+          "
+        >
+          <a
+            href="task_management.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #1a3c5e;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-list-check"
+              style="font-size: 22px; color: #1a3c5e"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">
+                Task Management
+              </div>
+              <div style="font-size: 12px; color: #888">
+                Track & assign tasks
+              </div>
+            </div>
+          </a>
+          <a
+            href="purchase.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #f39c12;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-basket-shopping"
+              style="font-size: 22px; color: #f39c12"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">Purchase</div>
+              <div style="font-size: 12px; color: #888">
+                Manage purchase orders
+              </div>
+            </div>
+          </a>
+          <a
+            href="ticket_list.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #3498db;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-headset"
+              style="font-size: 22px; color: #3498db"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">Support</div>
+              <div style="font-size: 12px; color: #888">
+                Tickets & complaints
+              </div>
+            </div>
+          </a>
+          <a
+            href="employee_list.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #27ae60;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-users-gear"
+              style="font-size: 22px; color: #27ae60"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">HR & Payroll</div>
+              <div style="font-size: 12px; color: #888">Staff management</div>
+            </div>
+          </a>
+          <a
+            href="billing.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #e74c3c;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-file-invoice-dollar"
+              style="font-size: 22px; color: #e74c3c"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">Billing</div>
+              <div style="font-size: 12px; color: #888">
+                Invoices & payments
+              </div>
+            </div>
+          </a>
+          <a
+            href="client_list.html"
+            style="
+              text-decoration: none;
+              background: #fff;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              border-left: 4px solid #9b59b6;
+              transition: box-shadow 0.2s;
+            "
+          >
+            <i
+              class="fa-solid fa-user"
+              style="font-size: 22px; color: #9b59b6"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #1a3c5e">Clients</div>
+              <div style="font-size: 12px; color: #888">Client management</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-widget">
+      <i class="fa-solid fa-comment"></i> Send message
+    </div>
+
+    <script>
+      document
+        .getElementById("sidebarToggle")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.toggle("active");
+        });
+      document.querySelectorAll(".has-submenu > a").forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          var li = a.parentElement;
+          var isOpen = li.classList.contains("open");
+          document.querySelectorAll(".has-submenu").forEach(function (x) {
+            x.classList.remove("open");
+          });
+          if (!isOpen) li.classList.add("open");
+        });
+      });
+    </script>
+  </body>
+</html>

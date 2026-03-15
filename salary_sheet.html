@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <title>Promee International - Salary Sheet</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --primary-color: #0d1b2a;
+        --accent-color:  #1b263b;
+        --active-menu-bg:#102a43;
+        --bg:        #f1f3f7;
+        --surface:   #FDFCFA;
+        --ink:       #102a43;
+        --ink2:      #5A5A52;
+        --ink3:      #9A9A90;
+        --gold:      #204b71;
+        --gold-light:#b4cde9;
+        --teal:      #2A7A6A;
+        --teal-light:#D6EDEA;
+        --danger:    #C0392B;
+        --danger-light:#FDECEA;
+        --warning:   #D97706;
+        --warning-light:#FEF3C7;
+        --border:    #E2DDD4;
+        --shadow:    0 2px 12px rgba(24,24,26,0.08);
+        --shadow-lg: 0 8px 40px rgba(24,24,26,0.12);
+        --radius:    12px;
+        --font-display:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        --font-body: 'DM Sans', system-ui, sans-serif;
+      }
+
+      html, body { height: 100%; font-family: var(--font-body); background: var(--bg); color: var(--ink); }
+      body { font-family: var(--font-body); background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.6; }
+
+      /* ── LAYOUT ── */
+      .layout-wrapper { display: flex; height: 100vh; overflow: hidden; }
+
+      /* ── SIDEBAR ── */
+      .sidebar { width: 250px; background-color: var(--primary-color); color: #fff; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+      .brand { padding: 15px 20px; font-size: 18px; font-weight: bold; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .brand i { margin-right: 10px; }
+      .menu { list-style: none; padding: 0; margin-top: 10px; }
+      .menu li { border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .menu li a { display: block; padding: 12px 20px; color: #b0b8c1; text-decoration: none; font-size: 14px; transition: background 0.2s, color 0.2s; }
+      .menu li a:hover, .menu li a.active { background-color: var(--active-menu-bg); color: #fff; border-left: 4px solid #3498db; }
+      .menu li a i { width: 25px; text-align: center; margin-right: 5px; }
+      .submenu { list-style: none; padding-left: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background-color: rgba(0,0,0,0.2); }
+      .has-submenu.open .submenu { max-height: 500px; }
+      .has-submenu.open > a .fa-caret-right { transform: rotate(90deg); transition: transform 0.3s; }
+      .submenu li a { padding-left: 45px; font-size: 13px; border: none; color: #b0b8c1; background: transparent; }
+      .submenu li a:hover { color: white; }
+      .submenu li a i { font-size: 8px; width: 15px; text-align: center; margin-right: 10px; }
+
+      /* ── MAIN ── */
+      .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+      /* ── TOPBAR ── */
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .page-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .user-chip { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+
+
+      /* ── CONTENT ── */
+      .main-inner { flex: 1; overflow-y: auto; padding: 32px; }
+      .main-inner::-webkit-scrollbar { width: 5px; }
+      .main-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+      /* ── PAGE HEADER ── */
+      .page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+      .page-header h1 { font-family: var(--font-display); font-size: 30px; letter-spacing: -0.5px; color: var(--ink); line-height: 1.15; font-style: italic; }
+      .page-header h1 em { font-style: normal; color: var(--gold); }
+      .page-header p { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+      .header-actions { display: flex; gap: 8px; align-items: center; }
+
+      /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-primary:hover { background: #2d2d2a; transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: #fff; }
+    .btn-gold:hover { background: #1a3d5e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(32,75,113,0.35); }
+    .btn-outline { background: transparent; color: var(--ink2); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-success-soft { background: var(--teal-light); color: var(--teal); border: 1px solid rgba(42,122,106,0.2); }
+    .btn-success-soft:hover { background: var(--teal); color: #fff; }
+    .btn-ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.2); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+    .btn-icon { padding: 6px 9px; }
+    
+      /* ── STAT CARDS ── */
+      .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+      .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow); transition: transform 0.2s; }
+      .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+      .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+      .stat-label { font-size: 11px; text-transform: uppercase; font-weight: 600; color: var(--ink3); }
+      .stat-val { font-family: var(--font-display); font-size: 26px; line-height: 1.1; margin-top: 2px; color: var(--ink); }
+
+      /* ── HERO BANNER ── */
+      .sal-hero {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1b4f72 60%, #204b71 100%);
+        border-radius: var(--radius); color: #fff; padding: 28px 32px;
+        margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between;
+        position: relative; overflow: hidden; box-shadow: var(--shadow-lg);
+      }
+      .hero-eyebrow { font-size: 11px; text-transform: uppercase; opacity: .5; font-weight: 600; }
+      .hero-month { font-family: var(--font-display); font-size: 36px; line-height: 1; margin-top: 5px; }
+      .hero-sub { font-size: 13px; opacity: .55; margin-top: 8px; }
+      .hero-stats { display: flex; gap: 36px; z-index: 1; }
+      .hero-stat-val { font-family: var(--font-display); font-size: 26px; }
+      .hero-stat-lbl { font-size: 10px; opacity: .5; text-transform: uppercase; margin-top: 3px; }
+      .hero-divider { width: 1px; background: rgba(255,255,255,0.15); }
+
+        /* ── DEPT SUMMARY CARDS ── */
+    .dept-totals-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .dept-total-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border-left: 5px solid var(--c); transition: transform 0.2s, box-shadow 0.2s; }
+    .dept-total-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .d-name { font-size: 11px; font-weight: 700; color: var(--ink3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+    .d-amount { font-family: var(--font-display); font-size: 24px; color: var(--ink); letter-spacing: -0.5px; }
+    .d-emp { font-size: 11px; color: var(--ink3); margin-top: 4px; }
+
+      /* ── TOOLBAR ── */
+      .toolbar { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; }
+      .toolbar select, .toolbar input[type="text"] {
+        height: 36px; padding: 0 12px; border-radius: 8px; border: 1.5px solid var(--border);
+        background: var(--bg); font-family: var(--font-body); font-size: 13px; color: var(--ink); outline: none;
+      }
+      .search-wrap { position: relative; }
+      .search-wrap input { padding-left: 32px; width: 200px; }
+      .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 12px; }
+
+      /* ── TABLE ── */
+      .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+      .table-scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; }
+      table th { text-align: left; }
+      thead th {
+        background: var(--primary-color); color: rgba(255,255,255,0.8);
+        padding: 12px 14px; font-size: 10.5px; text-transform: uppercase;
+        font-weight: 600; white-space: nowrap;
+      }
+      tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+      tbody tr:hover { background: var(--bg); }
+      tbody td { padding: 12px 14px; font-size: 12.5px; vertical-align: middle; }
+      .emp-cell { display: flex; align-items: center; gap: 10px; }
+      .emp-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+      .emp-name { font-weight: 600; font-size: 13px; color: var(--ink); }
+      .emp-id { font-size: 10.5px; color: var(--ink3); margin-top: 1px; }
+
+      .amount { text-align: right; white-space: nowrap; }
+      .amount-net { color: var(--teal); font-weight: 700; font-family: var(--font-display); font-size: 13px; }
+      .dept-tag { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; background: #e0e7ff; color: #3730a3;}
+      .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+      .status-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+      .pill-green  { background: var(--teal-light); color: var(--teal); }
+      .pill-yellow { background: var(--warning-light); color: var(--warning); }
+      .pill-red    { background: var(--danger-light); color: var(--danger); }
+
+    .days-cell { font-size: 12px; color: var(--ink2); text-align: center; }
+
+      /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,24,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-lg); width: 420px; max-width: 95vw; overflow: hidden; animation: modalIn 0.25s ease; border: 1px solid var(--border); }
+    @keyframes modalIn { from { opacity:0; transform:translateY(16px) scale(0.98); } }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-family: var(--font-display); font-size: 18px; color: var(--ink); font-weight: 400; }
+    .modal-close { width: 28px; height: 28px; border-radius: 7px; background: var(--bg); border: 1px solid var(--border); color: var(--ink3); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+    .modal-body { padding: 22px 24px; }
+    .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--ink2); margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+    .form-control { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: var(--font-body); font-size: 13px; color: var(--ink); outline: none; width: 100%; transition: border-color 0.2s; }
+    .form-control:focus { border-color: var(--gold); }
+    .form-group { margin-bottom: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    </style>
+  </head>
+  <body>
+  <div class="layout-wrapper">
+    
+      <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="brand"><i class="fa-solid fa-circle-nodes"></i> Promee International</div>
+    <ul class="menu">
+      <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="new_request.html"><i class="fa-regular fa-circle"></i> New Request</a></li>
+          <li><a href="add_new_client.html"><i class="fa-regular fa-circle"></i> Add New</a></li>
+          <li><a href="client_list.html"><i class="fa-regular fa-circle"></i> Client List</a></li>
+          <li><a href="left_client.html"><i class="fa-regular fa-circle"></i> Left Client</a></li>
+          <li><a href="scheduler.html"><i class="fa-regular fa-circle"></i> Scheduler</a></li>
+          <li><a href="change_request.html"><i class="fa-regular fa-circle"></i> Change Request</a></li>
+          <li><a href="portal_manage.html"><i class="fa-regular fa-circle"></i> Portal Manage</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu"><li><a href="billing.html"><i class="fa-regular fa-circle"></i> Billing</a></li></ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu"><li><a href="Bulk_Client_Import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li></ul>
+      </li>
+
+      <li class="has-submenu open">
+        <a href="#"><i class="fa-solid fa-users-gear"></i> HR & Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:9px;margin-top:6px;opacity:.5"></i></a>
+        <ul class="submenu">
+          <li><a href="employee_list.html"><i class="fa-regular fa-circle"></i> Employee List</a></li>
+          <li><a href="add_employee.html"><i class="fa-regular fa-circle"></i> Add Employee</a></li>
+          <li><a href="attendance.html"><i class="fa-regular fa-circle"></i> Attendance</a></li>
+          <li><a href="salary_sheet.html" class="active"><i class="fa-regular fa-circle"></i> Salary Sheet</a></li>
+          <li><a href="department.html"><i class="fa-regular fa-circle"></i> Department</a></li>
+          <li><a href="position.html"><i class="fa-regular fa-circle"></i> Position</a></li>
+          <li><a href="payhead.html"><i class="fa-regular fa-circle"></i> Payhead</a></li>
+          <li><a href="payroll.html"><i class="fa-regular fa-circle"></i> Payroll</a></li>
+          <li><a href="payslip.html"><i class="fa-regular fa-circle"></i> Payslip</a></li>
+          <li><a href="resign_rule.html"><i class="fa-regular fa-circle"></i> Resign Rule</a></li>
+          <li><a href="resignation.html"><i class="fa-regular fa-circle"></i> Resignation</a></li>
+          <li><a href="rejoin.html"><i class="fa-regular fa-circle"></i> Rejoin</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="leave_management.html"><i class="fa-regular fa-circle"></i> Leave Management</a></li></ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-calendar-days"></i> Events & Holidays <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="events_holidays.html"><i class="fa-regular fa-circle"></i> Events & Holidays</a></li></ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-headset"></i> Support & Ticketing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+          <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
+          <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
+          <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
+          <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
+          <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
+          <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu"><li><a href="dropdown1.html"><i class="fa-regular fa-circle"></i> Dropdown 1</a></li></ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Inventory</a></li>
+          <li><a href="stock_in.html"><i class="fa-regular fa-circle"></i> Stock In</a></li>
+          <li><a href="stock_out.html"><i class="fa-regular fa-circle"></i> Stock Out</a></li>
+          <li><a href="suppliers.html"><i class="fa-regular fa-circle"></i> Suppliers</a></li>
+      </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="assets.html" class="active"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+          <li><a href="asset_assign.html"><i class="fa-regular fa-circle"></i> Assign Asset</a></li>
+          <li><a href="asset_maintenance.html"><i class="fa-regular fa-circle"></i> Maintenance</a></li>
+      </ul>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income Overview</a></li>
+          <li><a href="income_entry.html"><i class="fa-regular fa-circle"></i> Income Entry</a></li>
+          <li><a href="income_report.html"><i class="fa-regular fa-circle"></i> Reports</a></li>
+      </ul>
+      </li>
+    </ul>
+  </aside>
+
+    <div class="main-content">
+      
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge">0</span>
+          </div>
+
+          <a href="login.html" class="header-btn">
+            <i class="fa-solid fa-house"></i> Home
+          </a>
+
+          <a href="login.html" class="header-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Log Out
+          </a>
+
+          <div class="profile">
+            <i class="fa-solid fa-user-circle"></i>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-inner">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Salary <em>Sheet</em></h1>
+          <p>Monthly salary breakdown for all employees · February 2026</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+          <button class="btn btn-outline"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+          <button class="btn btn-gold"><i class="fa-solid fa-file-pdf"></i> PDF Report</button>
+        </div>
+      </div>
+
+      <!-- Hero Banner -->
+      <div class="sal-hero">
+        <div style="position:relative;z-index:1">
+          <div class="hero-eyebrow">Monthly Salary Sheet</div>
+          <div class="hero-month">February 2026</div>
+          <div class="hero-sub">Generated on Feb 20, 2026 &middot; All figures in BDT (৳)</div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-val">৳5,24,000</div>
+            <div class="hero-stat-lbl">Gross Payroll</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val" style="color:#ffab91">৳46,000</div>
+            <div class="hero-stat-lbl">Deductions</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val" style="color:#80cbc4">৳4,78,000</div>
+            <div class="hero-stat-lbl">Net Pay</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">52</div>
+            <div class="hero-stat-lbl">Employees</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#EEF4FF;color:#3B82F6"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-val">52</div>
+            <div class="stat-sub">All departments</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-circle-check"></i></div>
+          <div>
+            <div class="stat-label">Approved</div>
+            <div class="stat-val">44</div>
+            <div class="stat-sub">Ready for payment</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FFF7ED;color:#F59E0B"><i class="fa-solid fa-clock"></i></div>
+          <div>
+            <div class="stat-label">Pending</div>
+            <div class="stat-val">6</div>
+            <div class="stat-sub">Awaiting review</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FDF4FF;color:#A855F7"><i class="fa-solid fa-circle-pause"></i></div>
+          <div>
+            <div class="stat-label">On Hold</div>
+            <div class="stat-val">2</div>
+            <div class="stat-sub">Requires action</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Department Summary Cards -->
+      <div class="dept-totals-grid">
+        <div class="dept-total-card" style="--c:#1e88e5">
+          <div class="d-name">IT Department</div>
+          <div class="d-amount">৳1,96,000</div>
+          <div class="d-emp">20 employees</div>
+        </div>
+        <div class="dept-total-card" style="--c:#43a047">
+          <div class="d-name">Human Resources</div>
+          <div class="d-amount">৳1,04,000</div>
+          <div class="d-emp">12 employees</div>
+        </div>
+        <div class="dept-total-card" style="--c:#ef6c00">
+          <div class="d-name">Sales & Marketing</div>
+          <div class="d-amount">৳1,44,000</div>
+          <div class="d-emp">15 employees</div>
+        </div>
+        <div class="dept-total-card" style="--c:#8e24aa">
+          <div class="d-name">Accounts & Finance</div>
+          <div class="d-amount">৳80,000</div>
+          <div class="d-emp">5 employees</div>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="table-card">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <select id="deptFilter" onchange="renderSalary()">
+            <option value="">All Departments</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Sales">Sales</option>
+            <option value="Accounts">Accounts</option>
+          </select>
+          <select id="monthFilter">
+            <option>February 2026</option>
+            <option>January 2026</option>
+            <option>December 2025</option>
+          </select>
+          <select id="statusFilter" onchange="renderSalary()">
+            <option value="">All Statuses</option>
+            <option value="processed">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="hold">On Hold</option>
+          </select>
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search employee..." id="salSearch" oninput="renderSalary()">
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="toggleSelectAll()"><i class="fa-solid fa-check-double"></i> Select All</button>
+            <button class="btn btn-success-soft btn-sm" onclick="bulkApprove()"><i class="fa-solid fa-thumbs-up"></i> Approve Selected</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:36px"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="cursor:pointer;accent-color:#b4cde9"></th>
+                <th>#</th>
+                <th>Employee</th>
+                <th>Dept</th>
+                <th>Position</th>
+                <th style="text-align:center">Days</th>
+                <th class="amount">Basic</th>
+                <th class="amount">H.Rent</th>
+                <th class="amount">Medical</th>
+                <th class="amount">Transport</th>
+                <th class="amount">Bonus</th>
+                <th class="amount">Gross</th>
+                <th class="amount">Tax</th>
+                <th class="amount">Provident</th>
+                <th class="amount">Absent Ded.</th>
+                <th class="amount">Net Pay</th>
+                <th>Status</th>
+                <th style="text-align:center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="salTbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" style="color:var(--ink3);font-size:12px">GRAND TOTAL · All Departments</td>
+                <td class="amount">৳3,20,000</td>
+                <td class="amount">৳96,000</td>
+                <td class="amount">৳48,000</td>
+                <td class="amount">৳32,000</td>
+                <td class="amount">৳28,000</td>
+                <td class="amount" style="color:var(--ink)">৳5,24,000</td>
+                <td class="amount" style="color:var(--danger)">৳24,000</td>
+                <td class="amount" style="color:var(--danger)">৳16,000</td>
+                <td class="amount" style="color:var(--danger)">৳6,000</td>
+                <td class="amount amount-net">৳4,78,000</td>
+                <td colspan="2"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /main-inner -->
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<!-- Edit/Adjust Modal -->
+<!-- Edit/Adjust Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="editModalTitle">Adjust Salary</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group">
+          <label class="form-label">Basic Salary (৳)</label>
+          <input class="form-control" type="number" id="e-basic">
+        </div>
+        <div class="form-group">
+          <label class="form-label">House Rent (৳)</label>
+          <input class="form-control" type="number" id="e-rent">
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group">
+          <label class="form-label">Medical (৳)</label>
+          <input class="form-control" type="number" id="e-medical">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Transport (৳)</label>
+          <input class="form-control" type="number" id="e-transport">
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group">
+          <label class="form-label">Bonus (৳)</label>
+          <input class="form-control" type="number" id="e-bonus">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Absent Deduction (৳)</label>
+          <input class="form-control" type="number" id="e-absent">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Remarks</label>
+        <textarea class="form-control" rows="2" placeholder="Reason for adjustment..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()"><i class="fa-solid fa-check"></i> Save & Approve</button>
+    </div>
+  </div>
+</div>
+
+
+  <script>
+    // Sidebar toggle
+  document.querySelectorAll('.has-submenu > a').forEach(link => {
+    link.addEventListener('click', e => {
+      const li = link.parentElement;
+      const isOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-submenu').forEach(el => el.classList.remove('open'));
+      if (!isOpen) li.classList.add('open');
+      e.preventDefault();
+    });
+  });
+
+  const salaryData = [
+    { id:'EMP001', name:'Ahmed Rahman',   dept:'IT',       pos:'Manager',   days:28, basic:25000, rent:7500,  medical:2500, transport:2000, bonus:3000, tax:2000, pf:1250, absent:0,    status:'processed' },
+    { id:'EMP002', name:'Fatima Khanam', dept:'HR',       pos:'Executive', days:28, basic:18000, rent:5400,  medical:1800, transport:1500, bonus:0,    tax:1200, pf:900,  absent:0,    status:'processed' },
+    { id:'EMP003', name:'Rafiq Islam',   dept:'Sales',    pos:'Staff',     days:23, basic:15000, rent:4500,  medical:1500, transport:1200, bonus:0,    tax:800,  pf:750,  absent:2500, status:'pending'   },
+    { id:'EMP004', name:'Nadia Akter',   dept:'IT',       pos:'Executive', days:28, basic:20000, rent:6000,  medical:2000, transport:1600, bonus:0,    tax:1500, pf:1000, absent:0,    status:'processed' },
+    { id:'EMP005', name:'Karim Hossain', dept:'HR',       pos:'Manager',   days:28, basic:30000, rent:9000,  medical:3000, transport:2400, bonus:5000, tax:3000, pf:1500, absent:0,    status:'processed' },
+    { id:'EMP006', name:'Mahmudul Sayeed',dept:'IT',      pos:'Staff',     days:28, basic:16000, rent:4800,  medical:1600, transport:1280, bonus:0,    tax:900,  pf:800,  absent:0,    status:'pending'   },
+    { id:'EMP007', name:'Sadia Rahman',  dept:'HR',       pos:'Executive', days:25, basic:14000, rent:4200,  medical:1400, transport:1120, bonus:0,    tax:700,  pf:700,  absent:1500, status:'hold'      },
+    { id:'EMP008', name:'Tanvir Ahmed',  dept:'Sales',    pos:'Manager',   days:28, basic:28000, rent:8400,  medical:2800, transport:2240, bonus:4000, tax:2500, pf:1400, absent:0,    status:'processed' },
+    { id:'EMP009', name:'Lamia Islam',   dept:'IT',       pos:'Executive', days:28, basic:17000, rent:5100,  medical:1700, transport:1360, bonus:0,    tax:950,  pf:850,  absent:0,    status:'pending'   },
+    { id:'EMP010', name:'Rashed Alam',   dept:'HR',       pos:'Staff',     days:20, basic:13000, rent:3900,  medical:1300, transport:1040, bonus:0,    tax:600,  pf:650,  absent:3000, status:'hold'      },
+  ];
+
+  const avatarColors = ['#1565C0','#2E7D32','#E65100','#6A1B9A','#00838F','#558B2F','#283593','#4E342E','#37474F','#880E4F'];
+  const deptStyle = {
+    IT:       { bg:'#EEF4FF', color:'#3B82F6' },
+    HR:       { bg:'#ECFDF5', color:'#10B981' },
+    Sales:    { bg:'#FFF7ED', color:'#F59E0B' },
+    Accounts: { bg:'#FDF4FF', color:'#A855F7' },
+  };
+
+  let currentEdit = null;
+
+  function initials(name) { return name.split(' ').map(n => n[0]).join('').slice(0,2); }
+
+  function renderSalary() {
+    const q      = (document.getElementById('salSearch').value || '').toLowerCase();
+    const dept   = document.getElementById('deptFilter').value;
+    const status = document.getElementById('statusFilter').value;
+
+    const data = salaryData.filter(e =>
+      (!dept   || e.dept === dept) &&
+      (!status || e.status === status) &&
+      (!q      || e.name.toLowerCase().includes(q) || e.id.toLowerCase().includes(q))
+    );
+
+    document.getElementById('salTbody').innerHTML = data.map((e, i) => {
+      const gross = e.basic + e.rent + e.medical + e.transport + e.bonus;
+      const net   = gross - e.tax - e.pf - e.absent;
+      const d     = deptStyle[e.dept] || { bg:'#f0f0f0', color:'#555' };
+
+      const statusPill = e.status === 'processed'
+        ? `<span class="status-pill pill-green"><span class="dot"></span> Approved</span>`
+        : e.status === 'pending'
+        ? `<span class="status-pill pill-yellow"><span class="dot"></span> Pending</span>`
+        : `<span class="status-pill pill-red"><span class="dot"></span> On Hold</span>`;
+
+      const idx = salaryData.indexOf(e);
+
+      return `<tr>
+        <td><input type="checkbox" class="row-cb" style="cursor:pointer;accent-color:var(--gold)"></td>
+        <td style="color:var(--ink3);font-size:12px">${i + 1}</td>
+        <td>
+          <div class="emp-cell">
+            <div class="emp-avatar" style="background:${avatarColors[idx % avatarColors.length]}">${initials(e.name)}</div>
+            <div>
+              <div class="emp-name">${e.name}</div>
+              <div class="emp-id">#${e.id}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="dept-tag" style="background:${d.bg};color:${d.color}">${e.dept}</span></td>
+        <td style="font-size:12px;color:var(--ink2)">${e.pos}</td>
+        <td class="days-cell">${e.days}/28</td>
+        <td class="amount">৳${e.basic.toLocaleString()}</td>
+        <td class="amount">৳${e.rent.toLocaleString()}</td>
+        <td class="amount">৳${e.medical.toLocaleString()}</td>
+        <td class="amount">৳${e.transport.toLocaleString()}</td>
+        <td class="amount">${e.bonus ? '৳' + e.bonus.toLocaleString() : '<span style="color:var(--ink3)">—</span>'}</td>
+        <td class="amount" style="font-weight:700">৳${gross.toLocaleString()}</td>
+        <td class="amount" style="color:var(--danger)">৳${e.tax.toLocaleString()}</td>
+        <td class="amount" style="color:var(--danger)">৳${e.pf.toLocaleString()}</td>
+        <td class="amount" style="color:var(--danger)">${e.absent ? '৳' + e.absent.toLocaleString() : '<span style="color:var(--ink3)">—</span>'}</td>
+        <td class="amount amount-net">৳${net.toLocaleString()}</td>
+        <td>${statusPill}</td>
+        <td style="text-align:center">
+          <div style="display:flex;gap:5px;justify-content:center">
+            <button class="btn btn-outline btn-sm btn-icon" title="Adjust" onclick="openEdit(${idx})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-success-soft btn-sm btn-icon" title="Approve" onclick="approveOne(${idx})"><i class="fa-solid fa-check"></i></button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function openEdit(idx) {
+    currentEdit = idx;
+    const e = salaryData[idx];
+    document.getElementById('editModalTitle').textContent = `Adjust — ${e.name}`;
+    document.getElementById('e-basic').value     = e.basic;
+    document.getElementById('e-rent').value      = e.rent;
+    document.getElementById('e-medical').value   = e.medical;
+    document.getElementById('e-transport').value = e.transport;
+    document.getElementById('e-bonus').value     = e.bonus;
+    document.getElementById('e-absent').value    = e.absent;
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function saveEdit() {
+    if (currentEdit !== null) {
+      const e = salaryData[currentEdit];
+      e.basic     = +document.getElementById('e-basic').value;
+      e.rent      = +document.getElementById('e-rent').value;
+      e.medical   = +document.getElementById('e-medical').value;
+      e.transport = +document.getElementById('e-transport').value;
+      e.bonus     = +document.getElementById('e-bonus').value;
+      e.absent    = +document.getElementById('e-absent').value;
+      e.status    = 'processed';
+      renderSalary();
+    }
+    closeModal();
+  }
+
+  function approveOne(idx) {
+    salaryData[idx].status = 'processed';
+    renderSalary();
+  }
+
+  function closeModal() { document.getElementById('editModal').classList.remove('open'); }
+
+  document.getElementById('editModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('editModal')) closeModal();
+  });
+
+  let allSelected = false;
+  function toggleSelectAll() {
+    allSelected = !allSelected;
+    document.querySelectorAll('.row-cb').forEach(cb => cb.checked = allSelected);
+    document.getElementById('selectAll').checked = allSelected;
+  }
+
+  function bulkApprove() {
+    const checked = document.querySelectorAll('.row-cb:checked').length;
+    if (!checked) { alert('Please select at least one employee.'); return; }
+    if (confirm(`Approve salary for ${checked} selected employee(s)?`)) {
+      alert(`${checked} salaries approved successfully!`);
+    }
+  }
+
+  renderSalary();
+  </script>
+  </body>
+</html>
