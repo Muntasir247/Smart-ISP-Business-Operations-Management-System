@@ -1,0 +1,349 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Position</title>
+    <style>
+      table th {
+        text-align: center;
+      }
+    </style>  
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content Area -->
+    <div class="main-content">
+<div class="page-content">
+        <div class="card">
+          <h2>Position</h2>
+
+          <form id="positionForm">
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 15px;">
+              <input id="positionInput" placeholder="New Position" required />
+              <select id="positionDepartment" required>
+                <option value="">Select Department</option>
+              </select>
+              <button type="submit">Add Position</button>
+            </div>
+          </form>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="positionTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+    <script>
+      const positionForm = document.getElementById('positionForm');
+      const positionInput = document.getElementById('positionInput');
+      const positionDepartment = document.getElementById('positionDepartment');
+      const positionTable = document.getElementById('positionTable');
+      let departmentsState = [];
+      let positionsState = [];
+      let editingPositionId = null;
+
+      function getDepartments() {
+        return departmentsState
+          .map((item) => (typeof item === 'string' ? item : (item && item.name) || ''))
+          .map((name) => name.toString().trim())
+          .filter(Boolean);
+      }
+
+      // Populate department dropdown
+      function renderDepartmentDropdown() {
+        const depts = getDepartments();
+        positionDepartment.innerHTML = '<option value="">Select Department</option>';
+        depts.forEach((dept) => {
+          const option = document.createElement('option');
+          option.value = dept;
+          option.textContent = dept;
+          positionDepartment.appendChild(option);
+        });
+      }
+
+      function getPositions() {
+        return positionsState
+          .map((item) => {
+            if (typeof item === 'string') {
+              return { name: item.trim(), department: '' };
+            }
+            if (item && typeof item === 'object') {
+              return {
+                id: Number(item.id || 0),
+                name: (item.name || '').toString().trim(),
+                department: (item.department || '').toString().trim()
+              };
+            }
+            return { id: 0, name: '', department: '' };
+          })
+          .filter((item) => item.name);
+      }
+
+      function savePositions(list) {
+        positionsState = Array.from(
+          new Map(
+            list.map((item) => {
+              const key = `${(item.name || '').toLowerCase()}::${(item.department || '').toLowerCase()}`;
+              return [key, item];
+            })
+          ).values()
+        );
+      }
+
+      function saveDepartments(list) {
+        departmentsState = Array.from(
+          new Map(list.map((item) => [String(item.name || '').toLowerCase(), item])).values()
+        );
+      }
+
+      async function syncDepartmentsFromDb() {
+        try {
+          const response = await fetch('backend/public/employees/list_departments.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            return;
+          }
+
+          const dbDepartments = Array.isArray(result.departments)
+            ? result.departments
+              .map((item) => ({ name: (item && item.name ? String(item.name) : '').trim() }))
+              .filter((item) => item.name)
+            : [];
+
+          saveDepartments(dbDepartments);
+          renderDepartmentDropdown();
+        } catch (_error) {
+          // Keep in-memory data if DB sync fails.
+        }
+      }
+
+      async function syncPositionsFromDb() {
+        try {
+          const response = await fetch('backend/public/employees/list_positions.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            return;
+          }
+
+          const dbPositions = Array.isArray(result.positions)
+            ? result.positions
+              .map((item) => ({
+                id: Number(item && item.id ? item.id : 0),
+                name: (item && item.name ? String(item.name) : '').trim(),
+                department: (item && item.department ? String(item.department) : '').trim()
+              }))
+              .filter((item) => item.name)
+            : [];
+
+          savePositions(dbPositions);
+          renderPositions();
+          renderDepartmentDropdown();
+        } catch (_error) {
+          // Keep in-memory data if DB sync fails.
+        }
+      }
+
+      async function savePositionToDb(name, department) {
+        const response = await fetch('backend/public/employees/upsert_position.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            position_name: name,
+            department_name: department
+          })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to save position to database.');
+        }
+      }
+
+      async function deletePositionFromDb(name, department) {
+        const response = await fetch('backend/public/employees/delete_position.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            position_name: name,
+            department_name: department
+          })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to delete position from database.');
+        }
+      }
+
+      async function updatePositionInDb(positionId, newName, newDepartment) {
+        const response = await fetch('backend/public/employees/update_position.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            position_id: positionId,
+            new_position_name: newName,
+            new_department_name: newDepartment
+          })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to update position.');
+        }
+      }
+
+      function renderPositions() {
+        const list = getPositions();
+        positionTable.innerHTML = '';
+
+        if (!list.length) {
+          positionTable.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;">No positions found.</td></tr>';
+          return;
+        }
+
+        list.forEach((item, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.department || '-'}</td>
+            <td style="text-align:center;">
+              <button type="button" onclick="editPosition(${index})" style="background:#2563eb;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;margin-right:6px;">Edit</button>
+              <button type="button" onclick="deletePosition(${index})" style="background:#dc2626;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">Delete</button>
+            </td>
+          `;
+          positionTable.appendChild(tr);
+        });
+      }
+
+      function editPosition(index) {
+        const list = getPositions();
+        const target = list[index];
+        if (!target) return;
+
+        if (!target.id) {
+          alert('This position is still syncing. Please try again.');
+          syncPositionsFromDb();
+          return;
+        }
+
+        editingPositionId = Number(target.id || 0) || null;
+        positionInput.value = target.name;
+        positionDepartment.value = target.department || '';
+        positionForm.querySelector('button[type="submit"]').textContent = 'Update Position';
+        positionInput.focus();
+      }
+
+      async function addPosition(name, department) {
+        const nameValue = (name || '').trim();
+        if (!nameValue) return;
+
+        const list = getPositions();
+        const deptValue = (department || '').trim();
+        const exists = list.some(
+          (item) =>
+            item.name.toLowerCase() === nameValue.toLowerCase() &&
+            (item.department || '').toLowerCase() === deptValue.toLowerCase()
+        );
+        if (!exists) {
+          await savePositionToDb(nameValue, deptValue);
+          await syncPositionsFromDb();
+        } else {
+          alert('This position already exists in the selected department.');
+        }
+      }
+
+      async function deletePosition(index) {
+        const list = getPositions();
+        const target = list[index];
+        if (!target) return;
+
+        if (!window.confirm(`Delete position "${target.name}" from department "${target.department}"?`)) {
+          return;
+        }
+
+        try {
+          await deletePositionFromDb(target.name, target.department);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+
+        list.splice(index, 1);
+        savePositions(list);
+        renderPositions();
+      }
+
+      // Form submit handler
+      positionForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const posName = positionInput.value.trim();
+        const posDept = positionDepartment.value.trim();
+        
+        if (!posName || !posDept) {
+          alert('Please fill all fields');
+          return;
+        }
+
+        try {
+          if (editingPositionId) {
+            await updatePositionInDb(editingPositionId, posName, posDept);
+            await syncPositionsFromDb();
+          } else {
+            await addPosition(posName, posDept);
+          }
+        } catch (error) {
+          alert(error.message || 'Failed to save position.');
+          return;
+        }
+        positionInput.value = '';
+        positionDepartment.value = '';
+        editingPositionId = null;
+        positionForm.querySelector('button[type="submit"]').textContent = 'Add Position';
+      });
+
+      // Initialize
+      window.deletePosition = deletePosition;
+      window.editPosition = editPosition;
+      renderPositions();
+      Promise.all([syncDepartmentsFromDb(), syncPositionsFromDb()]);
+    </script>
+  </body>
+</html>
+
+
+
+

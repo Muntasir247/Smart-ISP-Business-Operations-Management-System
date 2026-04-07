@@ -1,0 +1,123 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee Internet - New Ticket</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .ticket-form-container {
+        width: 100%;
+        margin: 0;
+      }
+      .form-header {
+        background: #1a3c5e;
+        color: white;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 0;
+      }
+      .form-body {
+        background: white;
+        padding: 30px;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<div class="main-content">
+<div class="page-content">
+        <div class="ticket-form-container">
+          <div class="form-header">
+            <h3>
+              <i class="fa-solid fa-plus-circle"></i> Create New Support Ticket
+            </h3>
+          </div>
+          <div class="form-body">
+            <div class="form-section">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Select Client</label>
+                  <select>
+                    <option>Search client name...</option>
+                    <option>John Doe</option>
+                    <option>Sarah Smith</option>
+                    <option>Michael Brown</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Service Type</label>
+                  <select>
+                    <option>Broadband</option>
+                    <option>Fiber Optic</option>
+                    <option>IPTV</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Subject</label>
+                <input type="text" placeholder="Brief summary of the issue" />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select>
+                    <option>Technical Issue</option>
+                    <option>Billing Problem</option>
+                    <option>General Inquiry</option>
+                    <option>New Connection</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Priority</label>
+                  <select>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Description</label>
+                <textarea
+                  rows="6"
+                  placeholder="Provide detailed information about the client's problem..."
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Attachment (Optional)</label>
+                <input type="file" />
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-navy">Create Ticket</button>
+                <button
+                  class="btn btn-default"
+                  onclick="window.location.href = 'ticket_list.html'"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+  </body>
+</html>
+
+
+
+

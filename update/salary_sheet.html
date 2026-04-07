@@ -1,0 +1,984 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Salary Sheet</title>
+    <style>
+      :root {
+        --bg-page: #f4f7f1;
+        --bg-panel: #ffffff;
+        --bg-panel-soft: #f7fbf7;
+        --line: #d7e3d3;
+        --text-main: #193320;
+        --text-soft: #5a7062;
+        --brand: #1f8a58;
+        --brand-strong: #10653f;
+        --accent: #f2a64a;
+        --danger: #d1495b;
+        --info: #0c5c74;
+        --shadow: 0 14px 38px rgba(16, 46, 25, 0.12);
+      }
+
+      .salary-page {
+        font-family: 'Manrope', sans-serif;
+        color: var(--text-main);
+        background:
+          radial-gradient(circle at 12% 6%, rgba(31, 138, 88, 0.17), transparent 34%),
+          radial-gradient(circle at 88% 18%, rgba(242, 166, 74, 0.2), transparent 30%),
+          linear-gradient(150deg, #f8fbf5 0%, #edf5ea 100%);
+        min-height: calc(100vh - 70px);
+        padding: 18px;
+      }
+
+      .salary-shell {
+        max-width: 1500px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+
+      .sheet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 14px;
+        flex-wrap: wrap;
+        background: linear-gradient(120deg, #ffffff, #edf7ef);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: var(--shadow);
+        animation: rise 420ms ease-out;
+      }
+
+      .sheet-header h2 {
+        margin: 0;
+        font-family: 'Sora', sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 0.2px;
+      }
+
+      .sheet-header p {
+        margin: 6px 0 0;
+        color: var(--text-soft);
+        font-size: 0.92rem;
+      }
+
+      .head-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .pay-btn {
+        border: 0;
+        border-radius: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+
+      .pay-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .pay-btn.primary {
+        background: linear-gradient(145deg, var(--brand), var(--brand-strong));
+        color: #fff;
+        box-shadow: 0 9px 16px rgba(20, 94, 59, 0.25);
+      }
+
+      .pay-btn.secondary {
+        background: #fff;
+        color: var(--text-main);
+        border: 1px solid var(--line);
+      }
+
+      .kpi-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(4, minmax(180px, 1fr));
+      }
+
+      .kpi-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: var(--shadow);
+        animation: rise 380ms ease-out;
+      }
+
+      .kpi-label {
+        color: var(--text-soft);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .kpi-value {
+        margin-top: 8px;
+        font-size: 1.32rem;
+        font-weight: 800;
+      }
+
+      .sheet-controls {
+        background: var(--bg-panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 10px;
+        animation: rise 500ms ease-out;
+      }
+
+      .controls-row {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(6, minmax(120px, 1fr));
+      }
+
+      .controls-row label {
+        display: block;
+        font-size: 0.74rem;
+        color: var(--text-soft);
+        font-weight: 700;
+        margin-bottom: 4px;
+        letter-spacing: 0.4px;
+      }
+
+      .controls-row input,
+      .controls-row select {
+        width: 100%;
+        min-height: 38px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        padding: 6px 9px;
+        font-size: 0.9rem;
+        background: var(--bg-panel-soft);
+        color: var(--text-main);
+      }
+
+      .table-wrap {
+        overflow: auto;
+        background: var(--bg-panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        animation: rise 620ms ease-out;
+      }
+
+      .salary-table {
+        width: 100%;
+        min-width: 1450px;
+        border-collapse: collapse;
+      }
+
+      .salary-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #edf7ee;
+        color: #244832;
+        font-size: 0.75rem;
+        letter-spacing: 0.35px;
+        text-transform: uppercase;
+        font-weight: 800;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      .salary-table tbody td {
+        border-bottom: 1px solid #e8efe7;
+        padding: 8px;
+        font-size: 0.86rem;
+        vertical-align: middle;
+      }
+
+      .salary-table tbody tr {
+        transition: background 180ms ease;
+      }
+
+      .salary-table tbody tr:hover {
+        background: #f4faf4;
+      }
+
+      .salary-table tfoot td {
+        font-weight: 800;
+        background: #f1f8f2;
+        border-top: 2px solid var(--line);
+        padding: 10px 8px;
+      }
+
+      .row-input,
+      .row-select {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        min-height: 33px;
+        padding: 5px 7px;
+        font-size: 0.83rem;
+        background: #fbfdfb;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .pill.ok {
+        background: #dff5e7;
+        color: #0f6c40;
+      }
+
+      .pill.warn {
+        background: #fff1dc;
+        color: #9a5e0f;
+      }
+
+      .pill.hold {
+        background: #fde3e7;
+        color: #a0273d;
+      }
+
+      .employee-cell {
+        min-width: 230px;
+      }
+
+      .employee-name {
+        margin: 0;
+        font-weight: 700;
+      }
+
+      .employee-meta {
+        margin: 2px 0 0;
+        font-size: 0.76rem;
+        color: var(--text-soft);
+      }
+
+      .money {
+        white-space: nowrap;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .net {
+        color: var(--brand-strong);
+      }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text-soft);
+        padding: 28px;
+      }
+
+      .status-line {
+        font-size: 0.82rem;
+        color: var(--text-soft);
+      }
+
+      .tiny {
+        font-size: 0.75rem;
+        color: var(--text-soft);
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 1200px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, minmax(180px, 1fr));
+        }
+
+        .controls-row {
+          grid-template-columns: repeat(3, minmax(130px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .salary-page {
+          padding: 10px;
+        }
+
+        .kpi-grid,
+        .controls-row {
+          grid-template-columns: 1fr;
+        }
+
+        .sheet-header {
+          padding: 14px;
+        }
+
+        .sheet-header h2 {
+          font-size: 1.08rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <div class="main-content">
+      <div class="salary-page">
+        <div class="salary-shell">
+          <section class="sheet-header">
+            <div>
+              <h2><i class="fa-solid fa-file-invoice-dollar"></i> Salary Sheet Workspace</h2>
+              <p>Generate payroll cycle, manage corporate HR adjustments, and export Excel in one place.</p>
+            </div>
+            <div class="head-actions">
+              <button class="pay-btn secondary" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+              <button class="pay-btn secondary" id="btnPrint"><i class="fa-solid fa-print"></i> Print</button>
+              <button class="pay-btn primary" id="btnExport"><i class="fa-solid fa-file-excel"></i> Download Excel</button>
+            </div>
+          </section>
+
+          <section class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Employees In Sheet</div>
+              <div class="kpi-value" id="kpiHeadcount">0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Gross Payroll</div>
+              <div class="kpi-value" id="kpiGross">BDT 0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Total Deductions</div>
+              <div class="kpi-value" id="kpiDeduction">BDT 0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Net Payout</div>
+              <div class="kpi-value" id="kpiNet">BDT 0</div>
+            </div>
+          </section>
+
+          <section class="sheet-controls">
+            <div class="controls-row">
+              <div>
+                <label for="salaryMonth">Payroll Month</label>
+                <input type="month" id="salaryMonth" />
+              </div>
+              <div>
+                <label for="departmentFilter">Department</label>
+                <select id="departmentFilter">
+                  <option value="all">All Departments</option>
+                </select>
+              </div>
+              <div>
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                  <option value="all">All Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Probation">Probation</option>
+                  <option value="On Leave">On Leave</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+              <div>
+                <label for="paymentFilter">Payment State</label>
+                <select id="paymentFilter">
+                  <option value="all">All</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Processed">Processed</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Hold">Hold</option>
+                </select>
+              </div>
+              <div>
+                <label for="searchInput">Search</label>
+                <input id="searchInput" type="text" placeholder="Name, ID, phone" />
+              </div>
+              <div>
+                <label for="minNetFilter">Min Net Pay</label>
+                <input id="minNetFilter" type="number" min="0" step="0.01" placeholder="0" />
+              </div>
+            </div>
+
+            <div class="controls-row">
+              <div>
+                <label for="taxPercent">Tax %</label>
+                <input id="taxPercent" type="number" min="0" step="0.01" value="5" />
+              </div>
+              <div>
+                <label for="pfPercent">PF %</label>
+                <input id="pfPercent" type="number" min="0" step="0.01" value="3" />
+              </div>
+              <div>
+                <label for="defaultBonus">Default Bonus</label>
+                <input id="defaultBonus" type="number" min="0" step="0.01" value="0" />
+              </div>
+              <div>
+                <label for="defaultOvertime">Default Overtime</label>
+                <input id="defaultOvertime" type="number" min="0" step="0.01" value="0" />
+              </div>
+              <div>
+                <label for="defaultOtherDeduction">Default Other Deduction</label>
+                <input id="defaultOtherDeduction" type="number" min="0" step="0.01" value="0" />
+              </div>
+              <div>
+                <label for="workDays">Working Days</label>
+                <input id="workDays" type="number" min="1" step="1" value="30" />
+              </div>
+            </div>
+
+            <div class="head-actions">
+              <button class="pay-btn secondary" id="btnApplyDefaults"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply Defaults To Filtered</button>
+              <button class="pay-btn secondary" id="btnMarkProcessed"><i class="fa-solid fa-list-check"></i> Mark Filtered Processed</button>
+              <button class="pay-btn secondary" id="btnResetAdjustments"><i class="fa-solid fa-eraser"></i> Reset Adjustments</button>
+            </div>
+            <div class="status-line" id="statusLine">Loading payroll data...</div>
+          </section>
+
+          <section class="table-wrap">
+            <table class="salary-table">
+              <thead>
+                <tr>
+                  <th style="width: 36px;"><input type="checkbox" id="checkAllRows" /></th>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Designation</th>
+                  <th>Type</th>
+                  <th>Payable Days</th>
+                  <th>Basic</th>
+                  <th>Allowances</th>
+                  <th>Bonus</th>
+                  <th>Overtime</th>
+                  <th>Other Earn</th>
+                  <th>Tax</th>
+                  <th>PF</th>
+                  <th>Loan</th>
+                  <th>Other Deduct</th>
+                  <th>Gross</th>
+                  <th>Net</th>
+                  <th>Pay State</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody id="salaryBody">
+                <tr>
+                  <td colspan="19" class="empty-state">Loading employee payroll data...</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6">Totals</td>
+                  <td class="money" id="totalBasic">BDT 0</td>
+                  <td class="money" id="totalAllowance">BDT 0</td>
+                  <td class="money" id="totalBonus">BDT 0</td>
+                  <td class="money" id="totalOvertime">BDT 0</td>
+                  <td class="money" id="totalOtherEarn">BDT 0</td>
+                  <td class="money" id="totalTax">BDT 0</td>
+                  <td class="money" id="totalPf">BDT 0</td>
+                  <td class="money" id="totalLoan">BDT 0</td>
+                  <td class="money" id="totalOtherDeduct">BDT 0</td>
+                  <td class="money" id="totalGross">BDT 0</td>
+                  <td class="money net" id="totalNet">BDT 0</td>
+                  <td colspan="2" class="tiny" id="totalRows">0 row(s)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+    <script>
+      const payrollState = {
+        employees: [],
+        filtered: [],
+        adjustments: {},
+        selected: new Set()
+      };
+
+      const dom = {
+        body: document.getElementById('salaryBody'),
+        salaryMonth: document.getElementById('salaryMonth'),
+        departmentFilter: document.getElementById('departmentFilter'),
+        statusFilter: document.getElementById('statusFilter'),
+        paymentFilter: document.getElementById('paymentFilter'),
+        searchInput: document.getElementById('searchInput'),
+        minNetFilter: document.getElementById('minNetFilter'),
+        taxPercent: document.getElementById('taxPercent'),
+        pfPercent: document.getElementById('pfPercent'),
+        defaultBonus: document.getElementById('defaultBonus'),
+        defaultOvertime: document.getElementById('defaultOvertime'),
+        defaultOtherDeduction: document.getElementById('defaultOtherDeduction'),
+        workDays: document.getElementById('workDays'),
+        checkAllRows: document.getElementById('checkAllRows'),
+        statusLine: document.getElementById('statusLine'),
+        kpiHeadcount: document.getElementById('kpiHeadcount'),
+        kpiGross: document.getElementById('kpiGross'),
+        kpiDeduction: document.getElementById('kpiDeduction'),
+        kpiNet: document.getElementById('kpiNet')
+      };
+
+      function money(value) {
+        const safe = Number(value || 0);
+        return `BDT ${safe.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+      }
+
+      function normalizeEmployee(item) {
+        const first = (item.employeeFirstName || '').trim();
+        const last = (item.employeeLastName || '').trim();
+        const name = `${first} ${last}`.trim() || 'Unnamed Employee';
+
+        return {
+          id: String(item.employeeId || ''),
+          name,
+          department: (item.employeeDepartment || 'N/A').trim() || 'N/A',
+          designation: (item.employeeDesignation || 'N/A').trim() || 'N/A',
+          type: (item.employeeType || 'N/A').trim() || 'N/A',
+          status: (item.employeeStatus || 'Active').trim() || 'Active',
+          phone: (item.employeePhone || '').trim(),
+          email: (item.employeeMail || '').trim(),
+          basic: Number(item.employeeSalary || 0),
+          house: Number(item.employeeHouseAllowance || 0),
+          medical: Number(item.employeeMedicalAllowance || 0),
+          transport: Number(item.employeeTransportAllowance || 0)
+        };
+      }
+
+      function defaultAdjustment() {
+        return {
+          payableDays: null,
+          bonus: 0,
+          overtime: 0,
+          otherEarning: 0,
+          loan: 0,
+          otherDeduction: 0,
+          paymentState: 'Pending',
+          remarks: ''
+        };
+      }
+
+      function ensureAdjustment(id) {
+        if (!payrollState.adjustments[id]) {
+          payrollState.adjustments[id] = defaultAdjustment();
+        }
+        return payrollState.adjustments[id];
+      }
+
+      function getConfig() {
+        return {
+          taxPercent: Math.max(0, Number(dom.taxPercent.value || 0)),
+          pfPercent: Math.max(0, Number(dom.pfPercent.value || 0)),
+          workDays: Math.max(1, Number(dom.workDays.value || 30))
+        };
+      }
+
+      function calcPayroll(employee) {
+        const cfg = getConfig();
+        const adj = ensureAdjustment(employee.id);
+
+        const payableDays = adj.payableDays === null
+          ? cfg.workDays
+          : Math.max(0, Math.min(cfg.workDays, Number(adj.payableDays || 0)));
+        const attendanceFactor = cfg.workDays > 0 ? (payableDays / cfg.workDays) : 1;
+
+        const proratedBasic = employee.basic * attendanceFactor;
+        const proratedHouse = employee.house * attendanceFactor;
+        const proratedMedical = employee.medical * attendanceFactor;
+        const proratedTransport = employee.transport * attendanceFactor;
+
+        const allowanceTotal = proratedHouse + proratedMedical + proratedTransport;
+        const gross = proratedBasic + allowanceTotal + Number(adj.bonus || 0) + Number(adj.overtime || 0) + Number(adj.otherEarning || 0);
+
+        const tax = (proratedBasic * cfg.taxPercent) / 100;
+        const pf = (proratedBasic * cfg.pfPercent) / 100;
+        const deductions = tax + pf + Number(adj.loan || 0) + Number(adj.otherDeduction || 0);
+        const net = Math.max(0, gross - deductions);
+
+        return {
+          payableDays,
+          proratedBasic,
+          allowanceTotal,
+          gross,
+          tax,
+          pf,
+          deductions,
+          net
+        };
+      }
+
+      function getPillClass(state) {
+        if (state === 'Paid') return 'ok';
+        if (state === 'Hold') return 'hold';
+        return 'warn';
+      }
+
+      function updateSummary(rows) {
+        let gross = 0;
+        let ded = 0;
+        let net = 0;
+        let basic = 0;
+        let allow = 0;
+        let bonus = 0;
+        let overtime = 0;
+        let otherEarn = 0;
+        let tax = 0;
+        let pf = 0;
+        let loan = 0;
+        let otherDed = 0;
+
+        rows.forEach((item) => {
+          const pay = calcPayroll(item);
+          const adj = ensureAdjustment(item.id);
+          gross += pay.gross;
+          ded += pay.deductions;
+          net += pay.net;
+          basic += pay.proratedBasic;
+          allow += pay.allowanceTotal;
+          bonus += Number(adj.bonus || 0);
+          overtime += Number(adj.overtime || 0);
+          otherEarn += Number(adj.otherEarning || 0);
+          tax += pay.tax;
+          pf += pay.pf;
+          loan += Number(adj.loan || 0);
+          otherDed += Number(adj.otherDeduction || 0);
+        });
+
+        dom.kpiHeadcount.textContent = rows.length;
+        dom.kpiGross.textContent = money(gross);
+        dom.kpiDeduction.textContent = money(ded);
+        dom.kpiNet.textContent = money(net);
+
+        document.getElementById('totalBasic').textContent = money(basic);
+        document.getElementById('totalAllowance').textContent = money(allow);
+        document.getElementById('totalBonus').textContent = money(bonus);
+        document.getElementById('totalOvertime').textContent = money(overtime);
+        document.getElementById('totalOtherEarn').textContent = money(otherEarn);
+        document.getElementById('totalTax').textContent = money(tax);
+        document.getElementById('totalPf').textContent = money(pf);
+        document.getElementById('totalLoan').textContent = money(loan);
+        document.getElementById('totalOtherDeduct').textContent = money(otherDed);
+        document.getElementById('totalGross').textContent = money(gross);
+        document.getElementById('totalNet').textContent = money(net);
+        document.getElementById('totalRows').textContent = `${rows.length} row(s)`;
+      }
+
+      function renderTable() {
+        if (!payrollState.filtered.length) {
+          dom.body.innerHTML = '<tr><td colspan="19" class="empty-state">No employee matched current salary filters.</td></tr>';
+          updateSummary([]);
+          return;
+        }
+
+        const html = payrollState.filtered.map((employee, index) => {
+          const adj = ensureAdjustment(employee.id);
+          const pay = calcPayroll(employee);
+          const state = adj.paymentState || 'Pending';
+
+          return `
+            <tr style="animation: rise ${240 + index * 12}ms ease-out;">
+              <td><input type="checkbox" data-check-row="${employee.id}" ${payrollState.selected.has(employee.id) ? 'checked' : ''} /></td>
+              <td class="employee-cell">
+                <p class="employee-name">${employee.name}</p>
+                <p class="employee-meta">${employee.id} • ${employee.phone || 'No Phone'}</p>
+              </td>
+              <td>${employee.department}</td>
+              <td>${employee.designation}</td>
+              <td>${employee.type}</td>
+              <td><input class="row-input" type="number" min="0" step="1" data-field="payableDays" data-id="${employee.id}" value="${Math.round(Number(pay.payableDays || 0))}" /></td>
+              <td class="money">${money(pay.proratedBasic)}</td>
+              <td class="money">${money(pay.allowanceTotal)}</td>
+              <td><input class="row-input" type="number" min="0" step="0.01" data-field="bonus" data-id="${employee.id}" value="${Number(adj.bonus || 0)}" /></td>
+              <td><input class="row-input" type="number" min="0" step="0.01" data-field="overtime" data-id="${employee.id}" value="${Number(adj.overtime || 0)}" /></td>
+              <td><input class="row-input" type="number" min="0" step="0.01" data-field="otherEarning" data-id="${employee.id}" value="${Number(adj.otherEarning || 0)}" /></td>
+              <td class="money">${money(pay.tax)}</td>
+              <td class="money">${money(pay.pf)}</td>
+              <td><input class="row-input" type="number" min="0" step="0.01" data-field="loan" data-id="${employee.id}" value="${Number(adj.loan || 0)}" /></td>
+              <td><input class="row-input" type="number" min="0" step="0.01" data-field="otherDeduction" data-id="${employee.id}" value="${Number(adj.otherDeduction || 0)}" /></td>
+              <td class="money">${money(pay.gross)}</td>
+              <td class="money net">${money(pay.net)}</td>
+              <td>
+                <span class="pill ${getPillClass(state)}">${state}</span>
+                <select class="row-select" data-field="paymentState" data-id="${employee.id}">
+                  <option ${state === 'Pending' ? 'selected' : ''}>Pending</option>
+                  <option ${state === 'Processed' ? 'selected' : ''}>Processed</option>
+                  <option ${state === 'Paid' ? 'selected' : ''}>Paid</option>
+                  <option ${state === 'Hold' ? 'selected' : ''}>Hold</option>
+                </select>
+              </td>
+              <td>
+                <input class="row-input" type="text" data-field="remarks" data-id="${employee.id}" value="${(adj.remarks || '').replace(/"/g, '&quot;')}" placeholder="Remarks" />
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        dom.body.innerHTML = html;
+        updateSummary(payrollState.filtered);
+      }
+
+      function applyFilters() {
+        const department = dom.departmentFilter.value;
+        const status = dom.statusFilter.value;
+        const paymentState = dom.paymentFilter.value;
+        const search = (dom.searchInput.value || '').trim().toLowerCase();
+        const minNet = Number(dom.minNetFilter.value || 0);
+
+        payrollState.filtered = payrollState.employees.filter((employee) => {
+          if (department !== 'all' && employee.department !== department) return false;
+          if (status !== 'all' && employee.status !== status) return false;
+          const adj = ensureAdjustment(employee.id);
+          if (paymentState !== 'all' && (adj.paymentState || 'Pending') !== paymentState) return false;
+
+          if (search) {
+            const haystack = `${employee.name} ${employee.id} ${employee.phone} ${employee.designation}`.toLowerCase();
+            if (!haystack.includes(search)) return false;
+          }
+
+          const pay = calcPayroll(employee);
+          if (pay.net < minNet) return false;
+          return true;
+        });
+
+        renderTable();
+        dom.statusLine.textContent = `Showing ${payrollState.filtered.length} employee(s) for ${dom.salaryMonth.value || 'selected period'}.`;
+      }
+
+      function hydrateDepartmentFilter() {
+        const unique = Array.from(new Set(payrollState.employees.map((e) => e.department).filter(Boolean))).sort();
+        const current = dom.departmentFilter.value || 'all';
+        dom.departmentFilter.innerHTML = '<option value="all">All Departments</option>';
+        unique.forEach((dept) => {
+          const option = document.createElement('option');
+          option.value = dept;
+          option.textContent = dept;
+          dom.departmentFilter.appendChild(option);
+        });
+
+        if (Array.from(dom.departmentFilter.options).some((opt) => opt.value === current)) {
+          dom.departmentFilter.value = current;
+        }
+      }
+
+      async function loadEmployees() {
+        dom.statusLine.textContent = 'Loading employees from database...';
+        const response = await fetch('backend/public/employees/list.php', {
+          method: 'GET',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || data.ok === false) {
+          throw new Error((data && data.message) || 'Could not fetch employees for salary sheet.');
+        }
+
+        payrollState.employees = (Array.isArray(data.employees) ? data.employees : []).map(normalizeEmployee);
+        payrollState.filtered = [...payrollState.employees];
+
+        payrollState.employees.forEach((employee) => {
+          ensureAdjustment(employee.id);
+        });
+
+        hydrateDepartmentFilter();
+        applyFilters();
+      }
+
+      function applyDefaultsToFiltered() {
+        const bonus = Math.max(0, Number(dom.defaultBonus.value || 0));
+        const overtime = Math.max(0, Number(dom.defaultOvertime.value || 0));
+        const otherDeduction = Math.max(0, Number(dom.defaultOtherDeduction.value || 0));
+
+        payrollState.filtered.forEach((employee) => {
+          const adj = ensureAdjustment(employee.id);
+          adj.bonus = bonus;
+          adj.overtime = overtime;
+          adj.otherDeduction = otherDeduction;
+        });
+
+        renderTable();
+      }
+
+      function markFilteredProcessed() {
+        payrollState.filtered.forEach((employee) => {
+          const adj = ensureAdjustment(employee.id);
+          adj.paymentState = 'Processed';
+        });
+        renderTable();
+      }
+
+      function resetAdjustments() {
+        payrollState.adjustments = {};
+        payrollState.selected.clear();
+        payrollState.employees.forEach((employee) => {
+          ensureAdjustment(employee.id);
+        });
+        renderTable();
+      }
+
+      function exportExcel() {
+        if (!window.XLSX) {
+          alert('Excel export library did not load. Please refresh and try again.');
+          return;
+        }
+
+        const monthLabel = dom.salaryMonth.value || new Date().toISOString().slice(0, 7);
+        const rows = payrollState.filtered.map((employee) => {
+          const pay = calcPayroll(employee);
+          const adj = ensureAdjustment(employee.id);
+          return {
+            Month: monthLabel,
+            Employee_ID: employee.id,
+            Name: employee.name,
+            Department: employee.department,
+            Designation: employee.designation,
+            Type: employee.type,
+            Status: employee.status,
+            Payable_Days: Number(Number(pay.payableDays || 0).toFixed(0)),
+            Basic_Salary: Number(pay.proratedBasic.toFixed(2)),
+            House_Allowance: Number(employee.house.toFixed(2)),
+            Medical_Allowance: Number(employee.medical.toFixed(2)),
+            Transport_Allowance: Number(employee.transport.toFixed(2)),
+            Bonus: Number(Number(adj.bonus || 0).toFixed(2)),
+            Overtime: Number(Number(adj.overtime || 0).toFixed(2)),
+            Other_Earning: Number(Number(adj.otherEarning || 0).toFixed(2)),
+            Gross_Pay: Number(pay.gross.toFixed(2)),
+            Tax: Number(pay.tax.toFixed(2)),
+            PF: Number(pay.pf.toFixed(2)),
+            Loan: Number(Number(adj.loan || 0).toFixed(2)),
+            Other_Deduction: Number(Number(adj.otherDeduction || 0).toFixed(2)),
+            Total_Deduction: Number(pay.deductions.toFixed(2)),
+            Net_Pay: Number(pay.net.toFixed(2)),
+            Payment_State: adj.paymentState || 'Pending',
+            Remarks: adj.remarks || ''
+          };
+        });
+
+        const ws = XLSX.utils.json_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Salary Sheet');
+        XLSX.writeFile(wb, `salary_sheet_${monthLabel}.xlsx`);
+      }
+
+      function syncCheckAllState() {
+        const rowIds = payrollState.filtered.map((item) => item.id);
+        if (!rowIds.length) {
+          dom.checkAllRows.checked = false;
+          return;
+        }
+        dom.checkAllRows.checked = rowIds.every((id) => payrollState.selected.has(id));
+      }
+
+      function onRowInput(event) {
+        const target = event.target;
+        const id = target.getAttribute('data-id');
+        const field = target.getAttribute('data-field');
+        if (!id || !field) return;
+
+        const adj = ensureAdjustment(id);
+        if (field === 'remarks' || field === 'paymentState') {
+          adj[field] = target.value;
+        } else if (field === 'payableDays') {
+          const maxDays = Math.max(1, Number(dom.workDays.value || 30));
+          adj[field] = Math.max(0, Math.min(maxDays, Number(target.value || 0)));
+        } else {
+          adj[field] = Math.max(0, Number(target.value || 0));
+        }
+
+        renderTable();
+      }
+
+      function onRowCheck(event) {
+        const target = event.target;
+        const id = target.getAttribute('data-check-row');
+        if (!id) return;
+        if (target.checked) payrollState.selected.add(id);
+        else payrollState.selected.delete(id);
+        syncCheckAllState();
+      }
+
+      function bindEvents() {
+        [
+          dom.departmentFilter,
+          dom.statusFilter,
+          dom.paymentFilter,
+          dom.searchInput,
+          dom.minNetFilter,
+          dom.salaryMonth,
+          dom.taxPercent,
+          dom.pfPercent,
+          dom.workDays
+        ].forEach((input) => input.addEventListener('input', applyFilters));
+
+        document.getElementById('btnApplyDefaults').addEventListener('click', applyDefaultsToFiltered);
+        document.getElementById('btnMarkProcessed').addEventListener('click', markFilteredProcessed);
+        document.getElementById('btnResetAdjustments').addEventListener('click', resetAdjustments);
+        document.getElementById('btnRefresh').addEventListener('click', () => {
+          loadEmployees().catch((error) => {
+            dom.statusLine.textContent = error.message;
+            dom.body.innerHTML = `<tr><td colspan="19" class="empty-state">${error.message}</td></tr>`;
+            updateSummary([]);
+          });
+        });
+        document.getElementById('btnPrint').addEventListener('click', () => window.print());
+        document.getElementById('btnExport').addEventListener('click', exportExcel);
+
+        dom.checkAllRows.addEventListener('change', (event) => {
+          if (event.target.checked) {
+            payrollState.filtered.forEach((item) => payrollState.selected.add(item.id));
+          } else {
+            payrollState.filtered.forEach((item) => payrollState.selected.delete(item.id));
+          }
+          renderTable();
+        });
+
+        dom.body.addEventListener('input', (event) => {
+          if (event.target.matches('[data-field]')) onRowInput(event);
+          if (event.target.matches('[data-check-row]')) onRowCheck(event);
+        });
+
+        dom.body.addEventListener('change', (event) => {
+          if (event.target.matches('[data-field]')) onRowInput(event);
+          if (event.target.matches('[data-check-row]')) onRowCheck(event);
+        });
+      }
+
+      function initMonth() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        dom.salaryMonth.value = `${y}-${m}`;
+      }
+
+      bindEvents();
+      initMonth();
+      loadEmployees().catch((error) => {
+        dom.statusLine.textContent = error.message;
+        dom.body.innerHTML = `<tr><td colspan="19" class="empty-state">${error.message}</td></tr>`;
+        updateSummary([]);
+      });
+    </script>
+  </body>
+</html>
+
+
+
+

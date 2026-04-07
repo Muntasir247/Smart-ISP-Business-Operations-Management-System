@@ -1,0 +1,269 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Promee Internet - Dashboard</title>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content Area -->
+    <div class="main-content">
+<!-- Page Content -->
+      <div class="page-content">
+        <h1>Dashboard - System Overview</h1>
+
+        <!-- Search Results Modal -->
+        <div id="searchModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+          <div style="background: white; width: 90%; max-width: 1200px; margin: 5% auto; border-radius: 8px; padding: 20px; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>Search Results</h2>
+              <button onclick="closeSearchModal()" style="background: #ff6b6b; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;"><i class="fa-solid fa-times"></i> Close</button>
+            </div>
+            <div id="searchResults" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+              <!-- Search results will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistics Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+          
+          <!-- Total Clients Card -->
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.9; font-size: 14px;">Total Clients</p>
+                <h2 id="totalClientsCount" style="margin: 0; font-size: 36px; font-weight: bold;">-</h2>
+              </div>
+              <i class="fa-solid fa-users" style="font-size: 40px; opacity: 0.3;"></i>
+            </div>
+          </div>
+
+          <!-- New Clients Card -->
+          <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.9; font-size: 14px;">New Clients (30 days)</p>
+                <h2 id="newClientsCount" style="margin: 0; font-size: 36px; font-weight: bold;">-</h2>
+              </div>
+              <i class="fa-solid fa-user-plus" style="font-size: 40px; opacity: 0.3;"></i>
+            </div>
+          </div>
+
+          <!-- Paid Clients Card -->
+          <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.9; font-size: 14px;">Paid Clients</p>
+                <h2 id="paidClientsCount" style="margin: 0; font-size: 36px; font-weight: bold;">-</h2>
+              </div>
+              <i class="fa-solid fa-check-circle" style="font-size: 40px; opacity: 0.3;"></i>
+            </div>
+          </div>
+
+          <!-- Unpaid Clients Card -->
+          <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.9; font-size: 14px;">Unpaid Clients</p>
+                <h2 id="unpaidClientsCount" style="margin: 0; font-size: 36px; font-weight: bold;">-</h2>
+              </div>
+              <i class="fa-solid fa-exclamation-triangle" style="font-size: 40px; opacity: 0.3;"></i>
+            </div>
+          </div>
+
+          <!-- Left Clients Card -->
+          <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.8; font-size: 14px;">Left Clients</p>
+                <h2 id="leftClientsCount" style="margin: 0; font-size: 36px; font-weight: bold; color: #333;">-</h2>
+              </div>
+              <i class="fa-solid fa-sign-out-alt" style="font-size: 40px; opacity: 0.3; color: #333;"></i>
+            </div>
+          </div>
+
+          <!-- Total Revenue Card -->
+          <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="margin: 0 0 10px 0; opacity: 0.9; font-size: 14px;">Revenue (30 days)</p>
+                <h2 id="totalRevenueCount" style="margin: 0; font-size: 28px; font-weight: bold;">à§³ -</h2>
+              </div>
+              <i class="fa-solid fa-money-bill-wave" style="font-size: 40px; opacity: 0.3;"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bill Expiry Notifications Section -->
+        <div style="margin-top: 40px;">
+          <h2 style="margin-bottom: 20px; color: #333; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-bell" style="color: #ff6b6b;"></i>
+            Bill Expiry Notifications (Due within 7 days)
+          </h2>
+          <div id="billExpiryContainer" style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                  <th style="padding: 15px; text-align: left; font-weight: 600; color: #333;">Client Code</th>
+                  <th style="padding: 15px; text-align: left; font-weight: 600; color: #333;">Client Name</th>
+                  <th style="padding: 15px; text-align: left; font-weight: 600; color: #333;">Invoice No</th>
+                  <th style="padding: 15px; text-align: left; font-weight: 600; color: #333;">Amount</th>
+                  <th style="padding: 15px; text-align: left; font-weight: 600; color: #333;">Due Date</th>
+                </tr>
+              </thead>
+              <tbody id="billExpiryTable">
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                  <td colspan="5" style="padding: 20px; text-align: center; color: #999;">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+    <script>
+      // Auth check
+      async function checkAuth() {
+        try {
+          const response = await fetch('backend/public/auth/me.php', {
+            credentials: 'same-origin'
+          });
+          if (!response.ok) {
+            window.location.href = 'login.html';
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+        }
+      }
+
+      // Load dashboard statistics
+      async function loadDashboardStats() {
+        try {
+          const response = await fetch('backend/public/dashboard/stats.php', {
+            credentials: 'same-origin'
+          });
+          const data = await response.json();
+          
+          if (data.ok) {
+            // Update statistics
+            document.getElementById('totalClientsCount').textContent = data.stats.totalClients;
+            document.getElementById('newClientsCount').textContent = data.stats.newClients;
+            document.getElementById('paidClientsCount').textContent = data.stats.paidClients;
+            document.getElementById('unpaidClientsCount').textContent = data.stats.unpaidClients;
+            document.getElementById('leftClientsCount').textContent = data.stats.leftClients;
+            document.getElementById('totalRevenueCount').textContent = 'à§³ ' + data.stats.totalRevenue.toLocaleString('en-BD', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+
+            // Update bill expiry notifications
+            const tbody = document.getElementById('billExpiryTable');
+            if (data.billExpiryNotifications.length > 0) {
+              tbody.innerHTML = data.billExpiryNotifications.map(notification => `
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                  <td style="padding: 12px 15px;">${escapeHtml(notification.client_code)}</td>
+                  <td style="padding: 12px 15px;">${escapeHtml(notification.full_name)}</td>
+                  <td style="padding: 12px 15px;">${escapeHtml(notification.invoice_no)}</td>
+                  <td style="padding: 12px 15px;">à§³ ${parseFloat(notification.amount).toLocaleString('en-BD', {minimumFractionDigits: 2})}</td>
+                  <td style="padding: 12px 15px;">
+                    <span style="background: #fff3cd; color: #856404; padding: 4px 12px; border-radius: 4px; font-size: 12px;">
+                      ${new Date(notification.due_date).toLocaleDateString('en-BD')}
+                    </span>
+                  </td>
+                </tr>
+              `).join('');
+            } else {
+              tbody.innerHTML = '<tr style="border-bottom: 1px solid #dee2e6;"><td colspan="5" style="padding: 20px; text-align: center; color: #999;">No bills expiring soon</td></tr>';
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load dashboard stats:', error);
+        }
+      }
+
+      // Search functionality
+      const searchInput = document.querySelector('input[placeholder="Search Customer"]');
+      let searchTimeout;
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          clearTimeout(searchTimeout);
+          const query = e.target.value.trim();
+          
+          if (query.length < 2) {
+            document.getElementById('searchModal').style.display = 'none';
+            return;
+          }
+
+          searchTimeout = setTimeout(() => performSearch(query), 300);
+        });
+      }
+
+      async function performSearch(query) {
+        try {
+          const response = await fetch(`backend/public/dashboard/search.php?q=${encodeURIComponent(query)}`, {
+            credentials: 'same-origin'
+          });
+          const data = await response.json();
+
+          if (data.ok && data.results.length > 0) {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = data.results.map(client => `
+              <div style="background: white; border: 1px solid #dee2e6; border-radius: 6px; padding: 15px;">
+                <h3 style="margin: 0 0 10px 0; color: #333;">${escapeHtml(client.full_name)}</h3>
+                <p style="margin: 5px 0; color: #666; font-size: 13px;"><strong>Code:</strong> ${escapeHtml(client.client_code)}</p>
+                <p style="margin: 5px 0; color: #666; font-size: 13px;"><strong>Phone:</strong> ${escapeHtml(client.phone)}</p>
+                <p style="margin: 5px 0; color: #666; font-size: 13px;"><strong>Email:</strong> ${escapeHtml(client.email)}</p>
+                <p style="margin: 5px 0; color: #666; font-size: 13px;"><strong>Package:</strong> ${escapeHtml(client.package_name || 'N/A')}</p>
+                <p style="margin: 5px 0; color: #666; font-size: 13px;"><strong>Status:</strong> <span style="background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 3px;">${escapeHtml(client.status)}</span></p>
+              </div>
+            `).join('');
+
+            document.getElementById('searchModal').style.display = 'block';
+          } else {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #999;">No results found</div>';
+            document.getElementById('searchModal').style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Search failed:', error);
+        }
+      }
+
+      function closeSearchModal() {
+        document.getElementById('searchModal').style.display = 'none';
+        searchInput.value = '';
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        checkAuth();
+        loadDashboardStats();
+      });
+
+      // Refresh stats every 30 seconds
+      setInterval(loadDashboardStats, 30000);
+    </script>
+  </body>
+</html>
+
+
+

@@ -1,0 +1,879 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Promee Internet - Attendance</title>
+    <style>
+      :root {
+        --navy-primary: #0f1d3f;
+        --navy-dark: #0f1d3f;
+        --navy-darker: #0a1628;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --info: #3b82f6;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+      }
+
+      .sidebar.collapsed { margin-left: -250px; }
+      .sidebar .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+      .sidebar .has-submenu.open > .submenu { max-height: 500px; }
+      .sidebar a.active { background-color: #1f2937; color: #fff; }
+
+      /* Page Header */
+      .page-header {
+        background: white;
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .page-header h1 {
+        font-size: 28px; font-weight: 700; color: var(--gray-900);
+        margin-bottom: 6px; display: flex; align-items: center; gap: 12px;
+      }
+      .page-header h1 i { color: var(--navy-primary); }
+      .page-header p { color: var(--gray-500); font-size: 14px; }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px; margin-bottom: 24px;
+      }
+      .stat-card {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px; transition: all 0.2s ease;
+      }
+      .stat-card:hover { border-color: var(--navy-primary); box-shadow: 0 4px 12px rgba(15,29,63,0.08); }
+      .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+      .stat-icon {
+        width: 40px; height: 40px; border-radius: 10px; background: var(--gray-50);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; color: var(--navy-primary);
+      }
+      .stat-icon.green { background: #d1fae5; color: #065f46; }
+      .stat-icon.red { background: #fee2e2; color: #991b1b; }
+      .stat-icon.yellow { background: #fef3c7; color: #92400e; }
+      .stat-icon.blue { background: #dbeafe; color: #1e40af; }
+      .stat-icon.purple { background: #ede9fe; color: #5b21b6; }
+      .stat-value { font-size: 28px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+      .stat-label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+
+      /* Attendance Banner */
+      .att-banner {
+        background: linear-gradient(135deg, var(--navy-primary) 0%, var(--navy-darker) 100%);
+        border-radius: 16px; padding: 28px; color: white;
+        margin-bottom: 24px; position: relative; overflow: hidden;
+      }
+      .att-banner::before {
+        content: ""; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; background: rgba(255,255,255,0.05); border-radius: 50%;
+      }
+      .att-banner::after {
+        content: ""; position: absolute; bottom: -40px; left: 100px;
+        width: 160px; height: 160px; background: rgba(255,255,255,0.03); border-radius: 50%;
+      }
+      .banner-header {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 24px; position: relative; z-index: 1; flex-wrap: wrap; gap: 12px;
+      }
+      .banner-title h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+      .banner-title p { font-size: 13px; opacity: 0.8; }
+      .banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .banner-btn {
+        background: white; color: var(--navy-primary); border: none;
+        padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px;
+        cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;
+      }
+      .banner-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+      .banner-btn.outline {
+        background: rgba(255,255,255,0.12); color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+      }
+      .banner-btn.outline:hover { background: rgba(255,255,255,0.2); }
+      .banner-stats {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+        gap: 16px; position: relative; z-index: 1;
+      }
+      .banner-stat h4 {
+        font-size: 11px; opacity: 0.75; margin-bottom: 6px; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.5px;
+      }
+      .banner-stat p { font-size: 22px; font-weight: 700; }
+      .mini-bar { height: 5px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-top: 7px; overflow: hidden; }
+      .mini-fill { height: 100%; background: white; border-radius: 10px; }
+
+      /* Controls bar */
+      .controls-bar {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+      }
+      .ctrl-item { flex: 1; min-width: 150px; }
+      .ctrl-item label {
+        display: block; font-size: 12px; font-weight: 600;
+        color: var(--gray-600); margin-bottom: 6px;
+        text-transform: uppercase; letter-spacing: 0.3px;
+      }
+      .ctrl-select, .ctrl-input {
+        width: 100%; padding: 10px 12px; border: 1px solid var(--gray-300);
+        border-radius: 8px; font-size: 14px; color: var(--gray-700);
+        background: white; cursor: pointer; transition: all 0.2s ease; font-family: inherit;
+      }
+      .ctrl-select:focus, .ctrl-input:focus {
+        outline: none; border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(15,29,63,0.1);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 10px 18px; border: none; border-radius: 8px;
+        font-size: 14px; font-weight: 600; cursor: pointer;
+        transition: all 0.2s ease; display: inline-flex;
+        align-items: center; gap: 8px; white-space: nowrap;
+      }
+      .btn-primary { background: var(--navy-primary); color: white; }
+      .btn-primary:hover { background: var(--navy-darker); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,29,63,0.2); }
+      .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
+      .btn-secondary:hover { background: var(--gray-200); }
+      .btn-success { background: var(--success); color: white; }
+      .btn-success:hover { background: #059669; }
+      .btn-danger { background: var(--danger); color: white; }
+      .btn-danger:hover { background: #dc2626; }
+      .btn-warning { background: var(--warning); color: white; }
+      .btn-warning:hover { background: #d97706; }
+      .btn-info { background: var(--info); color: white; }
+      .btn-info:hover { background: #2563eb; }
+      .btn-sm { padding: 7px 12px; font-size: 12px; }
+
+      /* View Tabs */
+      .view-tabs {
+        display: flex; background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+      }
+      .view-tab {
+        flex: 1; padding: 14px 16px; border: none; background: white;
+        cursor: pointer; font-size: 14px; font-weight: 600;
+        color: var(--gray-500); transition: all 0.2s ease;
+        display: flex; align-items: center; justify-content: center;
+        gap: 8px; border-right: 1px solid var(--gray-200);
+      }
+      .view-tab:last-child { border-right: none; }
+      .view-tab.active { background: var(--navy-primary); color: white; }
+      .view-tab:hover:not(.active) { background: var(--gray-50); color: var(--navy-primary); }
+
+      /* Table Section */
+      .table-section {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; overflow: hidden;
+      }
+      .table-header {
+        padding: 18px 24px; border-bottom: 1px solid var(--gray-200);
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: wrap; gap: 12px;
+      }
+      .table-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+      .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+      .data-table { width: 100%; border-collapse: collapse; }
+      .data-table thead { background: var(--gray-50); }
+      .data-table th {
+        padding: 12px 16px; text-align: left; font-size: 11px;
+        font-weight: 700; color: var(--gray-600); text-transform: uppercase;
+        letter-spacing: 0.5px; border-bottom: 1px solid var(--gray-200); white-space: nowrap;
+      }
+      .data-table td {
+        padding: 13px 16px; border-bottom: 1px solid var(--gray-100);
+        font-size: 14px; color: var(--gray-700);
+      }
+      .data-table tbody tr { transition: background 0.15s ease; }
+      .data-table tbody tr:hover { background: var(--gray-50); }
+
+      /* Employee mini info */
+      .emp-cell { display: flex; align-items: center; gap: 10px; }
+      .emp-avatar {
+        width: 34px; height: 34px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+      }
+      .emp-name { font-weight: 600; color: var(--gray-900); font-size: 14px; line-height: 1.2; }
+      .emp-dept { font-size: 11px; color: var(--gray-500); }
+
+      /* Status Badges */
+      .att-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+        cursor: pointer; transition: all 0.15s ease;
+      }
+      .att-badge:hover { filter: brightness(0.92); }
+      .att-present { background: #d1fae5; color: #065f46; }
+      .att-absent { background: #fee2e2; color: #991b1b; }
+      .att-late { background: #fef3c7; color: #92400e; }
+      .att-halfday { background: #dbeafe; color: #1e40af; }
+      .att-leave { background: #ede9fe; color: #5b21b6; }
+      .att-holiday { background: var(--gray-200); color: var(--gray-600); }
+      .att-wfh { background: #d0fdf4; color: #065f46; border: 1px solid #6ee7b7; }
+
+      /* Time inputs in table */
+      .time-cell {
+        font-size: 13px; color: var(--gray-700); font-weight: 500;
+        font-variant-numeric: tabular-nums;
+      }
+      .time-cell.late { color: var(--danger); }
+      .time-cell.early { color: var(--success); }
+      .time-cell.empty { color: var(--gray-400); font-style: italic; font-weight: 400; }
+
+      /* Work hours badge */
+      .hours-pill {
+        display: inline-block; padding: 3px 10px; border-radius: 20px;
+        font-size: 12px; font-weight: 700; background: var(--gray-100); color: var(--gray-700);
+      }
+      .hours-pill.good { background: #d1fae5; color: #065f46; }
+      .hours-pill.partial { background: #fef3c7; color: #92400e; }
+      .hours-pill.none { background: #fee2e2; color: #991b1b; }
+
+      /* Overtime badge */
+      .ot-pill {
+        display: inline-block; padding: 2px 8px; border-radius: 20px;
+        font-size: 11px; font-weight: 600; background: #ede9fe; color: #5b21b6;
+      }
+
+      /* Edit inline status select */
+      .status-select {
+        border: none; background: transparent; font-size: 12px;
+        font-weight: 600; cursor: pointer; padding: 0; outline: none;
+        font-family: inherit;
+      }
+
+      /* Calendar View */
+      #calendarView { display: none; }
+      .cal-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 20px 24px; border-bottom: 1px solid var(--gray-200);
+        flex-wrap: wrap; gap: 12px;
+      }
+      .cal-nav { display: flex; align-items: center; gap: 12px; }
+      .cal-nav button {
+        width: 34px; height: 34px; border: 1px solid var(--gray-300);
+        background: white; border-radius: 8px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--gray-600); font-size: 14px; transition: all 0.2s;
+      }
+      .cal-nav button:hover { background: var(--navy-primary); color: white; border-color: var(--navy-primary); }
+      .cal-month { font-size: 18px; font-weight: 700; color: var(--gray-900); min-width: 180px; text-align: center; }
+
+      .employee-selector {
+        padding: 16px 24px; border-bottom: 1px solid var(--gray-200);
+        display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      }
+      .employee-selector label { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+
+      .cal-grid { padding: 20px 24px; }
+      .cal-days-header {
+        display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px;
+      }
+      .cal-day-label {
+        text-align: center; font-size: 11px; font-weight: 700;
+        color: var(--gray-500); text-transform: uppercase; padding: 6px 0;
+      }
+      .cal-cells { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+      .cal-cell {
+        border: 1px solid var(--gray-200); border-radius: 8px;
+        padding: 8px 6px; min-height: 68px; transition: all 0.2s;
+        cursor: pointer; position: relative;
+      }
+      .cal-cell:hover { border-color: var(--navy-primary); box-shadow: 0 2px 8px rgba(15,29,63,0.1); }
+      .cal-cell.today { border-color: var(--navy-primary); background: #eff6ff; }
+      .cal-cell.other-month { opacity: 0.35; cursor: default; }
+      .cal-cell.weekend { background: var(--gray-50); }
+      .cal-cell.holiday { background: #fef3c7; border-color: var(--warning); }
+      .cal-date {
+        font-size: 13px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px;
+      }
+      .cal-cell.today .cal-date { color: var(--navy-primary); }
+      .cal-att-dot {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 20px; height: 20px; border-radius: 50%; font-size: 9px;
+        font-weight: 700; color: white; margin: 1px;
+      }
+      .cal-att-dot.present { background: var(--success); }
+      .cal-att-dot.absent { background: var(--danger); }
+      .cal-att-dot.late { background: var(--warning); }
+      .cal-att-dot.halfday { background: var(--info); }
+      .cal-att-dot.leave { background: #8b5cf6; }
+      .cal-att-dot.holiday { background: var(--gray-400); }
+      .cal-att-dot.wfh { background: #0d9488; }
+      .cal-holiday-label { font-size: 9px; color: #92400e; font-weight: 600; margin-top: 2px; }
+
+      /* Summary View */
+      #summaryView { display: none; }
+      .summary-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px; padding: 20px;
+      }
+      .emp-summary-card {
+        border: 1px solid var(--gray-200); border-radius: 12px;
+        padding: 18px; background: white; transition: all 0.2s;
+      }
+      .emp-summary-card:hover {
+        border-color: var(--navy-primary);
+        box-shadow: 0 4px 16px rgba(15,29,63,0.1);
+      }
+      .esc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+      .esc-avatar {
+        width: 44px; height: 44px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
+      }
+      .esc-name { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+      .esc-pos { font-size: 12px; color: var(--gray-500); }
+      .esc-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 12px; }
+      .esc-stat { text-align: center; }
+      .esc-stat-val { font-size: 18px; font-weight: 700; }
+      .esc-stat-val.present { color: var(--success); }
+      .esc-stat-val.absent { color: var(--danger); }
+      .esc-stat-val.late { color: var(--warning); }
+      .esc-stat-val.leave { color: #8b5cf6; }
+      .esc-stat-label { font-size: 10px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; }
+      .esc-progress { height: 6px; background: var(--gray-200); border-radius: 10px; overflow: hidden; }
+      .esc-progress-fill { height: 100%; background: var(--success); border-radius: 10px; }
+      .esc-rate { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: var(--gray-600); font-weight: 600; }
+
+      /* Pagination */
+      .pagination {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 16px 24px; border-top: 1px solid var(--gray-200); flex-wrap: wrap; gap: 12px;
+      }
+      .pagination-info { font-size: 13px; color: var(--gray-600); }
+      .pagination-controls { display: flex; gap: 8px; }
+      .pagination button {
+        padding: 8px 14px; background: white; border: 1px solid var(--gray-300);
+        border-radius: 6px; cursor: pointer; font-size: 13px;
+        font-weight: 600; color: var(--gray-700); transition: all 0.2s;
+      }
+      .pagination button:hover:not(:disabled) { background: var(--navy-primary); color: white; border-color: var(--navy-primary); }
+      .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+      /* Mark Attendance Modal */
+      .modal {
+        display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px); animation: fadeIn 0.2s ease;
+      }
+      .modal.show { display: flex; align-items: center; justify-content: center; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .modal-content {
+        background: white; border-radius: 16px; width: 90%;
+        max-width: 560px; max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.3s ease;
+      }
+      .modal-content.wide { max-width: 900px; }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .modal-header {
+        padding: 22px 24px 16px; border-bottom: 1px solid var(--gray-200);
+        display: flex; justify-content: space-between; align-items: center;
+        position: sticky; top: 0; background: white; z-index: 10;
+      }
+      .modal-header h2 { font-size: 18px; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px; }
+      .close {
+        background: transparent; border: none; font-size: 20px;
+        cursor: pointer; color: var(--gray-400); width: 32px; height: 32px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 6px; transition: all 0.2s;
+      }
+      .close:hover { background: var(--gray-100); color: var(--gray-700); }
+      .modal-body { padding: 22px; }
+      .modal-footer {
+        padding: 16px 24px; border-top: 1px solid var(--gray-200);
+        display: flex; gap: 8px; justify-content: flex-end;
+        position: sticky; bottom: 0; background: white;
+      }
+
+      /* Bulk mark table inside modal */
+      .bulk-att-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      .bulk-att-table th {
+        background: var(--gray-50); padding: 10px 12px; text-align: left;
+        font-size: 11px; font-weight: 700; color: var(--gray-600);
+        text-transform: uppercase; letter-spacing: 0.4px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .bulk-att-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+      .bulk-att-table tbody tr:hover { background: var(--gray-50); }
+
+      .bulk-status-select {
+        padding: 6px 10px; border: 1px solid var(--gray-300);
+        border-radius: 6px; font-size: 12px; font-weight: 600;
+        cursor: pointer; outline: none; font-family: inherit; background: white;
+      }
+      .bulk-status-select:focus { border-color: var(--navy-primary); }
+
+      .time-input {
+        padding: 6px 10px; border: 1px solid var(--gray-300);
+        border-radius: 6px; font-size: 12px; width: 90px;
+        outline: none; font-family: inherit;
+      }
+      .time-input:focus { border-color: var(--navy-primary); }
+
+      /* Notification */
+      .notification {
+        position: fixed; top: 80px; right: 20px; background: white;
+        border: 1px solid var(--gray-200); border-left: 4px solid var(--success);
+        padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 3000; animation: slideInRight 0.3s ease; max-width: 340px;
+      }
+      .notification.error { border-left-color: var(--danger); }
+      .notification.warning { border-left-color: var(--warning); }
+      @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+      .notification-content { display: flex; align-items: flex-start; gap: 12px; }
+      .notification-icon { font-size: 20px; }
+      .notification-icon.success { color: var(--success); }
+      .notification-icon.error { color: var(--danger); }
+      .notification-icon.warning { color: var(--warning); }
+      .notification-title { font-weight: 700; font-size: 14px; color: var(--gray-900); margin-bottom: 2px; }
+      .notification-text { font-size: 13px; color: var(--gray-600); }
+
+      /* Quick Actions */
+      .quick-actions {
+        background: white; border: 1px solid var(--gray-200);
+        border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;
+      }
+      .qa-title { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+      .qa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+      .qa-btn {
+        padding: 12px 10px; background: var(--gray-50); border: 1px solid var(--gray-200);
+        border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: center;
+        font-size: 13px; font-weight: 600; color: var(--gray-700);
+        display: flex; flex-direction: column; align-items: center; gap: 6px;
+      }
+      .qa-btn:hover { background: var(--navy-primary); color: white; border-color: var(--navy-primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15,29,63,0.15); }
+      .qa-btn i { font-size: 18px; }
+
+      /* Form */
+      .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+      .form-group label { font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.3px; }
+      .form-control { padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px; color: var(--gray-800); background: white; transition: all 0.2s; font-family: inherit; }
+      .form-control:focus { outline: none; border-color: var(--navy-primary); box-shadow: 0 0 0 3px rgba(15,29,63,0.1); }
+
+      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+      /* Empty */
+      .empty-state { text-align: center; padding: 50px 20px; }
+      .empty-state i { font-size: 56px; color: var(--gray-300); margin-bottom: 14px; }
+      .empty-state h3 { font-size: 17px; color: var(--gray-700); margin-bottom: 6px; }
+      .empty-state p { font-size: 13px; color: var(--gray-500); }
+
+      /* Detail panel inside record modal */
+      .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: 8px; margin-bottom: 8px; }
+      .detail-lbl { font-size: 12px; font-weight: 600; color: var(--gray-500); display: flex; align-items: center; gap: 8px; }
+      .detail-val { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+
+      @media (max-width: 768px) {
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .banner-stats { grid-template-columns: 1fr 1fr; }
+        .view-tab span { display: none; }
+        .form-row { grid-template-columns: 1fr; }
+        .cal-cells { gap: 2px; }
+        .cal-cell { min-height: 50px; padding: 4px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content -->
+    <div class="main-content">
+<div class="page-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1><i class="fa-solid fa-fingerprint"></i> Attendance Management</h1>
+          <p>Track daily attendance, check-in/out times, work hours, and generate attendance reports</p>
+        </div>
+
+        <!-- Banner -->
+        <div class="att-banner">
+          <div class="banner-header">
+            <div class="banner-title">
+              <h2><i class="fa-solid fa-calendar-check"></i> Today's Attendance</h2>
+              <p id="todayDateStr"></p>
+            </div>
+            <div class="banner-actions">
+              <button class="banner-btn" onclick="openBulkMarkModal()">
+                <i class="fa-solid fa-list-check"></i> Mark Attendance
+              </button>
+              <button class="banner-btn outline" onclick="exportToExcel()">
+                <i class="fa-solid fa-file-excel"></i> Export
+              </button>
+            </div>
+          </div>
+          <div class="banner-stats">
+            <div class="banner-stat">
+              <h4>Present</h4>
+              <p id="bPresent">0</p>
+              <div class="mini-bar"><div class="mini-fill" id="bPresentBar" style="width:0%"></div></div>
+            </div>
+            <div class="banner-stat">
+              <h4>Absent</h4>
+              <p id="bAbsent">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>Late</h4>
+              <p id="bLate">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>On Leave</h4>
+              <p id="bLeave">0</p>
+            </div>
+            <div class="banner-stat">
+              <h4>WFH</h4>
+              <p id="bWfh">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon green"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+            <div class="stat-value" id="statPresent">0</div>
+            <div class="stat-label">Present Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon red"><i class="fa-solid fa-user-xmark"></i></div>
+            </div>
+            <div class="stat-value" id="statAbsent">0</div>
+            <div class="stat-label">Absent Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon yellow"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            </div>
+            <div class="stat-value" id="statLate">0</div>
+            <div class="stat-label">Late Arrivals</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon blue"><i class="fa-solid fa-house-laptop"></i></div>
+            </div>
+            <div class="stat-value" id="statWfh">0</div>
+            <div class="stat-label">Work From Home</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon purple"><i class="fa-solid fa-umbrella-beach"></i></div>
+            </div>
+            <div class="stat-value" id="statLeave">0</div>
+            <div class="stat-label">On Leave</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="qa-title">Quick Actions</div>
+          <div class="qa-grid">
+            <button class="qa-btn" onclick="openBulkMarkModal()">
+              <i class="fa-solid fa-list-check"></i> Mark Today
+            </button>
+            <button class="qa-btn" onclick="markAllPresent()">
+              <i class="fa-solid fa-users-line"></i> All Present
+            </button>
+            <button class="qa-btn" onclick="exportToExcel()">
+              <i class="fa-solid fa-file-excel"></i> Export Excel
+            </button>
+            <button class="qa-btn" onclick="switchToView('summary')">
+              <i class="fa-solid fa-chart-pie"></i> Monthly Summary
+            </button>
+            <button class="qa-btn" onclick="switchToView('calendar')">
+              <i class="fa-solid fa-calendar-days"></i> Calendar View
+            </button>
+            <button class="qa-btn" onclick="openSingleMarkModal(null)">
+              <i class="fa-solid fa-user-clock"></i> Mark Single
+            </button>
+          </div>
+        </div>
+
+        <!-- View Tabs -->
+        <div class="view-tabs">
+          <button class="view-tab active" id="tab-daily" onclick="switchToView('daily')">
+            <i class="fa-solid fa-table-list"></i> <span>Daily Register</span>
+          </button>
+          <button class="view-tab" id="tab-calendar" onclick="switchToView('calendar')">
+            <i class="fa-solid fa-calendar-days"></i> <span>Calendar View</span>
+          </button>
+          <button class="view-tab" id="tab-summary" onclick="switchToView('summary')">
+            <i class="fa-solid fa-chart-bar"></i> <span>Monthly Summary</span>
+          </button>
+        </div>
+
+        <!-- DAILY VIEW -->
+        <div id="dailyView">
+          <!-- Filter Controls -->
+          <div class="controls-bar">
+            <div class="ctrl-item">
+              <label>Date</label>
+              <input type="date" class="ctrl-input" id="filterDate" />
+            </div>
+            <div class="ctrl-item">
+              <label>Status</label>
+              <select class="ctrl-select" id="filterStatus">
+                <option value="all">All Status</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Leave">Leave</option>
+                <option value="WFH">Work From Home</option>
+                <option value="Holiday">Holiday</option>
+              </select>
+            </div>
+            <div class="ctrl-item">
+              <label>Department</label>
+              <select class="ctrl-select" id="filterDept">
+                <option value="all">All Departments</option>
+                <option value="Technology">Technology</option>
+                <option value="HR">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="Support">Support</option>
+                <option value="Sales">Sales</option>
+                <option value="Admin">Administration</option>
+                <option value="Operations">Operations</option>
+              </select>
+            </div>
+            <button class="btn btn-secondary" onclick="clearFilters()">
+              <i class="fa-solid fa-rotate-right"></i> Reset
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="table-section">
+            <div class="table-header">
+              <div class="table-title" id="dailyTableTitle">Daily Attendance Register</div>
+              <div class="table-actions">
+                <button class="btn btn-primary" onclick="openBulkMarkModal()">
+                  <i class="fa-solid fa-list-check"></i> Mark Attendance
+                </button>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Employee</th>
+                    <th>Dept</th>
+                    <th>Status</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Work Hours</th>
+                    <th>Overtime</th>
+                    <th>Note</th>
+                    <th style="text-align:center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info"><span id="paginationInfo">Showing 0 records</span></div>
+              <div class="pagination-controls">
+                <button onclick="prevPage()" id="prevBtn"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                <button onclick="nextPage()" id="nextBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CALENDAR VIEW -->
+        <div id="calendarView">
+          <div class="table-section">
+            <div class="cal-header">
+              <div class="cal-nav">
+                <button onclick="calPrev()"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="cal-month" id="calMonthLabel"></div>
+                <button onclick="calNext()"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--success);margin-right:4px;"></span>Present</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--danger);margin-right:4px;"></span>Absent</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--warning);margin-right:4px;"></span>Late</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#8b5cf6;margin-right:4px;"></span>Leave</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--info);margin-right:4px;"></span>Half Day</span>
+                  <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0d9488;margin-right:4px;"></span>WFH</span>
+                </div>
+              </div>
+            </div>
+            <div class="employee-selector">
+              <label><i class="fa-solid fa-user"></i> Employee:</label>
+              <select class="ctrl-select" id="calEmpSelect" style="width:250px;" onchange="renderCalendar()">
+                <option value="all">All Employees (Overview)</option>
+              </select>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-days-header">
+                <div class="cal-day-label">Sun</div>
+                <div class="cal-day-label">Mon</div>
+                <div class="cal-day-label">Tue</div>
+                <div class="cal-day-label">Wed</div>
+                <div class="cal-day-label">Thu</div>
+                <div class="cal-day-label">Fri</div>
+                <div class="cal-day-label">Sat</div>
+              </div>
+              <div class="cal-cells" id="calCells"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUMMARY VIEW -->
+        <div id="summaryView">
+          <div class="controls-bar">
+            <div class="ctrl-item">
+              <label>Month</label>
+              <select class="ctrl-select" id="summaryMonth">
+                <option value="0">January</option><option value="1">February</option>
+                <option value="2">March</option><option value="3">April</option>
+                <option value="4">May</option><option value="5">June</option>
+                <option value="6">July</option><option value="7">August</option>
+                <option value="8">September</option><option value="9">October</option>
+                <option value="10">November</option><option value="11">December</option>
+              </select>
+            </div>
+            <div class="ctrl-item">
+              <label>Year</label>
+              <select class="ctrl-select" id="summaryYear">
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="renderSummary()">
+              <i class="fa-solid fa-magnifying-glass"></i> Show Report
+            </button>
+          </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== BULK MARK MODAL ===== -->
+    <div id="bulkMarkModal" class="modal">
+      <div class="modal-content wide">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-list-check"></i> Mark Attendance â€” <span id="bulkDateLabel"></span></h2>
+          <button class="close" onclick="closeBulkMarkModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="padding:0;">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--gray-200);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <label style="font-size:13px;font-weight:600;color:var(--gray-600);">Set all to:</label>
+            <button class="btn btn-success btn-sm" onclick="setAllStatus('Present')"><i class="fa-solid fa-check"></i> Present</button>
+            <button class="btn btn-danger btn-sm" onclick="setAllStatus('Absent')"><i class="fa-solid fa-times"></i> Absent</button>
+            <button class="btn btn-warning btn-sm" onclick="setAllStatus('Late')"><i class="fa-solid fa-clock"></i> Late</button>
+            <button class="btn btn-info btn-sm" onclick="setAllStatus('WFH')"><i class="fa-solid fa-house-laptop"></i> WFH</button>
+          </div>
+          <div style="overflow-x:auto;max-height:500px;">
+            <table class="bulk-att-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Check In</th>
+                  <th>Check Out</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="bulkAttBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeBulkMarkModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveBulkAttendance()"><i class="fa-solid fa-save"></i> Save Attendance</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SINGLE MARK MODAL ===== -->
+    <div id="singleMarkModal" class="modal">
+      <div class="modal-content" style="max-width:480px;">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-user-clock"></i> Edit Attendance Record</h2>
+          <button class="close" onclick="closeSingleMarkModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div id="singleEmpInfo" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--gray-50);border-radius:10px;margin-bottom:18px;"></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" class="form-control" id="s_date">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select class="form-control" id="s_status">
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Leave">Leave</option>
+                <option value="WFH">Work From Home</option>
+                <option value="Holiday">Holiday</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Check In Time</label>
+              <input type="time" class="form-control" id="s_checkIn">
+            </div>
+            <div class="form-group">
+              <label>Check Out Time</label>
+              <input type="time" class="form-control" id="s_checkOut">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Note / Reason</label>
+            <input type="text" class="form-control" id="s_note" placeholder="Optional note or reason">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeSingleMarkModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveSingleAttendance()"><i class="fa-solid fa-save"></i> Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    
+  </body>
+</html>
+
+
+
+

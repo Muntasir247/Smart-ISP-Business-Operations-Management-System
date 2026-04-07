@@ -1,0 +1,328 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Department</title>
+    <style>
+      table th {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content Area -->
+    <div class="main-content">
+<div class="page-content">
+        <div class="card">
+          <h2>Department</h2>
+
+          <form id="departmentForm">
+            <div style="margin-bottom: 15px;">
+              <input id="deptInput" placeholder="New Department" required />
+              <button type="submit" style="margin-left: 10px;">Add Department</button>
+            </div>
+
+            <div id="moduleOptions" style="margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9;">
+              <strong style="display: block; margin-bottom: 10px;">Accessible Modules (for employees in this department):</strong>
+              <div id="moduleCheckboxes" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+            </div>
+          </form>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Accessible Modules</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="deptTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+    <script>
+      const departmentForm = document.getElementById('departmentForm');
+      const deptInput = document.getElementById('deptInput');
+      const deptTable = document.getElementById('deptTable');
+      const moduleCheckboxes = document.getElementById('moduleCheckboxes');
+      let departmentsState = [];
+      let editingDepartmentId = null;
+
+      // All available modules from sidebar
+      const AVAILABLE_MODULES = [
+        'Dashboard',
+        'Client',
+        'Billing',
+        'Mikrotik Server',
+        'HR & Payroll',
+        'Leave Management',
+        'Events & Holidays',
+        'Support & Ticketing',
+        'Task Management',
+        'Purchase',
+        'Assets',
+        'Income',
+        'Inventory'
+      ];
+
+      function getDepartments() {
+        return departmentsState
+          .map((item) => {
+            if (typeof item === 'string') {
+              return { id: 0, name: item.trim(), options: [] };
+            }
+            if (item && typeof item === 'object') {
+              return {
+                id: Number(item.id || 0),
+                name: (item.name || '').toString().trim(),
+                options: Array.isArray(item.options) ? item.options : []
+              };
+            }
+            return { id: 0, name: '', options: [] };
+          })
+          .filter((item) => item.name);
+      }
+
+      function saveDepartments(list) {
+        departmentsState = Array.from(
+          new Map(list.map((item) => [item.name.toLowerCase(), item])).values()
+        );
+      }
+
+      async function syncDepartmentsFromDb() {
+        try {
+          const response = await fetch('backend/public/employees/list_departments.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            return;
+          }
+
+          const dbDepartments = Array.isArray(result.departments)
+            ? result.departments.map((item) => ({
+                id: Number(item && item.id ? item.id : 0),
+                name: (item && item.name ? String(item.name) : '').trim(),
+                options: Array.isArray(item && item.options) ? item.options : []
+              })).filter((item) => item.name)
+            : [];
+
+          saveDepartments(dbDepartments);
+          renderDepartments();
+        } catch (_error) {
+          // Keep in-memory data if DB sync fails.
+        }
+      }
+
+      function renderModuleCheckboxes(selectedModules = []) {
+        moduleCheckboxes.innerHTML = '';
+        AVAILABLE_MODULES.forEach((module) => {
+          const label = document.createElement('label');
+          label.style.display = 'flex';
+          label.style.alignItems = 'center';
+          label.style.gap = '8px';
+          label.style.cursor = 'pointer';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = module;
+          checkbox.checked = selectedModules.includes(module);
+
+          const span = document.createElement('span');
+          span.textContent = module;
+          span.style.fontSize = '14px';
+
+          label.appendChild(checkbox);
+          label.appendChild(span);
+          moduleCheckboxes.appendChild(label);
+        });
+      }
+
+      function getSelectedModules() {
+        return Array.from(moduleCheckboxes.querySelectorAll('input[type="checkbox"]:checked'))
+          .map((checkbox) => checkbox.value);
+      }
+
+      async function saveDepartmentToDb(name, modules) {
+        const response = await fetch('backend/public/employees/upsert_department.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            department_name: name,
+            access_modules: modules
+          })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to save department to database.');
+        }
+      }
+
+      async function updateDepartmentInDb(departmentId, newName, modules) {
+        const response = await fetch('backend/public/employees/update_department.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            department_id: departmentId,
+            new_department_name: newName,
+            access_modules: modules
+          })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to update department.');
+        }
+      }
+
+      async function deleteDepartmentFromDb(name) {
+        const response = await fetch('backend/public/employees/delete_department.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({ department_name: name })
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Failed to delete department from database.');
+        }
+      }
+
+      function renderDepartments() {
+        const departments = getDepartments();
+        deptTable.innerHTML = '';
+
+        if (!departments.length) {
+          deptTable.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;">No departments found.</td></tr>';
+          return;
+        }
+
+        departments.forEach((dept, index) => {
+          const row = document.createElement('tr');
+          const modulesText = dept.options.length > 0 ? dept.options.join(', ') : 'None';
+          row.innerHTML = `
+            <td>${dept.name}</td>
+            <td style="font-size: 12px; color: #666;">${modulesText}</td>
+            <td style="text-align: center;">
+              <button type="button" class="btn" data-action="edit" data-index="${index}" style="background: #2563eb; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; margin-right: 6px;">Edit</button>
+              <button type="button" class="btn btn-danger" data-index="${index}" style="background: #dc2626; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;">Delete</button>
+            </td>
+          `;
+          deptTable.appendChild(row);
+        });
+      }
+
+      departmentForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const deptName = (deptInput.value || '').trim();
+        if (!deptName) return;
+
+        const selectedModules = getSelectedModules();
+
+        const list = getDepartments();
+
+        try {
+          if (editingDepartmentId) {
+            await updateDepartmentInDb(editingDepartmentId, deptName, selectedModules);
+            const idx = list.findIndex((item) => Number(item.id) === Number(editingDepartmentId));
+            if (idx >= 0) {
+              list[idx] = {
+                ...list[idx],
+                name: deptName,
+                options: selectedModules
+              };
+            }
+          } else {
+            await saveDepartmentToDb(deptName, selectedModules);
+            await syncDepartmentsFromDb();
+            deptInput.value = '';
+            renderModuleCheckboxes([]);
+            return;
+          }
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+
+        saveDepartments(list);
+        renderDepartments();
+
+        deptInput.value = '';
+        editingDepartmentId = null;
+        departmentForm.querySelector('button[type="submit"]').textContent = 'Add Department';
+        renderModuleCheckboxes([]);
+      });
+
+      deptTable.addEventListener('click', async function (event) {
+        const button = event.target.closest('button[data-index], button[data-action="edit"]');
+        if (!button) return;
+
+        const index = Number(button.getAttribute('data-index'));
+        if (!Number.isInteger(index)) return;
+
+        const list = getDepartments();
+        const target = list[index];
+        if (!target) return;
+
+        if (button.getAttribute('data-action') === 'edit') {
+          editingDepartmentId = Number(target.id || 0) || null;
+          deptInput.value = target.name;
+          renderModuleCheckboxes(Array.isArray(target.options) ? target.options : []);
+          departmentForm.querySelector('button[type="submit"]').textContent = 'Update Department';
+          deptInput.focus();
+          return;
+        }
+
+        if (!window.confirm(`Delete department "${target.name}" and all employees under it from database?`)) {
+          return;
+        }
+
+        try {
+          await deleteDepartmentFromDb(target.name);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+
+        list.splice(index, 1);
+        saveDepartments(list);
+
+        renderDepartments();
+      });
+
+      // Initialize
+      renderModuleCheckboxes();
+      renderDepartments();
+      syncDepartmentsFromDb();
+    </script>
+  </body>
+</html>
+
+
+
+

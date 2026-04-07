@@ -1,0 +1,782 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Resign Rule</title>
+    <style>
+      :root {
+        --line: #d5dff0;
+        --text-main: #162949;
+        --text-soft: #587099;
+        --brand: #2e67ef;
+        --brand-strong: #1148bc;
+        --ok: #0f9965;
+        --danger: #d5454c;
+        --shadow: 0 14px 34px rgba(22, 47, 97, 0.14);
+      }
+
+      .rule-page {
+        min-height: calc(100vh - 70px);
+        padding: 18px;
+        font-family: 'Outfit', sans-serif;
+        color: var(--text-main);
+        background:
+          radial-gradient(circle at 12% 6%, rgba(46, 103, 239, 0.15), transparent 30%),
+          radial-gradient(circle at 85% 16%, rgba(42, 193, 134, 0.15), transparent 28%),
+          linear-gradient(145deg, #f8fbff, #eef3fb);
+      }
+
+      .rule-shell {
+        max-width: 1520px;
+        margin: 0 auto;
+        display: grid;
+        gap: 14px;
+      }
+
+      .hero {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: linear-gradient(120deg, #fff, #ecf3ff);
+        box-shadow: var(--shadow);
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        animation: rise 380ms ease-out;
+      }
+
+      .hero h2 {
+        margin: 0;
+        font-family: 'Sora', sans-serif;
+        font-size: 1.28rem;
+      }
+
+      .hero p {
+        margin: 6px 0 0;
+        color: var(--text-soft);
+        font-size: 0.91rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 11px;
+        padding: 10px 13px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .btn.primary {
+        color: #fff;
+        background: linear-gradient(140deg, var(--brand), var(--brand-strong));
+      }
+
+      .btn.secondary {
+        background: #fff;
+        color: var(--text-main);
+        border: 1px solid var(--line);
+      }
+
+      .stats {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(5, minmax(160px, 1fr));
+      }
+
+      .stat {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        padding: 12px;
+      }
+
+      .stat .label {
+        color: var(--text-soft);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .stat .value {
+        margin-top: 7px;
+        font-size: 1.2rem;
+        font-weight: 800;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .filters {
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(4, minmax(140px, 1fr));
+      }
+
+      .filters label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-soft);
+      }
+
+      .filters input,
+      .filters select {
+        width: 100%;
+        min-height: 37px;
+        border-radius: 9px;
+        border: 1px solid var(--line);
+        background: #f8fbff;
+        padding: 6px 8px;
+      }
+
+      .status-line {
+        padding: 0 12px 11px;
+        color: var(--text-soft);
+        font-size: 0.82rem;
+      }
+
+      .table-wrap {
+        overflow: auto;
+      }
+
+      .rule-table {
+        width: 100%;
+        min-width: 1250px;
+        border-collapse: collapse;
+      }
+
+      .rule-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #edf3ff;
+        color: #355280;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.42px;
+        padding: 9px 8px;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .rule-table tbody td {
+        padding: 8px;
+        border-bottom: 1px solid #e7edf9;
+        font-size: 0.84rem;
+      }
+
+      .rule-table tbody tr:hover {
+        background: #f6f9ff;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .pill.active {
+        background: #dff6ea;
+        color: var(--ok);
+      }
+
+      .pill.inactive {
+        background: #ffe5e7;
+        color: var(--danger);
+      }
+
+      .icon-btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 8px;
+        min-width: 30px;
+        min-height: 30px;
+        cursor: pointer;
+      }
+
+      .icon-btn.danger {
+        color: var(--danger);
+      }
+
+      .empty {
+        text-align: center;
+        color: var(--text-soft);
+        padding: 24px;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 18, 39, 0.45);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+        padding: 16px;
+      }
+
+      .modal.open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(980px, 98vw);
+        max-height: 92vh;
+        overflow: auto;
+        border-radius: 14px;
+        border: 1px solid #d9e3f8;
+        background: #fff;
+        box-shadow: 0 24px 48px rgba(8, 21, 44, 0.34);
+      }
+
+      .modal-head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #eef4ff;
+        border-bottom: 1px solid #dde8ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+      }
+
+      .modal-head h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-family: 'Sora', sans-serif;
+      }
+
+      .modal-grid {
+        padding: 14px;
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(3, minmax(140px, 1fr));
+      }
+
+      .modal-grid .span3 {
+        grid-column: span 3;
+      }
+
+      .modal-grid label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.72rem;
+        color: var(--text-soft);
+        font-weight: 700;
+      }
+
+      .modal-grid input,
+      .modal-grid select,
+      .modal-grid textarea {
+        width: 100%;
+        min-height: 36px;
+        border-radius: 8px;
+        border: 1px solid #d6e2fb;
+        background: #fbfdff;
+        padding: 6px 8px;
+      }
+
+      .modal-grid textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      .switch-line {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.82rem;
+        color: var(--text-main);
+      }
+
+      .modal-foot {
+        padding: 11px 14px;
+        border-top: 1px solid #e6edf8;
+        background: #fbfdff;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 1200px) {
+        .stats {
+          grid-template-columns: repeat(3, minmax(150px, 1fr));
+        }
+
+        .filters {
+          grid-template-columns: repeat(2, minmax(140px, 1fr));
+        }
+
+        .modal-grid {
+          grid-template-columns: repeat(2, minmax(140px, 1fr));
+        }
+
+        .modal-grid .span3 {
+          grid-column: span 2;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .rule-page {
+          padding: 10px;
+        }
+
+        .stats,
+        .filters,
+        .modal-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .modal-grid .span3 {
+          grid-column: span 1;
+        }
+      }
+      }
+    </style>
+  </head>
+  <body>
+
+<!-- Main Content Area -->
+      <div class="rule-page">
+        <div class="rule-shell">
+          <section class="hero">
+            <div>
+              <h2><i class="fa-solid fa-scale-balanced"></i> Resignation Rule Engine</h2>
+              <p>Define professional policy for notice period, buyout, approvals, tenure, and final settlement timeline by workforce segment.</p>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              <button class="btn primary" id="btnAdd"><i class="fa-solid fa-plus"></i> Add Rule</button>
+            </div>
+          </section>
+
+          <section class="stats">
+            <div class="stat"><div class="label">Total Rules</div><div class="value" id="sTotal">0</div></div>
+            <div class="stat"><div class="label">Active</div><div class="value" id="sActive">0</div></div>
+            <div class="stat"><div class="label">Buyout Enabled</div><div class="value" id="sBuyout">0</div></div>
+            <div class="stat"><div class="label">Exit Interview Req.</div><div class="value" id="sExit">0</div></div>
+            <div class="stat"><div class="label">Avg Notice Days</div><div class="value" id="sAvg">0</div></div>
+          </section>
+
+          <section class="panel">
+            <div class="filters">
+              <div>
+                <label for="searchInput">Search</label>
+                <input id="searchInput" placeholder="Rule/department/type" />
+              </div>
+              <div>
+                <label for="deptFilter">Department</label>
+                <select id="deptFilter"><option value="all">All</option></select>
+              </div>
+              <div>
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                  <option value="all">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+              <div>
+                <label for="buyoutFilter">Buyout</label>
+                <select id="buyoutFilter">
+                  <option value="all">All</option>
+                  <option value="yes">Allowed</option>
+                  <option value="no">Not Allowed</option>
+                </select>
+              </div>
+            </div>
+            <div class="status-line" id="statusLine">Loading resign rules...</div>
+
+            <div class="table-wrap">
+              <table class="rule-table">
+                <thead>
+                  <tr>
+                    <th>Rule Name</th>
+                    <th>Department</th>
+                    <th>Employee Type</th>
+                    <th>Notice / Tenure</th>
+                    <th>Buyout</th>
+                    <th>Settlement</th>
+                    <th>Approvals</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ruleBody">
+                  <tr><td colspan="9" class="empty">Loading rules...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          </table>
+        </div>
+      </div>
+
+    <div class="modal" id="ruleModal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3 id="modalTitle"><i class="fa-solid fa-plus"></i> Add Resign Rule</h3>
+          <button type="button" class="icon-btn" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="ruleForm">
+          <input type="hidden" id="f_id" />
+          <div class="modal-grid">
+            <div>
+              <label for="f_name">Rule Name *</label>
+              <input id="f_name" required />
+            </div>
+            <div>
+              <label for="f_department">Department</label>
+              <input id="f_department" placeholder="All if blank" />
+            </div>
+            <div>
+              <label for="f_employeeType">Employee Type</label>
+              <select id="f_employeeType">
+                <option value="">All Types</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Contractual">Contractual</option>
+                <option value="Probation">Probation</option>
+                <option value="Intern">Intern</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="f_noticeDays">Notice Days</label>
+              <input id="f_noticeDays" type="number" min="0" step="1" value="30" />
+            </div>
+            <div>
+              <label for="f_minTenure">Min Tenure (Months)</label>
+              <input id="f_minTenure" type="number" min="0" step="1" value="0" />
+            </div>
+            <div>
+              <label for="f_settlementDays">Final Settlement Days</label>
+              <input id="f_settlementDays" type="number" min="0" step="1" value="15" />
+            </div>
+
+            <div>
+              <label for="f_buyoutMultiplier">Buyout Multiplier</label>
+              <input id="f_buyoutMultiplier" type="number" min="0" step="0.01" value="1" />
+            </div>
+            <div>
+              <label for="f_approvals">Approvals Required</label>
+              <input id="f_approvals" placeholder="HR, Finance, IT" />
+            </div>
+            <div>
+              <label for="f_status">Status</label>
+              <select id="f_status">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+
+            <div class="switch-line"><input id="f_buyoutAllowed" type="checkbox" /><label for="f_buyoutAllowed">Buyout Allowed</label></div>
+            <div class="switch-line"><input id="f_exitRequired" type="checkbox" checked /><label for="f_exitRequired">Exit Interview Required</label></div>
+
+            <div class="span3">
+              <label for="f_description">Description</label>
+              <textarea id="f_description" placeholder="Policy notes, exception handling, legal references"></textarea>
+            </div>
+          </div>
+
+          <div class="modal-foot">
+            <button type="button" class="btn secondary" id="btnCancel">Cancel</button>
+            <button type="submit" class="btn primary">Save Rule</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+    <script>
+      const state = {
+        rules: [],
+        filtered: []
+      };
+
+      const dom = {
+        body: document.getElementById('ruleBody'),
+        statusLine: document.getElementById('statusLine'),
+        searchInput: document.getElementById('searchInput'),
+        deptFilter: document.getElementById('deptFilter'),
+        statusFilter: document.getElementById('statusFilter'),
+        buyoutFilter: document.getElementById('buyoutFilter'),
+        modal: document.getElementById('ruleModal'),
+        modalTitle: document.getElementById('modalTitle')
+      };
+
+      function updateStats(summary) {
+        document.getElementById('sTotal').textContent = Number(summary.total || 0);
+        document.getElementById('sActive').textContent = Number(summary.active || 0);
+        document.getElementById('sBuyout').textContent = Number(summary.buyout || 0);
+        document.getElementById('sExit').textContent = Number(summary.exitInterview || 0);
+        document.getElementById('sAvg').textContent = Number(summary.avgNotice || 0);
+      }
+
+      function renderTable() {
+        if (!state.filtered.length) {
+          dom.body.innerHTML = '<tr><td colspan="9" class="empty">No resign rule found.</td></tr>';
+          return;
+        }
+
+        const html = state.filtered.map((rule) => {
+          return `
+            <tr>
+              <td>
+                <strong>${rule.ruleName}</strong>
+                <div style="color:#587099; font-size:0.75rem; margin-top:2px;">${rule.descriptionText || '-'}</div>
+              </td>
+              <td>${rule.departmentName || 'All'}</td>
+              <td>${rule.employeeType || 'All'}</td>
+              <td>${Number(rule.noticePeriodDays || 0)} day(s) / ${Number(rule.minTenureMonths || 0)} month(s)</td>
+              <td>${rule.buyoutAllowed ? `Yes (${Number(rule.buyoutMultiplier || 1)}x)` : 'No'}</td>
+              <td>${Number(rule.finalSettlementDays || 0)} day(s)</td>
+              <td>${rule.approvalsRequired || '-'}</td>
+              <td><span class="pill ${rule.statusLabel === 'Active' ? 'active' : 'inactive'}">${rule.statusLabel}</span></td>
+              <td>
+                <button class="icon-btn" data-edit="${rule.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                <button class="icon-btn danger" data-delete="${rule.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        dom.body.innerHTML = html;
+      }
+
+      function hydrateDeptFilter() {
+        const depts = Array.from(new Set(state.rules.map((r) => (r.departmentName || '').trim()).filter(Boolean))).sort();
+        const current = dom.deptFilter.value || 'all';
+        dom.deptFilter.innerHTML = '<option value="all">All</option>';
+        depts.forEach((dept) => {
+          const opt = document.createElement('option');
+          opt.value = dept;
+          opt.textContent = dept;
+          dom.deptFilter.appendChild(opt);
+        });
+        if (Array.from(dom.deptFilter.options).some((o) => o.value === current)) {
+          dom.deptFilter.value = current;
+        }
+      }
+
+      function applyFilters() {
+        const search = (dom.searchInput.value || '').trim().toLowerCase();
+        const dept = dom.deptFilter.value;
+        const status = dom.statusFilter.value;
+        const buyout = dom.buyoutFilter.value;
+
+        state.filtered = state.rules.filter((r) => {
+          if (dept !== 'all' && (r.departmentName || '') !== dept) return false;
+          if (status !== 'all' && r.statusLabel !== status) return false;
+          if (buyout === 'yes' && !r.buyoutAllowed) return false;
+          if (buyout === 'no' && r.buyoutAllowed) return false;
+
+          if (search) {
+            const hay = `${r.ruleName} ${r.departmentName || ''} ${r.employeeType || ''} ${r.descriptionText || ''}`.toLowerCase();
+            if (!hay.includes(search)) return false;
+          }
+          return true;
+        });
+
+        renderTable();
+        dom.statusLine.textContent = `Showing ${state.filtered.length} rule(s).`;
+      }
+
+      function openModal(rule) {
+        const isEdit = !!rule;
+        dom.modalTitle.innerHTML = isEdit
+          ? '<i class="fa-solid fa-pen"></i> Edit Resign Rule'
+          : '<i class="fa-solid fa-plus"></i> Add Resign Rule';
+
+        document.getElementById('f_id').value = isEdit ? rule.id : '';
+        document.getElementById('f_name').value = isEdit ? rule.ruleName : '';
+        document.getElementById('f_department').value = isEdit ? (rule.departmentName || '') : '';
+        document.getElementById('f_employeeType').value = isEdit ? (rule.employeeType || '') : '';
+        document.getElementById('f_noticeDays').value = isEdit ? Number(rule.noticePeriodDays || 30) : 30;
+        document.getElementById('f_minTenure').value = isEdit ? Number(rule.minTenureMonths || 0) : 0;
+        document.getElementById('f_settlementDays').value = isEdit ? Number(rule.finalSettlementDays || 15) : 15;
+        document.getElementById('f_buyoutMultiplier').value = isEdit ? Number(rule.buyoutMultiplier || 1) : 1;
+        document.getElementById('f_approvals').value = isEdit ? (rule.approvalsRequired || '') : '';
+        document.getElementById('f_status').value = isEdit ? (rule.statusLabel || 'Active') : 'Active';
+        document.getElementById('f_buyoutAllowed').checked = isEdit ? !!rule.buyoutAllowed : false;
+        document.getElementById('f_exitRequired').checked = isEdit ? !!rule.exitInterviewRequired : true;
+        document.getElementById('f_description').value = isEdit ? (rule.descriptionText || '') : '';
+
+        dom.modal.classList.add('open');
+      }
+
+      function closeModal() {
+        dom.modal.classList.remove('open');
+      }
+
+      function payloadFromForm() {
+        return {
+          ruleId: Number(document.getElementById('f_id').value || 0),
+          ruleName: (document.getElementById('f_name').value || '').trim(),
+          departmentName: (document.getElementById('f_department').value || '').trim(),
+          employeeType: document.getElementById('f_employeeType').value,
+          minTenureMonths: Number(document.getElementById('f_minTenure').value || 0),
+          noticePeriodDays: Number(document.getElementById('f_noticeDays').value || 0),
+          buyoutAllowed: document.getElementById('f_buyoutAllowed').checked,
+          buyoutMultiplier: Number(document.getElementById('f_buyoutMultiplier').value || 1),
+          finalSettlementDays: Number(document.getElementById('f_settlementDays').value || 15),
+          exitInterviewRequired: document.getElementById('f_exitRequired').checked,
+          approvalsRequired: (document.getElementById('f_approvals').value || '').trim(),
+          statusLabel: document.getElementById('f_status').value,
+          descriptionText: (document.getElementById('f_description').value || '').trim()
+        };
+      }
+
+      async function loadRules() {
+        dom.statusLine.textContent = 'Loading resign rules...';
+        const response = await fetch('backend/public/resignations/list_rules.php', {
+          method: 'GET',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          const message = (data && data.message) || 'Failed to load resign rules.';
+          dom.statusLine.textContent = message;
+          dom.body.innerHTML = `<tr><td colspan="9" class="empty">${message}</td></tr>`;
+          updateStats({ total: 0, active: 0, buyout: 0, exitInterview: 0, avgNotice: 0 });
+          return;
+        }
+
+        state.rules = Array.isArray(data.rules) ? data.rules : [];
+        updateStats(data.summary || { total: state.rules.length });
+        hydrateDeptFilter();
+        applyFilters();
+      }
+
+      async function saveRule(event) {
+        event.preventDefault();
+        const payload = payloadFromForm();
+        if (!payload.ruleName) {
+          alert('Rule name is required.');
+          return;
+        }
+
+        const response = await fetch('backend/public/resignations/upsert_rule.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          alert((data && data.message) || 'Failed to save rule.');
+          return;
+        }
+
+        closeModal();
+        await loadRules();
+      }
+
+      async function deleteRule(id) {
+        if (!confirm('Delete this resign rule?')) return;
+
+        const response = await fetch('backend/public/resignations/delete_rule.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ ruleId: id })
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          alert((data && data.message) || 'Failed to delete rule.');
+          return;
+        }
+
+        await loadRules();
+      }
+
+      function bindEvents() {
+        [dom.searchInput, dom.deptFilter, dom.statusFilter, dom.buyoutFilter].forEach((el) => {
+          el.addEventListener('input', applyFilters);
+          el.addEventListener('change', applyFilters);
+        });
+
+        document.getElementById('btnAdd').addEventListener('click', () => openModal(null));
+        document.getElementById('btnRefresh').addEventListener('click', () => {
+          loadRules().catch((error) => {
+            dom.statusLine.textContent = error.message;
+          });
+        });
+
+        document.getElementById('btnClose').addEventListener('click', closeModal);
+        document.getElementById('btnCancel').addEventListener('click', closeModal);
+        document.getElementById('ruleForm').addEventListener('submit', (event) => {
+          saveRule(event).catch((error) => {
+            alert(error.message || 'Failed to save rule.');
+          });
+        });
+
+        dom.modal.addEventListener('click', (event) => {
+          if (event.target === dom.modal) closeModal();
+        });
+
+        dom.body.addEventListener('click', (event) => {
+          const editEl = event.target.closest('[data-edit]');
+          if (editEl) {
+            const id = Number(editEl.getAttribute('data-edit') || 0);
+            const rule = state.rules.find((item) => item.id === id);
+            if (rule) openModal(rule);
+            return;
+          }
+
+          const deleteEl = event.target.closest('[data-delete]');
+          if (deleteEl) {
+            const id = Number(deleteEl.getAttribute('data-delete') || 0);
+            if (id > 0) {
+              deleteRule(id).catch((error) => {
+                alert(error.message || 'Failed to delete rule.');
+              });
+            }
+          }
+        });
+      }
+
+      bindEvents();
+      loadRules().catch((error) => {
+        dom.statusLine.textContent = error.message;
+        dom.body.innerHTML = `<tr><td colspan="9" class="empty">${error.message}</td></tr>`;
+      });
+    </script>
+    <script src="assets/js/header-loader.js?v=20260327c"></script>
+  </body>
+</html>
+
+
+
+
