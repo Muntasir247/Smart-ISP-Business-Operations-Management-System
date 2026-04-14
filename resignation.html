@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Archivo:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Resignation</title>
+    <style>
+      :root {
+        --line: #d5e0f2;
+        --text-main: #142848;
+        --text-soft: #5a7198;
+        --brand: #2d68f2;
+        --brand-strong: #1447ba;
+        --ok: #0f9b64;
+        --warn: #c47900;
+        --danger: #d84a52;
+        --shadow: 0 15px 36px rgba(19, 46, 98, 0.14);
+      }
+
+      .resign-page {
+        min-height: calc(100vh - 70px);
+        padding: 18px;
+        font-family: 'Manrope', sans-serif;
+        color: var(--text-main);
+        background:
+          radial-gradient(circle at 12% 8%, rgba(45, 104, 242, 0.14), transparent 30%),
+          radial-gradient(circle at 85% 16%, rgba(243, 148, 33, 0.14), transparent 25%),
+          linear-gradient(145deg, #f8faff, #edf3ff);
+      }
+
+      .resign-shell {
+        max-width: 1540px;
+        margin: 0 auto;
+        display: grid;
+        gap: 14px;
+      }
+
+      .hero {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        background: linear-gradient(120deg, #fff, #edf3ff);
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero h2 {
+        margin: 0;
+        font-family: 'Archivo', sans-serif;
+        font-size: 1.28rem;
+      }
+
+      .hero p {
+        margin: 6px 0 0;
+        color: var(--text-soft);
+        font-size: 0.92rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 11px;
+        padding: 10px 13px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .btn.primary {
+        color: #fff;
+        background: linear-gradient(140deg, var(--brand), var(--brand-strong));
+      }
+
+      .btn.secondary {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text-main);
+      }
+
+      .stats {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(6, minmax(140px, 1fr));
+      }
+
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        background: #fff;
+        padding: 12px;
+      }
+
+      .stat .label {
+        color: var(--text-soft);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .stat .value {
+        margin-top: 7px;
+        font-size: 1.18rem;
+        font-weight: 800;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .filters {
+        padding: 12px;
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(5, minmax(130px, 1fr));
+      }
+
+      .filters label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--text-soft);
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .filters input,
+      .filters select {
+        width: 100%;
+        min-height: 37px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #f8fbff;
+        padding: 6px 8px;
+      }
+
+      .status-line {
+        padding: 0 12px 11px;
+        color: var(--text-soft);
+        font-size: 0.82rem;
+      }
+
+      .table-wrap {
+        overflow: auto;
+      }
+
+      .resign-table {
+        width: 100%;
+        min-width: 1450px;
+        border-collapse: collapse;
+      }
+
+      .resign-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #edf3ff;
+        color: #365280;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.42px;
+        text-align: left;
+        padding: 9px 8px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .resign-table tbody td {
+        padding: 8px;
+        border-bottom: 1px solid #e7eef9;
+        font-size: 0.84rem;
+      }
+
+      .resign-table tbody tr:hover {
+        background: #f6f9ff;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .pill.submitted { background: #fff0dd; color: var(--warn); }
+      .pill.approved { background: #dff6ea; color: var(--ok); }
+      .pill.rejected { background: #ffe4e7; color: var(--danger); }
+      .pill.relieved { background: #e4ecff; color: #2e58c2; }
+      .pill.cancelled { background: #f0f3f7; color: #5a6982; }
+
+      .tag {
+        display: inline-block;
+        font-size: 0.71rem;
+        border-radius: 999px;
+        padding: 2px 7px;
+        background: #edf3ff;
+        color: #375889;
+        margin-right: 4px;
+      }
+
+      .icon-btn {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-width: 30px;
+        min-height: 30px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .icon-btn.danger { color: var(--danger); }
+
+      .empty {
+        text-align: center;
+        color: var(--text-soft);
+        padding: 24px;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 20, 42, 0.45);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 3200;
+        padding: 16px;
+      }
+
+      .modal.open { display: flex; }
+
+      .modal-card {
+        width: min(1120px, 98vw);
+        max-height: 92vh;
+        overflow: auto;
+        border-radius: 14px;
+        border: 1px solid #d7e3fa;
+        background: #fff;
+        box-shadow: 0 24px 50px rgba(8, 21, 44, 0.34);
+      }
+
+      .modal-head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #eef4ff;
+        border-bottom: 1px solid #dce7ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+      }
+
+      .modal-head h3 {
+        margin: 0;
+        font-family: 'Archivo', sans-serif;
+        font-size: 1rem;
+      }
+
+      .modal-grid {
+        padding: 14px;
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
+      }
+
+      .modal-grid .span2 { grid-column: span 2; }
+      .modal-grid .span4 { grid-column: span 4; }
+
+      .modal-grid label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.72rem;
+        color: var(--text-soft);
+        font-weight: 700;
+      }
+
+      .modal-grid input,
+      .modal-grid select,
+      .modal-grid textarea {
+        width: 100%;
+        min-height: 36px;
+        border-radius: 8px;
+        border: 1px solid #d6e2fb;
+        padding: 6px 8px;
+        background: #fbfdff;
+      }
+
+      .modal-grid textarea {
+        min-height: 84px;
+        resize: vertical;
+      }
+
+      .modal-foot {
+        padding: 11px 14px;
+        border-top: 1px solid #e5edf9;
+        background: #fbfdff;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      @media (max-width: 1250px) {
+        .stats { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+        .filters { grid-template-columns: repeat(3, minmax(130px, 1fr)); }
+        .modal-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+        .modal-grid .span4 { grid-column: span 2; }
+      }
+
+      @media (max-width: 768px) {
+        .resign-page { padding: 10px; }
+        .stats, .filters, .modal-grid { grid-template-columns: 1fr; }
+        .modal-grid .span2, .modal-grid .span4 { grid-column: span 1; }
+      }
+      }
+    </style>
+  </head>
+  <body>
+
+<!-- Main Content Area -->
+      <div class="resign-page">
+        <div class="resign-shell">
+          <section class="hero">
+            <div>
+              <h2><i class="fa-solid fa-user-minus"></i> Resignation Workflow Manager</h2>
+              <p>Track exit lifecycle from submission to approval, clearance, final settlement, and relieving with complete HR governance.</p>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              <button class="btn primary" id="btnAdd"><i class="fa-solid fa-plus"></i> New Resignation</button>
+            </div>
+          </section>
+
+          <section class="stats">
+            <div class="stat"><div class="label">Total</div><div class="value" id="sTotal">0</div></div>
+            <div class="stat"><div class="label">Submitted</div><div class="value" id="sSubmitted">0</div></div>
+            <div class="stat"><div class="label">Approved</div><div class="value" id="sApproved">0</div></div>
+            <div class="stat"><div class="label">Rejected</div><div class="value" id="sRejected">0</div></div>
+            <div class="stat"><div class="label">Relieved</div><div class="value" id="sRelieved">0</div></div>
+            <div class="stat"><div class="label">Pending Clearance</div><div class="value" id="sPendingClearance">0</div></div>
+          </section>
+
+          <section class="panel">
+            <div class="filters">
+              <div>
+                <label for="searchInput">Search</label>
+                <input id="searchInput" placeholder="Employee/Dept/Type" />
+              </div>
+              <div>
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                  <option value="all">All</option>
+                  <option value="Submitted">Submitted</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Relieved">Relieved</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div>
+                <label for="departmentFilter">Department</label>
+                <select id="departmentFilter"><option value="all">All</option></select>
+              </div>
+              <div>
+                <label for="typeFilter">Type</label>
+                <select id="typeFilter">
+                  <option value="all">All</option>
+                  <option value="Voluntary">Voluntary</option>
+                  <option value="Retirement">Retirement</option>
+                  <option value="Termination">Termination</option>
+                  <option value="Contract End">Contract End</option>
+                </select>
+              </div>
+              <div>
+                <label for="monthFilter">Submitted Month</label>
+                <input id="monthFilter" type="month" />
+              </div>
+            </div>
+            <div class="status-line" id="statusLine">Loading resignations...</div>
+
+            <div class="table-wrap">
+              <table class="resign-table">
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Type</th>
+                    <th>Submission</th>
+                    <th>Notice / LWD</th>
+                    <th>Clearance</th>
+                    <th>Settlement</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="resignBody">
+                  <tr><td colspan="8" class="empty">Loading resignations...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          </table>
+        </div>
+      </div>
+
+    <div class="modal" id="resignModal">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3 id="modalTitle"><i class="fa-solid fa-plus"></i> New Resignation</h3>
+          <button type="button" class="icon-btn" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="resignForm">
+          <input type="hidden" id="f_id" />
+          <div class="modal-grid">
+            <div>
+              <label for="f_employee">Employee *</label>
+              <select id="f_employee" required><option value="">Select employee</option></select>
+            </div>
+            <div>
+              <label for="f_employeeCode">Employee Code</label>
+              <input id="f_employeeCode" readonly />
+            </div>
+            <div>
+              <label for="f_department">Department</label>
+              <input id="f_department" readonly />
+            </div>
+            <div>
+              <label for="f_designation">Designation</label>
+              <input id="f_designation" readonly />
+            </div>
+
+            <div>
+              <label for="f_type">Resignation Type</label>
+              <select id="f_type">
+                <option value="Voluntary">Voluntary</option>
+                <option value="Retirement">Retirement</option>
+                <option value="Termination">Termination</option>
+                <option value="Contract End">Contract End</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_submittedOn">Submitted On *</label>
+              <input id="f_submittedOn" type="date" required />
+            </div>
+            <div>
+              <label for="f_noticeDays">Notice Days</label>
+              <input id="f_noticeDays" type="number" min="0" step="1" value="30" />
+            </div>
+            <div>
+              <label for="f_lastWorking">Last Working Date</label>
+              <input id="f_lastWorking" type="date" />
+            </div>
+
+            <div>
+              <label for="f_handover">Handover</label>
+              <select id="f_handover">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_asset">Asset Clearance</label>
+              <select id="f_asset">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_finance">Finance Clearance</label>
+              <select id="f_finance">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_hr">HR Clearance</label>
+              <select id="f_hr">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="f_exitInterview">Exit Interview Date</label>
+              <input id="f_exitInterview" type="date" />
+            </div>
+            <div>
+              <label for="f_settlementAmount">Final Settlement Amount</label>
+              <input id="f_settlementAmount" type="number" min="0" step="0.01" value="0" />
+            </div>
+            <div>
+              <label for="f_settlementStatus">Settlement Status</label>
+              <select id="f_settlementStatus">
+                <option value="Pending">Pending</option>
+                <option value="Processed">Processed</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_status">Workflow Status</label>
+              <select id="f_status">
+                <option value="Submitted">Submitted</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Relieved">Relieved</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="f_reason">Reason</label>
+              <textarea id="f_reason" placeholder="Reason shared by employee"></textarea>
+            </div>
+            <div class="span4">
+              <label for="f_remarks">HR Remarks</label>
+              <textarea id="f_remarks" placeholder="Exit handling notes"></textarea>
+            </div>
+
+            <div class="span2"><label><input id="f_transferDone" type="checkbox" /> Knowledge Transfer Completed</label></div>
+          </div>
+
+          <div class="modal-foot">
+            <button type="button" class="btn secondary" id="btnCancel">Cancel</button>
+            <button type="submit" class="btn primary">Save Resignation</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+    <script>
+      const state = {
+        resignations: [],
+        filtered: [],
+        employees: []
+      };
+
+      const dom = {
+        body: document.getElementById('resignBody'),
+        statusLine: document.getElementById('statusLine'),
+        searchInput: document.getElementById('searchInput'),
+        statusFilter: document.getElementById('statusFilter'),
+        departmentFilter: document.getElementById('departmentFilter'),
+        typeFilter: document.getElementById('typeFilter'),
+        monthFilter: document.getElementById('monthFilter'),
+        modal: document.getElementById('resignModal'),
+        modalTitle: document.getElementById('modalTitle')
+      };
+
+      function statusClass(status) {
+        return (status || 'Submitted').toLowerCase();
+      }
+
+      function updateStats(summary) {
+        document.getElementById('sTotal').textContent = Number(summary.total || 0);
+        document.getElementById('sSubmitted').textContent = Number(summary.submitted || 0);
+        document.getElementById('sApproved').textContent = Number(summary.approved || 0);
+        document.getElementById('sRejected').textContent = Number(summary.rejected || 0);
+        document.getElementById('sRelieved').textContent = Number(summary.relieved || 0);
+        document.getElementById('sPendingClearance').textContent = Number(summary.pendingClearance || 0);
+      }
+
+      function renderTable() {
+        if (!state.filtered.length) {
+          dom.body.innerHTML = '<tr><td colspan="8" class="empty">No resignation records found.</td></tr>';
+          return;
+        }
+
+        const html = state.filtered.map((item) => {
+          const clearance = [
+            `H:${item.handoverStatus}`,
+            `A:${item.assetClearanceStatus}`,
+            `F:${item.financeClearanceStatus}`,
+            `HR:${item.hrClearanceStatus}`
+          ];
+
+          return `
+            <tr>
+              <td>
+                <strong>${item.employeeName}</strong>
+                <div style="font-size:0.75rem;color:#5a7198;">${item.employeeCode || '-'} � ${item.departmentName || '-'} � ${item.designationTitle || '-'}</div>
+              </td>
+              <td>${item.resignationType}</td>
+              <td>
+                ${item.submittedOn || '-'}
+                <div style="font-size:0.74rem;color:#5a7198;">Exit Interview: ${item.exitInterviewDate || '-'}</div>
+              </td>
+              <td>${Number(item.noticeDays || 0)} days / ${item.lastWorkingDate || '-'}</td>
+              <td>${clearance.map((v) => `<span class="tag">${v}</span>`).join('')}</td>
+              <td>
+                ${Number(item.finalSettlementAmount || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                <div style="font-size:0.74rem;color:#5a7198;">${item.finalSettlementStatus}</div>
+              </td>
+              <td>
+                <span class="pill ${statusClass(item.statusLabel)}">${item.statusLabel}</span>
+              </td>
+              <td>
+                <button class="icon-btn" data-edit="${item.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                <button class="icon-btn" data-status="${item.id}" title="Cycle Status"><i class="fa-solid fa-arrows-rotate"></i></button>
+                <button class="icon-btn danger" data-delete="${item.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        dom.body.innerHTML = html;
+      }
+
+      function hydrateDeptFilter() {
+        const depts = Array.from(new Set(state.resignations.map((r) => (r.departmentName || '').trim()).filter(Boolean))).sort();
+        const current = dom.departmentFilter.value || 'all';
+        dom.departmentFilter.innerHTML = '<option value="all">All</option>';
+        depts.forEach((dept) => {
+          const opt = document.createElement('option');
+          opt.value = dept;
+          opt.textContent = dept;
+          dom.departmentFilter.appendChild(opt);
+        });
+        if (Array.from(dom.departmentFilter.options).some((o) => o.value === current)) {
+          dom.departmentFilter.value = current;
+        }
+      }
+
+      function applyFilters() {
+        const search = (dom.searchInput.value || '').trim().toLowerCase();
+        const status = dom.statusFilter.value;
+        const dept = dom.departmentFilter.value;
+        const type = dom.typeFilter.value;
+        const month = dom.monthFilter.value;
+
+        state.filtered = state.resignations.filter((item) => {
+          if (status !== 'all' && item.statusLabel !== status) return false;
+          if (dept !== 'all' && (item.departmentName || '') !== dept) return false;
+          if (type !== 'all' && item.resignationType !== type) return false;
+          if (month && !(item.submittedOn || '').startsWith(month)) return false;
+
+          if (search) {
+            const hay = `${item.employeeName} ${item.employeeCode} ${item.departmentName} ${item.resignationType}`.toLowerCase();
+            if (!hay.includes(search)) return false;
+          }
+          return true;
+        });
+
+        renderTable();
+        dom.statusLine.textContent = `Showing ${state.filtered.length} resignation case(s).`;
+      }
+
+      function employeeById(id) {
+        return state.employees.find((e) => e.id === id) || null;
+      }
+
+      function fillEmployeeFields(employeeId) {
+        const employee = employeeById(employeeId);
+        document.getElementById('f_employeeCode').value = employee ? employee.employeeId : '';
+        document.getElementById('f_department').value = employee ? employee.employeeDepartment : '';
+        document.getElementById('f_designation').value = employee ? employee.employeeDesignation : '';
+      }
+
+      function openModal(item) {
+        const isEdit = !!item;
+        dom.modalTitle.innerHTML = isEdit
+          ? '<i class="fa-solid fa-pen"></i> Edit Resignation'
+          : '<i class="fa-solid fa-plus"></i> New Resignation';
+
+        document.getElementById('f_id').value = isEdit ? item.id : '';
+        document.getElementById('f_employee').value = isEdit && item.employeeId ? String(item.employeeId) : '';
+        fillEmployeeFields(isEdit && item.employeeId ? Number(item.employeeId) : 0);
+        document.getElementById('f_type').value = isEdit ? (item.resignationType || 'Voluntary') : 'Voluntary';
+        document.getElementById('f_submittedOn').value = isEdit ? (item.submittedOn || '') : new Date().toISOString().slice(0, 10);
+        document.getElementById('f_noticeDays').value = isEdit ? Number(item.noticeDays || 30) : 30;
+        document.getElementById('f_lastWorking').value = isEdit ? (item.lastWorkingDate || '') : '';
+        document.getElementById('f_handover').value = isEdit ? (item.handoverStatus || 'Pending') : 'Pending';
+        document.getElementById('f_asset').value = isEdit ? (item.assetClearanceStatus || 'Pending') : 'Pending';
+        document.getElementById('f_finance').value = isEdit ? (item.financeClearanceStatus || 'Pending') : 'Pending';
+        document.getElementById('f_hr').value = isEdit ? (item.hrClearanceStatus || 'Pending') : 'Pending';
+        document.getElementById('f_exitInterview').value = isEdit ? (item.exitInterviewDate || '') : '';
+        document.getElementById('f_settlementAmount').value = isEdit ? Number(item.finalSettlementAmount || 0) : 0;
+        document.getElementById('f_settlementStatus').value = isEdit ? (item.finalSettlementStatus || 'Pending') : 'Pending';
+        document.getElementById('f_status').value = isEdit ? (item.statusLabel || 'Submitted') : 'Submitted';
+        document.getElementById('f_reason').value = isEdit ? (item.reasonText || '') : '';
+        document.getElementById('f_remarks').value = isEdit ? (item.remarksText || '') : '';
+        document.getElementById('f_transferDone').checked = isEdit ? !!item.knowledgeTransferDone : false;
+
+        dom.modal.classList.add('open');
+      }
+
+      function closeModal() {
+        dom.modal.classList.remove('open');
+      }
+
+      function buildPayload() {
+        const employeeId = Number(document.getElementById('f_employee').value || 0);
+        const employee = employeeById(employeeId);
+
+        return {
+          resignationId: Number(document.getElementById('f_id').value || 0),
+          employeeId,
+          employeeCode: employee ? employee.employeeId : '',
+          employeeName: employee ? `${employee.employeeFirstName || ''} ${employee.employeeLastName || ''}`.trim() : '',
+          departmentName: employee ? (employee.employeeDepartment || '') : '',
+          designationTitle: employee ? (employee.employeeDesignation || '') : '',
+          resignationType: document.getElementById('f_type').value,
+          submittedOn: document.getElementById('f_submittedOn').value,
+          noticeDays: Number(document.getElementById('f_noticeDays').value || 0),
+          lastWorkingDate: document.getElementById('f_lastWorking').value,
+          reasonText: (document.getElementById('f_reason').value || '').trim(),
+          handoverStatus: document.getElementById('f_handover').value,
+          assetClearanceStatus: document.getElementById('f_asset').value,
+          financeClearanceStatus: document.getElementById('f_finance').value,
+          hrClearanceStatus: document.getElementById('f_hr').value,
+          exitInterviewDate: document.getElementById('f_exitInterview').value,
+          knowledgeTransferDone: document.getElementById('f_transferDone').checked,
+          finalSettlementAmount: Number(document.getElementById('f_settlementAmount').value || 0),
+          finalSettlementStatus: document.getElementById('f_settlementStatus').value,
+          statusLabel: document.getElementById('f_status').value,
+          remarksText: (document.getElementById('f_remarks').value || '').trim()
+        };
+      }
+
+      async function loadEmployees() {
+        const response = await fetch('backend/public/employees/list_resignation.php', {
+          method: 'GET',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          throw new Error((data && data.message) || 'Failed to load employees.');
+        }
+
+        state.employees = Array.isArray(data.employees) ? data.employees.map((item) => {
+          const numericId = Number((item.employeeId || '').toString().replace(/[^0-9]/g, '')) || 0;
+          return {
+            ...item,
+            id: numericId,
+            name: `${item.employeeFirstName || ''} ${item.employeeLastName || ''}`.trim()
+          };
+        }).filter((e) => e.id > 0) : [];
+
+        const select = document.getElementById('f_employee');
+        const current = select.value || '';
+        select.innerHTML = '<option value="">Select employee</option>';
+        state.employees.forEach((employee) => {
+          const option = document.createElement('option');
+          option.value = String(employee.id);
+          option.textContent = `${employee.name} (${employee.employeeId || employee.id})`;
+          select.appendChild(option);
+        });
+
+        if (Array.from(select.options).some((o) => o.value === current)) {
+          select.value = current;
+        }
+      }
+
+      async function loadResignations() {
+        dom.statusLine.textContent = 'Loading resignations...';
+        const response = await fetch('backend/public/resignations/list.php', {
+          method: 'GET',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || data.ok === false) {
+          const message = (data && data.message) || 'Failed to load resignations.';
+          dom.statusLine.textContent = message;
+          dom.body.innerHTML = `<tr><td colspan="8" class="empty">${message}</td></tr>`;
+          updateStats({ total: 0, submitted: 0, approved: 0, rejected: 0, relieved: 0, pendingClearance: 0 });
+          return;
+        }
+
+        state.resignations = Array.isArray(data.resignations) ? data.resignations : [];
+        updateStats(data.summary || { total: state.resignations.length });
+        hydrateDeptFilter();
+        applyFilters();
+      }
+
+      async function saveResignation(event) {
+        event.preventDefault();
+        const payload = buildPayload();
+        if (!payload.employeeId || !payload.submittedOn) {
+          alert('Employee and submitted date are required.');
+          return;
+        }
+
+        const response = await fetch('backend/public/resignations/upsert.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || data.ok === false) {
+          alert((data && data.message) || 'Failed to save resignation.');
+          return;
+        }
+
+        closeModal();
+        await loadResignations();
+      }
+
+      async function cycleStatus(item) {
+        const flow = ['Submitted', 'Approved', 'Relieved'];
+        if (item.statusLabel === 'Rejected' || item.statusLabel === 'Cancelled') {
+          alert('Cannot auto-cycle from Rejected/Cancelled. Edit manually.');
+          return;
+        }
+
+        const currentIndex = flow.indexOf(item.statusLabel);
+        const next = currentIndex >= 0 && currentIndex < flow.length - 1 ? flow[currentIndex + 1] : 'Relieved';
+
+        const response = await fetch('backend/public/resignations/update_status.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            resignationId: item.id,
+            statusLabel: next,
+            remarksText: item.remarksText || ''
+          })
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          alert((data && data.message) || 'Failed to update status.');
+          return;
+        }
+
+        await loadResignations();
+      }
+
+      async function deleteResignation(id) {
+        if (!confirm('Delete this resignation record?')) return;
+
+        const response = await fetch('backend/public/resignations/delete.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ resignationId: id })
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data || data.ok === false) {
+          alert((data && data.message) || 'Failed to delete resignation.');
+          return;
+        }
+
+        await loadResignations();
+      }
+
+      function bindEvents() {
+        [dom.searchInput, dom.statusFilter, dom.departmentFilter, dom.typeFilter, dom.monthFilter].forEach((el) => {
+          el.addEventListener('input', applyFilters);
+          el.addEventListener('change', applyFilters);
+        });
+
+        document.getElementById('f_employee').addEventListener('change', function () {
+          fillEmployeeFields(Number(this.value || 0));
+        });
+
+        document.getElementById('btnRefresh').addEventListener('click', () => {
+          loadEmployees()
+            .then(loadResignations)
+            .catch((error) => {
+              dom.statusLine.textContent = error.message;
+            });
+        });
+
+        document.getElementById('btnAdd').addEventListener('click', () => openModal(null));
+        document.getElementById('btnClose').addEventListener('click', closeModal);
+        document.getElementById('btnCancel').addEventListener('click', closeModal);
+        document.getElementById('resignForm').addEventListener('submit', (event) => {
+          saveResignation(event).catch((error) => {
+            alert(error.message || 'Failed to save resignation.');
+          });
+        });
+
+        dom.modal.addEventListener('click', (event) => {
+          if (event.target === dom.modal) closeModal();
+        });
+
+        dom.body.addEventListener('click', (event) => {
+          const editEl = event.target.closest('[data-edit]');
+          if (editEl) {
+            const id = Number(editEl.getAttribute('data-edit') || 0);
+            const item = state.resignations.find((x) => x.id === id);
+            if (item) openModal(item);
+            return;
+          }
+
+          const statusEl = event.target.closest('[data-status]');
+          if (statusEl) {
+            const id = Number(statusEl.getAttribute('data-status') || 0);
+            const item = state.resignations.find((x) => x.id === id);
+            if (item) {
+              cycleStatus(item).catch((error) => {
+                alert(error.message || 'Failed to update status.');
+              });
+            }
+            return;
+          }
+
+          const deleteEl = event.target.closest('[data-delete]');
+          if (deleteEl) {
+            const id = Number(deleteEl.getAttribute('data-delete') || 0);
+            if (id > 0) {
+              deleteResignation(id).catch((error) => {
+                alert(error.message || 'Failed to delete resignation.');
+              });
+            }
+          }
+        });
+      }
+
+      bindEvents();
+      loadEmployees()
+        .then(loadResignations)
+        .catch((error) => {
+          dom.statusLine.textContent = error.message;
+          dom.body.innerHTML = `<tr><td colspan="8" class="empty">${error.message}</td></tr>`;
+        });
+    </script>
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+  </body>
+</html>
+
+
+
+

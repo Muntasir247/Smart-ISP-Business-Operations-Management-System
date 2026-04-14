@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee Internet - Purchase Orders</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --surface: #ffffff;
+        --ink: #223046;
+        --muted: #6f7d90;
+        --line: #dce2eb;
+        --brand: #1a3c5e;
+        --ok: #27ae60;
+        --warn: #f39c12;
+        --danger: #e74c3c;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: var(--bg); color: var(--ink); }
+      .page { max-width: 1280px; margin: 24px auto; padding: 0 16px; }
+      .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+      .head h2 { margin: 0; font-size: 24px; }
+      .head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+      .btn { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 9px 12px; border-radius: 6px; cursor: pointer; }
+      .btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+      .btn.success { background: #2d9cdb; color: #fff; border-color: #2d9cdb; }
+      .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+      .s-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; cursor: pointer; }
+      .s-card.s-active { border-color: var(--brand); box-shadow: 0 2px 10px rgba(26, 60, 94, 0.15); }
+      .s-num { font-size: 22px; font-weight: 700; }
+      .s-lbl { font-size: 12px; color: var(--muted); }
+      .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; }
+      .toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+      .toolbar-left, .toolbar-right { display: flex; gap: 8px; align-items: center; }
+      .flt, .srch { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; height: 36px; }
+      .srch { min-width: 220px; }
+      .rc { font-size: 12px; color: var(--muted); margin: 8px 0; }
+      table { width: 100%; border-collapse: collapse; }
+      thead th { background: #23384f; color: #fff; font-size: 12px; text-align: left; padding: 10px; white-space: nowrap; }
+      tbody td { border-bottom: 1px solid #edf1f7; padding: 10px; font-size: 13px; }
+      tbody tr:hover { background: #f9fbff; }
+      .bp { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+      .bs-pending { background: #fef4e5; color: #a36700; }
+      .bs-approved { background: #e8f4ff; color: #135f99; }
+      .bs-received { background: #eaf9f0; color: #1a7f46; }
+      .bs-cancelled { background: #fdecec; color: #b7382f; }
+      .bs-partial { background: #f1ecff; color: #6140b0; }
+      .act-btns { display: flex; gap: 6px; }
+      .act-btns button { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 6px 8px; cursor: pointer; }
+      .empty { text-align: center; color: var(--muted); padding: 20px; }
+      .tbl-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; color: var(--muted); font-size: 12px; }
+      .page-btns button { border: 1px solid var(--line); background: #fff; border-radius: 5px; padding: 5px 9px; margin-left: 6px; cursor: pointer; }
+      .page-btns button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+      .mo { position: fixed; inset: 0; display: none; background: rgba(0, 0, 0, 0.45); align-items: center; justify-content: center; z-index: 1000; }
+      .mo.open { display: flex; }
+      .mo-box { width: 920px; max-width: 95vw; max-height: 92vh; background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+      .mo-hd, .mo-ft { padding: 12px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+      .mo-ft { border-bottom: 0; border-top: 1px solid var(--line); justify-content: flex-end; gap: 8px; }
+      .mo-body { padding: 14px; overflow: auto; }
+      .mo-close { border: 1px solid var(--line); background: #fff; border-radius: 6px; width: 28px; height: 28px; cursor: pointer; }
+      .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+      .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+      .form-group input, .form-group select, .form-group textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font-size: 13px; }
+      .items-table th, .items-table td { border: 1px solid #ecf1f7; padding: 8px; }
+      .items-table th { background: #f5f8fc; color: #45576f; font-size: 12px; }
+      .add-item-row { display: grid; grid-template-columns: 1fr 80px 130px auto; gap: 8px; margin-top: 10px; }
+      #grandTotal { font-weight: 700; color: var(--brand); }
+      .toast-host { position: fixed; top: 16px; right: 16px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
+      .toast { min-width: 260px; max-width: 360px; padding: 10px 12px; border-radius: 8px; color: #fff; font-size: 13px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); animation: toastIn 0.2s ease; }
+      .toast.info { background: #2d9cdb; }
+      .toast.success { background: #27ae60; }
+      .toast.error { background: #e74c3c; }
+      @keyframes toastIn { from { transform: translateY(-8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+    <div class="page">
+      <div class="head">
+        <div>
+          <h2><i class="fa-solid fa-basket-shopping"></i> Purchase Management</h2>
+          <p>Create and track purchase orders with role-based access.</p>
+        </div>
+        <button class="btn primary" onclick="openMo('addMo')"><i class="fa-solid fa-plus"></i> New Order</button>
+      </div>
+
+      <div class="stats">
+        <div class="s-card s-active" onclick="filterStat('')" id="sc-all"><div class="s-num" id="cnt-all">0</div><div class="s-lbl">All</div></div>
+        <div class="s-card" onclick="filterStat('Pending')" id="sc-pending"><div class="s-num" id="cnt-pending">0</div><div class="s-lbl">Pending</div></div>
+        <div class="s-card" onclick="filterStat('Approved')" id="sc-approved"><div class="s-num" id="cnt-approved">0</div><div class="s-lbl">Approved</div></div>
+        <div class="s-card" onclick="filterStat('Received')" id="sc-received"><div class="s-num" id="cnt-received">0</div><div class="s-lbl">Received</div></div>
+        <div class="s-card" onclick="filterStat('Cancelled')" id="sc-cancelled"><div class="s-num" id="cnt-cancelled">0</div><div class="s-lbl">Cancelled</div></div>
+      </div>
+
+      <div class="card">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <button class="btn primary" onclick="openMo('addMo')"><i class="fa-solid fa-plus"></i> New Order</button>
+            <button class="btn success" onclick="openPurchaseReport('export')"><i class="fa-solid fa-file-export"></i> Export</button>
+            <button class="btn" onclick="openPurchaseReport('print')"><i class="fa-solid fa-print"></i> Print</button>
+          </div>
+          <div class="toolbar-right">
+            <select class="flt" id="f-sts" onchange="applyF(true)">
+              <option value="">All Status</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Received</option>
+              <option>Partial</option>
+              <option>Cancelled</option>
+            </select>
+            <select class="flt" id="f-vendor" onchange="applyF(true)"><option value="">All Vendors</option></select>
+            <select class="flt" id="f-cat" onchange="applyF(true)"><option value="">All Category</option></select>
+            <input class="flt" type="date" id="report-from" title="Report from date" />
+            <input class="flt" type="date" id="report-to" title="Report to date" />
+            <input class="srch" type="text" id="f-srch" placeholder="Search orders..." oninput="applyF(true)" />
+          </div>
+        </div>
+
+        <div class="rc">Showing <strong id="rc-num">0</strong> order(s)</div>
+
+        <div style="overflow:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAll" onclick="toggleAll(this)" /></th>
+                <th>PO #</th>
+                <th>Date</th>
+                <th>Vendor</th>
+                <th>Category</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Requested By</th>
+                <th>Delivery</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="poBody"></tbody>
+          </table>
+          <div class="empty" id="emptyEl" style="display:none">No purchase orders found.</div>
+        </div>
+
+        <div class="tbl-footer">
+          <span id="footer-info">Showing 0-0 of 0 entries</span>
+          <div class="page-btns" id="pageBtns"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mo" id="addMo">
+      <div class="mo-box">
+        <div class="mo-hd">
+          <h3 id="addMoTitle"><i class="fa-solid fa-plus"></i> New Purchase Order</h3>
+          <button class="mo-close" onclick="closeMo('addMo')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="mo-body">
+          <input type="hidden" id="ei" />
+          <div class="form-row">
+            <div class="form-group"><label>Vendor *</label><select id="i-vendor"><option value="">-- Select Vendor --</option></select></div>
+            <div class="form-group"><label>Category *</label><select id="i-cat"><option value="">-- Select --</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Order Date *</label><input type="date" id="i-date" /></div>
+            <div class="form-group"><label>Expected Delivery</label><input type="date" id="i-delivery" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Requested By</label><input id="i-reqby" value="Admin" /></div>
+            <div class="form-group"><label>Status</label><select id="i-sts"><option>Pending</option><option>Approved</option><option>Received</option><option>Partial</option><option>Cancelled</option></select></div>
+          </div>
+
+          <table class="items-table" style="width:100%;border-collapse:collapse;">
+            <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th><th></th></tr></thead>
+            <tbody id="itemsBody"></tbody>
+            <tfoot><tr><td colspan="3" style="text-align:right">Grand Total:</td><td id="grandTotal">BDT 0.00</td><td></td></tr></tfoot>
+          </table>
+
+          <div class="add-item-row">
+            <input type="text" id="new-item-name" placeholder="Item name" />
+            <input type="number" id="new-item-qty" placeholder="Qty" min="1" />
+            <input type="number" id="new-item-price" placeholder="Unit price" min="0" step="0.01" />
+            <button class="btn primary" onclick="addItem()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+
+          <div class="form-row" style="grid-template-columns:1fr; margin-top:10px;">
+            <div class="form-group"><label>Notes</label><textarea id="i-notes" rows="2" placeholder="Additional notes..."></textarea></div>
+          </div>
+        </div>
+        <div class="mo-ft">
+          <button class="btn" onclick="closeMo('addMo')">Cancel</button>
+          <button class="btn primary" onclick="saveOrder()">Save Order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mo" id="viewMo">
+      <div class="mo-box" style="max-width:860px;">
+        <div class="mo-hd">
+          <h3><i class="fa-solid fa-eye"></i> Purchase Order Details</h3>
+          <button class="mo-close" onclick="closeMo('viewMo')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="mo-body" id="viewBody"></div>
+        <div class="mo-ft"><button class="btn" onclick="closeMo('viewMo')">Close</button></div>
+      </div>
+    </div>
+
+    <div id="toastHost" class="toast-host"></div>
+
+    <script>
+      var orders = [];
+      var modalItems = [];
+      var activeStat = "";
+      var currentPage = 1;
+      var pageSize = 20;
+      var totalRows = 0;
+      var filterDebounce = null;
+
+      var stsCls = { Pending: "bs-pending", Approved: "bs-approved", Received: "bs-received", Cancelled: "bs-cancelled", Partial: "bs-partial" };
+
+      function esc(v) {
+        return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+
+      function showToast(message, type) {
+        var host = document.getElementById("toastHost");
+        var node = document.createElement("div");
+        node.className = "toast " + (type || "info");
+        node.textContent = message;
+        host.appendChild(node);
+        setTimeout(function () {
+          node.remove();
+        }, 3200);
+      }
+
+      function fmt(n) {
+        return "BDT " + Number(n || 0).toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      async function apiJson(path, opts) {
+        var res = await fetch(path, Object.assign({ credentials: "include" }, opts || {}));
+        var data;
+        try {
+          data = await res.json();
+        } catch (e) {
+          throw new Error("Server returned invalid response");
+        }
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || "Request failed");
+        return data;
+      }
+
+      function getFilterState() {
+        var selectedStatus = document.getElementById("f-sts").value;
+        return {
+          status: selectedStatus || activeStat,
+          vendor: document.getElementById("f-vendor").value,
+          category: document.getElementById("f-cat").value,
+          search: (document.getElementById("f-srch").value || "").trim(),
+        };
+      }
+
+      function normalizeOrder(row) {
+        var items = Array.isArray(row.items) ? row.items : [];
+        return {
+          rid: Number(row.id || 0),
+          id: row.po_number || "PO-" + String(row.id || ""),
+          date: row.order_date || "",
+          vendor: row.vendor_name || "",
+          cat: row.category_name || "",
+          reqby: row.requested_by_name || "",
+          delivery: row.delivery_date || "",
+          sts: row.status_label || "Pending",
+          notes: row.notes || "",
+          total: Number(row.total_amount || 0),
+          items: items.map(function (it) { return { item_name: it.item_name || "", quantity: Number(it.quantity || 0), unit_price: Number(it.unit_price || 0), line_total: Number(it.line_total || 0) }; }),
+        };
+      }
+
+      function updateFilterOptions() {
+        var vendors = {};
+        var cats = {};
+        orders.forEach(function (o) { if (o.vendor) vendors[o.vendor] = true; if (o.cat) cats[o.cat] = true; });
+
+        function rewriteSelect(selId, firstLabel, values) {
+          var sel = document.getElementById(selId);
+          var cur = sel.value;
+          sel.innerHTML = '<option value="">' + firstLabel + '</option>';
+          Object.keys(values).sort().forEach(function (v) { sel.innerHTML += '<option>' + esc(v) + '</option>'; });
+          if (cur) sel.value = cur;
+        }
+
+        rewriteSelect("f-vendor", "All Vendors", vendors);
+        rewriteSelect("f-cat", "All Category", cats);
+        rewriteSelect("i-vendor", "-- Select Vendor --", vendors);
+        rewriteSelect("i-cat", "-- Select --", cats);
+      }
+
+      function renderPaging(total) {
+        var pages = Math.ceil(total / pageSize);
+        var pb = document.getElementById("pageBtns");
+        if (pages <= 1) { pb.innerHTML = ""; return; }
+        var html = "";
+        if (currentPage > 1) html += '<button onclick="goPage(' + (currentPage - 1) + ')"><i class="fa-solid fa-chevron-left"></i></button>';
+        for (var i = 1; i <= pages; i++) html += '<button class="' + (i === currentPage ? "active" : "") + '" onclick="goPage(' + i + ')">' + i + '</button>';
+        if (currentPage < pages) html += '<button onclick="goPage(' + (currentPage + 1) + ')"><i class="fa-solid fa-chevron-right"></i></button>';
+        pb.innerHTML = html;
+      }
+
+      function renderTable(list) {
+        var body = document.getElementById("poBody");
+        var empty = document.getElementById("emptyEl");
+        document.getElementById("rc-num").textContent = totalRows;
+        if (!list.length) {
+          body.innerHTML = "";
+          empty.style.display = "";
+          document.getElementById("footer-info").textContent = "Showing 0-0 of 0 entries";
+          renderPaging(0);
+          return;
+        }
+        empty.style.display = "none";
+
+        var start = ((currentPage - 1) * pageSize) + 1;
+        var end = start + list.length - 1;
+
+        body.innerHTML = list.map(function (o) {
+          return '<tr>' +
+            '<td><input type="checkbox" class="row-cb"></td>' +
+            '<td style="font-weight:700;color:#1a3c5e">' + esc(o.id) + '</td>' +
+            '<td>' + esc(o.date) + '</td>' +
+            '<td>' + esc(o.vendor) + '</td>' +
+            '<td>' + esc(o.cat) + '</td>' +
+            '<td>' + o.items.length + '</td>' +
+            '<td>' + fmt(o.total) + '</td>' +
+            '<td>' + esc(o.reqby) + '</td>' +
+            '<td>' + esc(o.delivery) + '</td>' +
+            '<td><span class="bp ' + (stsCls[o.sts] || '') + '">' + esc(o.sts) + '</span></td>' +
+            '<td><div class="act-btns">' +
+              '<button onclick="viewOrder(' + o.rid + ')"><i class="fa-solid fa-eye"></i></button>' +
+              '<button onclick="editOrder(' + o.rid + ')"><i class="fa-solid fa-pen"></i></button>' +
+              (o.sts === 'Pending' ? '<button onclick="approveOrder(' + o.rid + ')"><i class="fa-solid fa-check"></i></button>' : '') +
+              '<button onclick="deleteOrder(' + o.rid + ')"><i class="fa-solid fa-trash"></i></button>' +
+            '</div></td>' +
+            '</tr>';
+        }).join('');
+
+        document.getElementById("footer-info").textContent = "Showing " + start + "-" + end + " of " + totalRows + " entries";
+        renderPaging(totalRows);
+      }
+
+      function updateCnts(counts) {
+        counts = counts || {};
+        document.getElementById("cnt-all").textContent = String(counts.all || 0);
+        document.getElementById("cnt-pending").textContent = String(counts.Pending || 0);
+        document.getElementById("cnt-approved").textContent = String(counts.Approved || 0);
+        document.getElementById("cnt-received").textContent = String(counts.Received || 0);
+        document.getElementById("cnt-cancelled").textContent = String(counts.Cancelled || 0);
+      }
+
+      function renderModalItems() {
+        var body = document.getElementById("itemsBody");
+        body.innerHTML = modalItems.map(function (it, idx) {
+          return '<tr>' +
+            '<td>' + esc(it.item_name) + '</td>' +
+            '<td>' + it.quantity + '</td>' +
+            '<td>' + fmt(it.unit_price) + '</td>' +
+            '<td>' + fmt(Number(it.quantity) * Number(it.unit_price)) + '</td>' +
+            '<td><button onclick="removeItem(' + idx + ')" style="border:0;background:transparent;color:#c0392b;cursor:pointer"><i class="fa-solid fa-trash"></i></button></td>' +
+            '</tr>';
+        }).join('');
+        var gt = modalItems.reduce(function (sum, it) { return sum + Number(it.quantity) * Number(it.unit_price); }, 0);
+        document.getElementById("grandTotal").textContent = fmt(gt);
+      }
+
+      function applyF(resetPage) {
+        if (resetPage) currentPage = 1;
+        clearTimeout(filterDebounce);
+        filterDebounce = setTimeout(function () {
+          loadOrders();
+        }, 180);
+      }
+
+      function goPage(p) {
+        currentPage = p;
+        loadOrders();
+      }
+
+      function toggleAll(cb) { document.querySelectorAll(".row-cb").forEach(function (x) { x.checked = cb.checked; }); }
+      function filterStat(s) {
+        activeStat = s;
+        currentPage = 1;
+        document.querySelectorAll('.s-card').forEach(function (el) { el.classList.remove('s-active'); });
+        var m = { '': 'sc-all', Pending: 'sc-pending', Approved: 'sc-approved', Received: 'sc-received', Cancelled: 'sc-cancelled' };
+        if (m[s]) document.getElementById(m[s]).classList.add('s-active');
+        loadOrders();
+      }
+
+      function addItem() {
+        var name = document.getElementById("new-item-name").value.trim();
+        var qty = Number(document.getElementById("new-item-qty").value || 0);
+        var price = Number(document.getElementById("new-item-price").value || 0);
+        if (!name || qty <= 0 || price <= 0) { showToast("Fill in item name, quantity and price.", "error"); return; }
+        modalItems.push({ item_name: name, quantity: qty, unit_price: price });
+        document.getElementById("new-item-name").value = "";
+        document.getElementById("new-item-qty").value = "";
+        document.getElementById("new-item-price").value = "";
+        renderModalItems();
+      }
+
+      function removeItem(idx) { modalItems.splice(idx, 1); renderModalItems(); }
+
+      async function loadOrders() {
+        try {
+          var filters = getFilterState();
+          var params = new URLSearchParams();
+          params.set("limit", String(pageSize));
+          params.set("offset", String((currentPage - 1) * pageSize));
+          if (filters.status) params.set("status", filters.status);
+          if (filters.vendor) params.set("vendor", filters.vendor);
+          if (filters.category) params.set("category", filters.category);
+          if (filters.search) params.set("search", filters.search);
+
+          var data = await apiJson("backend/public/purchase/list.php?" + params.toString());
+          orders = (data.orders || []).map(normalizeOrder);
+          totalRows = Number(data.total_count || 0);
+          updateFilterOptions();
+          updateCnts(data.status_counts || {});
+          renderTable(orders);
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function viewOrder(id) {
+        try {
+          var data = await apiJson("backend/public/purchase/get.php?id=" + encodeURIComponent(id));
+          var o = normalizeOrder(data.order || {});
+          document.getElementById("viewBody").innerHTML =
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">' +
+            '<div><strong>PO #:</strong> ' + esc(o.id) + '</div><div><strong>Status:</strong> <span class="bp ' + (stsCls[o.sts] || '') + '">' + esc(o.sts) + '</span></div>' +
+            '<div><strong>Vendor:</strong> ' + esc(o.vendor) + '</div><div><strong>Category:</strong> ' + esc(o.cat) + '</div>' +
+            '<div><strong>Order Date:</strong> ' + esc(o.date) + '</div><div><strong>Delivery:</strong> ' + esc(o.delivery) + '</div>' +
+            '<div><strong>Requested By:</strong> ' + esc(o.reqby) + '</div><div><strong>Total:</strong> ' + fmt(o.total) + '</div>' +
+            '</div>' +
+            '<table class="items-table" style="width:100%;border-collapse:collapse"><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>' +
+            o.items.map(function (it) { return '<tr><td>' + esc(it.item_name) + '</td><td>' + it.quantity + '</td><td>' + fmt(it.unit_price) + '</td><td>' + fmt(it.line_total || it.quantity * it.unit_price) + '</td></tr>'; }).join('') +
+            '</tbody></table>' +
+            (o.notes ? '<div style="margin-top:10px"><strong>Notes:</strong> ' + esc(o.notes) + '</div>' : '');
+          openMo("viewMo");
+        } catch (err) { showToast(err.message, "error"); }
+      }
+
+      async function editOrder(id) {
+        try {
+          var data = await apiJson("backend/public/purchase/get.php?id=" + encodeURIComponent(id));
+          var o = normalizeOrder(data.order || {});
+          document.getElementById("ei").value = String(o.rid);
+          document.getElementById("i-vendor").value = o.vendor;
+          document.getElementById("i-cat").value = o.cat;
+          document.getElementById("i-date").value = o.date;
+          document.getElementById("i-delivery").value = o.delivery;
+          document.getElementById("i-reqby").value = o.reqby;
+          document.getElementById("i-sts").value = o.sts;
+          document.getElementById("i-notes").value = o.notes;
+          modalItems = o.items.map(function (it) { return { item_name: it.item_name, quantity: it.quantity, unit_price: it.unit_price }; });
+          renderModalItems();
+          document.getElementById("addMoTitle").innerHTML = '<i class="fa-solid fa-pen"></i> Edit Order - ' + esc(o.id);
+          openMo("addMo");
+        } catch (err) { showToast(err.message, "error"); }
+      }
+
+      async function approveOrder(id) {
+        try {
+          await apiJson("backend/public/purchase/update_status.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: Number(id), status_label: "Approved" }) });
+          await loadOrders();
+          showToast("Order approved", "success");
+        } catch (err) { showToast(err.message, "error"); }
+      }
+
+      async function deleteOrder(id) {
+        if (!confirm("Delete this purchase order?")) return;
+        try {
+          await apiJson("backend/public/purchase/delete.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: Number(id) }) });
+          await loadOrders();
+          showToast("Order deleted", "success");
+        } catch (err) { showToast(err.message, "error"); }
+      }
+
+      async function saveOrder() {
+        var vendor = document.getElementById("i-vendor").value.trim();
+        var cat = document.getElementById("i-cat").value.trim();
+        var date = document.getElementById("i-date").value;
+        if (!vendor || !cat || !date) { showToast("Please fill all required fields.", "error"); return; }
+        if (!modalItems.length) { showToast("Please add at least one item.", "error"); return; }
+
+        var eid = Number(document.getElementById("ei").value || 0);
+        var payload = {
+          id: eid || undefined,
+          order_date: date,
+          vendor_name: vendor,
+          category_name: cat,
+          requested_by_name: document.getElementById("i-reqby").value.trim(),
+          delivery_date: document.getElementById("i-delivery").value,
+          status_label: document.getElementById("i-sts").value,
+          notes: document.getElementById("i-notes").value,
+          items: modalItems.map(function (it) { return { item_name: it.item_name, quantity: Number(it.quantity), unit_price: Number(it.unit_price) }; }),
+        };
+
+        try {
+          await apiJson("backend/public/purchase/upsert.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+          closeMo("addMo");
+          await loadOrders();
+          showToast("Order saved successfully", "success");
+        } catch (err) { showToast(err.message, "error"); }
+      }
+
+      function openPurchaseReport(kind) {
+        var filters = getFilterState();
+        var params = new URLSearchParams();
+        var dateFrom = document.getElementById("report-from").value;
+        var dateTo = document.getElementById("report-to").value;
+        params.set("limit", "5000");
+        if (filters.status) params.set("status", filters.status);
+        if (filters.vendor) params.set("vendor", filters.vendor);
+        if (filters.category) params.set("category", filters.category);
+        if (filters.search) params.set("search", filters.search);
+        if (dateFrom) params.set("date_from", dateFrom);
+        if (dateTo) params.set("date_to", dateTo);
+
+        if (kind === "print") {
+          window.open("backend/public/purchase/report_print.php?" + params.toString(), "_blank");
+          return;
+        }
+
+        window.location.href = "backend/public/purchase/report_export.php?" + params.toString();
+      }
+
+      function openMo(id) { document.getElementById(id).classList.add("open"); }
+      function closeMo(id) {
+        document.getElementById(id).classList.remove("open");
+        if (id !== "addMo") return;
+        document.getElementById("ei").value = "";
+        document.getElementById("addMoTitle").innerHTML = '<i class="fa-solid fa-plus"></i> New Purchase Order';
+        ["i-vendor", "i-cat", "i-date", "i-delivery", "i-notes"].forEach(function (f) { document.getElementById(f).value = ""; });
+        document.getElementById("i-reqby").value = "Admin";
+        document.getElementById("i-sts").value = "Pending";
+        modalItems = [];
+        renderModalItems();
+      }
+
+      document.querySelectorAll(".mo").forEach(function (m) { m.addEventListener("click", function (e) { if (e.target === m) m.classList.remove("open"); }); });
+      document.getElementById("i-date").value = new Date().toISOString().slice(0, 10);
+      renderModalItems();
+      loadOrders();
+    </script>
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+  </body>
+</html>

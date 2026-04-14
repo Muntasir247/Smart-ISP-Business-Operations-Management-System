@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee Internet - Portal Management</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --pm-ink: #10212d;
+        --pm-muted: #61717c;
+        --pm-bg-a: #f4f8fb;
+        --pm-bg-b: #e7eef6;
+      }
+      .pm-shell {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        padding: 20px;
+        background:
+          radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.18), transparent 28%),
+          radial-gradient(circle at 90% 0%, rgba(15, 118, 110, 0.14), transparent 25%),
+          linear-gradient(170deg, var(--pm-bg-a), var(--pm-bg-b));
+      }
+      .pm-shell::before,
+      .pm-shell::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+      }
+      .pm-shell::before { width: 240px; height: 240px; top: -95px; right: -60px; background: rgba(14, 165, 233, 0.12); }
+      .pm-shell::after { width: 180px; height: 180px; left: -60px; bottom: -85px; background: rgba(201, 93, 43, 0.10); }
+      .pm-head,
+      .pm-grid,
+      .card { position: relative; z-index: 1; }
+      .pm-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 16px; }
+      .pm-title h1 { color: var(--pm-ink); margin-bottom: 6px; }
+      .pm-title p { color: var(--pm-muted); }
+      .pm-hero {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 16px 0 20px;
+      }
+      .pm-stat {
+        border-radius: 16px;
+        padding: 16px;
+        color: #fff;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+        position: relative;
+        overflow: hidden;
+        transform: translateY(10px);
+        animation: pmRise 0.45s ease forwards;
+      }
+      .pm-stat:nth-child(2) { animation-delay: 0.05s; }
+      .pm-stat:nth-child(3) { animation-delay: 0.1s; }
+      .pm-stat:nth-child(4) { animation-delay: 0.15s; }
+      .pm-stat:nth-child(1) { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+      .pm-stat:nth-child(2) { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+      .pm-stat:nth-child(3) { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+      .pm-stat:nth-child(4) { background: linear-gradient(135deg, #c2410c, #ea580c); }
+      .pm-stat .label { font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.9; }
+      .pm-stat .value { font-size: 28px; font-weight: 800; margin: 6px 0 3px; }
+      .pm-stat .sub { font-size: 12px; opacity: 0.92; }
+      .pm-card { border-radius: 16px; border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08); }
+      .pm-grid { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 14px; }
+      .pm-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .pm-switch { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:#f8fbff; border:1px solid #dbe7f0; }
+      .pm-switch input { width:auto; }
+      .pm-toolbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 10px; }
+      .pm-actions { display:flex; flex-wrap:wrap; gap:8px; }
+      .pm-table-wrap { overflow:auto; }
+      .pm-badge { border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+      .pm-badge.active { background:#dcfce7; color:#166534; }
+      .pm-badge.locked { background:#fee2e2; color:#991b1b; }
+      .pm-badge.inactive { background:#e2e8f0; color:#334155; }
+      .pm-badge.disconnected { background:#e5e7eb; color:#374151; }
+      .pm-badge.pending { background:#fef3c7; color:#854d0e; }
+      .pm-side-list {
+        max-height: 340px;
+        overflow: auto;
+        display: grid;
+        gap: 10px;
+      }
+      .pm-user-chip {
+        border: 1px solid #dbe7f0;
+        border-radius: 12px;
+        background: #fff;
+        padding: 12px;
+      }
+      .pm-user-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom: 8px; }
+      .pm-user-name { font-weight: 800; color:#0f172a; }
+      .pm-user-meta { font-size: 12px; color:#64748b; margin-top: 2px; }
+      .pm-empty { border: 1px dashed #cbd5e1; border-radius: 12px; background: #fff; padding: 18px; text-align:center; color:#64748b; }
+      .pm-banner { margin: 14px 0 18px; border-radius: 16px; padding: 16px 18px; background: linear-gradient(120deg, #0f172a, #0f766e, #0284c7); color:#f8fafc; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18); }
+      .pm-banner p { color:#dbeafe; margin-top:6px; }
+      @keyframes pmRise { to { opacity:1; transform: translateY(0); } }
+      @media (max-width: 1024px) {
+        .pm-grid { grid-template-columns: 1fr; }
+        .pm-hero { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 768px) {
+        .pm-shell { padding: 12px; border-radius: 14px; }
+        .pm-hero, .pm-form-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+    <div class="main-content">
+      <div class="page-content">
+        <div class="pm-shell">
+          <div class="pm-head">
+            <div class="pm-title">
+              <h1><i class="fa-solid fa-globe"></i> Client Portal Management</h1>
+              <p>Manage portal access, security rules, and client self-service accounts</p>
+            </div>
+            <div class="pm-actions">
+              <button class="btn btn-navy" id="pmRefreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              <button class="btn btn-navy" id="pmExportBtn"><i class="fa-solid fa-file-export"></i> Export</button>
+              <button class="btn btn-navy" onclick="location.href='add_new_client.html'"><i class="fa-solid fa-user-plus"></i> Add Portal User</button>
+            </div>
+          </div>
+
+          <div class="pm-banner">
+            <strong>Portal control center</strong>
+            <p>All portal changes are saved in the database, and client portal login activity is tracked per account.</p>
+          </div>
+
+          <div class="pm-hero">
+            <div class="pm-stat"><div class="label">Active Portal Users</div><div class="value" id="statActiveUsers">0</div><div class="sub">Online-ready accounts</div></div>
+            <div class="pm-stat"><div class="label">New Registrations</div><div class="value" id="statNewUsers">0</div><div class="sub">This month</div></div>
+            <div class="pm-stat"><div class="label">Monthly Logins</div><div class="value" id="statLogins">0</div><div class="sub">Portal sessions</div></div>
+            <div class="pm-stat"><div class="label">Locked Accounts</div><div class="value" id="statLocked">0</div><div class="sub">Require review</div></div>
+          </div>
+
+          <div class="pm-grid">
+            <div class="card pm-card">
+              <div class="card-header"><h3><i class="fa-solid fa-sliders"></i> Portal Settings</h3><small>Saved to database</small></div>
+              <div class="card-body">
+                <form id="portalSettingsForm" style="display:flex; flex-direction:column; gap:12px;">
+                  <div class="pm-form-grid">
+                    <label class="pm-switch"><input type="checkbox" id="portal-enabled" checked /> Enable Client Portal</label>
+                    <label class="pm-switch"><input type="checkbox" id="self-registration" checked /> Allow Self Registration</label>
+                    <label class="pm-switch"><input type="checkbox" id="strong-passwords" checked /> Enforce Strong Passwords</label>
+                    <label class="pm-switch"><input type="checkbox" id="two-factor" /> Enable Two Factor</label>
+                    <label class="pm-switch"><input type="checkbox" id="email-notifications" checked /> Email Notifications</label>
+                    <label class="pm-switch"><input type="checkbox" id="sms-notifications" /> SMS Notifications</label>
+                    <label class="pm-switch"><input type="checkbox" id="payment-reminders" checked /> Payment Reminders</label>
+                  </div>
+                  <div class="pm-form-grid">
+                    <div class="form-group"><label for="session-timeout">Session Timeout (minutes)</label><input type="number" id="session-timeout" min="5" max="240" value="30" /></div>
+                    <div class="form-group"><label for="max-attempts">Max Login Attempts</label><input type="number" id="max-attempts" min="3" max="12" value="5" /></div>
+                    <div class="form-group"><label for="lockout-duration">Lockout Duration (minutes)</label><input type="number" id="lockout-duration" min="5" max="120" value="15" /></div>
+                    <div class="form-group"><label for="access-hours">Allowed Access Hours</label><select id="access-hours"><option value="24/7">24/7 Access</option><option value="business">Business Hours</option><option value="custom">Custom Hours</option></select></div>
+                  </div>
+                  <div class="form-actions">
+                    <p id="settingsMessage" class="page-msg"></p>
+                    <button type="submit" class="btn btn-navy"><i class="fa-solid fa-save"></i> Save Settings</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card pm-card">
+              <div class="card-header"><h3><i class="fa-solid fa-chart-column"></i> Quick Overview</h3></div>
+              <div class="card-body">
+                <div class="pm-side-list" id="portalOverview">
+                  <div class="pm-empty">Loading portal overview...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card pm-card" style="margin-top:14px;">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-users"></i> Portal Users</h3>
+              <div class="pm-toolbar">
+                <div class="filter-group"><label for="filter-status">Status</label><select id="filter-status"><option value="">All</option><option value="active">Active</option><option value="locked">Locked</option><option value="inactive">Inactive</option><option value="pending">Pending</option></select></div>
+                <div class="filter-group"><label for="filter-search">Search</label><input type="text" id="filter-search" placeholder="Name, code or email" /></div>
+                <button class="btn btn-navy" id="portalFilterBtn" type="button"><i class="fa-solid fa-search"></i> Filter</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="pm-table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Email</th>
+                      <th>Package</th>
+                      <th>Status</th>
+                      <th>Joined</th>
+                      <th>Last Login</th>
+                      <th>Logins</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="portalUsersBody"><tr><td colspan="8" style="text-align:center; padding:18px;">Loading...</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tempPasswordModal" class="modal-overlay">
+      <div class="form-section" style="max-width:560px; width:92%;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:14px;">
+          <h3>Temporary Password</h3>
+          <button class="modal-close" type="button" id="closeTempPasswordBtn">&times;</button>
+        </div>
+        <p style="color:#475569; margin-bottom:12px;">Share this password securely with the client once. They should change it after login.</p>
+        <div class="form-group"><input type="text" id="tempPasswordValue" readonly /></div>
+        <button class="btn btn-navy" type="button" id="copyTempPasswordBtn"><i class="fa-solid fa-copy"></i> Copy Password</button>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script>
+      let portalUsers = [];
+      let portalSettings = {};
+      let canEditPortal = false;
+
+      const portalUsersBody = document.getElementById('portalUsersBody');
+      const portalOverview = document.getElementById('portalOverview');
+      const settingsMessage = document.getElementById('settingsMessage');
+
+      function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = value == null ? '' : String(value);
+        return div.innerHTML;
+      }
+
+      function setSettingsMessage(text, error) {
+        settingsMessage.textContent = text;
+        settingsMessage.style.color = error ? '#b42318' : '#0f6f3e';
+      }
+
+      function toLabel(status) {
+        return String(status || '').replace(/_/g, ' ');
+      }
+
+      function normalizePortalStatus(status) {
+        const normalized = String(status || '').trim().toLowerCase();
+        if (!normalized || normalized === 'active') return 'active';
+        if (normalized === 'paused' || normalized === 'locked' || normalized === 'inactive') return 'locked';
+        if (normalized === 'disconnected' || normalized === 'left' || normalized === 'resigned') return 'disconnected';
+        return normalized;
+      }
+
+      function setFormValues(settings) {
+        const mapping = {
+          'portal_enabled': 'portal-enabled',
+          'self_registration': 'self-registration',
+          'strong_passwords': 'strong-passwords',
+          'two_factor': 'two-factor',
+          'email_notifications': 'email-notifications',
+          'sms_notifications': 'sms-notifications',
+          'payment_reminders': 'payment-reminders',
+          'session_timeout': 'session-timeout',
+          'max_attempts': 'max-attempts',
+          'lockout_duration': 'lockout-duration',
+          'access_hours': 'access-hours',
+        };
+
+        Object.entries(mapping).forEach(([key, id]) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const raw = settings[key];
+          if (el.type === 'checkbox') {
+            el.checked = String(raw ?? '1') === '1';
+          } else {
+            el.value = raw ?? el.value;
+          }
+        });
+      }
+
+      function renderOverview(stats) {
+        document.getElementById('statActiveUsers').textContent = String(stats.active_portal_users || 0);
+        document.getElementById('statNewUsers').textContent = String(stats.new_registrations || 0);
+        document.getElementById('statLogins').textContent = String(stats.monthly_logins || 0);
+        document.getElementById('statLocked').textContent = String(stats.locked_accounts || 0);
+
+        portalOverview.innerHTML = [
+          { label: 'Active portal users', value: stats.active_portal_users || 0, icon: 'fa-users' },
+          { label: 'New registrations', value: stats.new_registrations || 0, icon: 'fa-user-plus' },
+          { label: 'Monthly logins', value: stats.monthly_logins || 0, icon: 'fa-right-to-bracket' },
+          { label: 'Locked accounts', value: stats.locked_accounts || 0, icon: 'fa-lock' },
+        ].map((item) => `
+          <div class="pm-user-chip">
+            <div class="pm-user-top">
+              <div>
+                <div class="pm-user-name"><i class="fa-solid ${item.icon}"></i> ${escapeHtml(item.label)}</div>
+                <div class="pm-user-meta">Database-backed live count</div>
+              </div>
+              <div style="font-size:24px; font-weight:800; color:#0f172a;">${escapeHtml(item.value)}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function renderUsers() {
+        const search = document.getElementById('filter-search').value.trim().toLowerCase();
+        const status = document.getElementById('filter-status').value;
+        const rows = portalUsers.filter((user) => {
+          const userStatus = normalizePortalStatus(user.status);
+          const matchesStatus = !status || userStatus === status;
+          const blob = `${user.client_code || ''} ${user.full_name || ''} ${user.connection_email || ''}`.toLowerCase();
+          const matchesSearch = !search || blob.includes(search);
+          return matchesStatus && matchesSearch;
+        });
+
+        if (!rows.length) {
+          portalUsersBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:18px;">No portal users found</td></tr>';
+          return;
+        }
+
+        portalUsersBody.innerHTML = rows.map((user) => {
+          const status = normalizePortalStatus(user.status || 'pending');
+          const lastLogin = user.portal_last_login_at || 'Never';
+          const isTerminated = status === 'disconnected';
+          const canLock = !isTerminated && status !== 'locked';
+          const canUnlock = !isTerminated && status === 'locked';
+          return `
+            <tr>
+              <td><strong>${escapeHtml(user.client_code || '-')}</strong><br><small>${escapeHtml(user.full_name || '-')}</small></td>
+              <td>${escapeHtml(user.connection_email || '-')}</td>
+              <td>${escapeHtml(user.package_name || '-')}<br><small>${escapeHtml(Number(user.speed_mbps || 0))} Mbps</small></td>
+              <td><span class="pm-badge ${escapeHtml(status)}">${escapeHtml(toLabel(status))}</span></td>
+              <td>${escapeHtml(user.connection_start_date || '-')}</td>
+              <td>${escapeHtml(lastLogin)}</td>
+              <td>${escapeHtml(user.portal_login_count || 0)}</td>
+              <td>
+                <div class="pm-actions">
+                  <button class="btn btn-sm btn-navy" type="button" data-action="view" data-id="${user.id}"><i class="fa-solid fa-eye"></i></button>
+                  ${canEditPortal && canLock ? `<button class="btn btn-sm btn-navy" type="button" data-action="lock" data-id="${user.id}"><i class="fa-solid fa-lock"></i></button>` : ''}
+                  ${canEditPortal && canUnlock ? `<button class="btn btn-sm btn-navy" type="button" data-action="unlock" data-id="${user.id}"><i class="fa-solid fa-unlock"></i></button>` : ''}
+                  ${canEditPortal ? `<button class="btn btn-sm btn-navy" type="button" data-action="reset_password" data-id="${user.id}"><i class="fa-solid fa-key"></i></button>` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      async function loadPortalData() {
+        const params = new URLSearchParams();
+        const search = document.getElementById('filter-search').value.trim();
+        const status = document.getElementById('filter-status').value;
+        if (search) params.set('search', search);
+        if (status) params.set('status', status);
+
+        const res = await fetch('backend/public/clients/portal_manage_data.php?' + params.toString(), { credentials: 'same-origin' });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          portalUsersBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:18px; color:#b42318;">' + escapeHtml(data.message || 'Failed to load portal data') + '</td></tr>';
+          return;
+        }
+
+        portalUsers = data.users || [];
+        portalSettings = data.settings || {};
+        canEditPortal = Boolean(data.can_edit);
+        renderOverview(data.stats || {});
+        setFormValues(portalSettings);
+        const settingFields = document.querySelectorAll('#portalSettingsForm input, #portalSettingsForm select, #portalSettingsForm button[type="submit"]');
+        settingFields.forEach((field) => {
+          field.disabled = !canEditPortal;
+        });
+        setSettingsMessage(canEditPortal ? '' : 'View-only access: settings and user actions are disabled', !canEditPortal);
+        renderUsers();
+      }
+
+      async function saveSettings(event) {
+        event.preventDefault();
+        if (!canEditPortal) {
+          setSettingsMessage('You do not have permission to change settings', true);
+          return;
+        }
+        const payload = {
+          portal_enabled: document.getElementById('portal-enabled').checked,
+          self_registration: document.getElementById('self-registration').checked,
+          strong_passwords: document.getElementById('strong-passwords').checked,
+          two_factor: document.getElementById('two-factor').checked,
+          email_notifications: document.getElementById('email-notifications').checked,
+          sms_notifications: document.getElementById('sms-notifications').checked,
+          payment_reminders: document.getElementById('payment-reminders').checked,
+          session_timeout: document.getElementById('session-timeout').value,
+          max_attempts: document.getElementById('max-attempts').value,
+          lockout_duration: document.getElementById('lockout-duration').value,
+          access_hours: document.getElementById('access-hours').value,
+        };
+
+        try {
+          const res = await fetch('backend/public/clients/portal_manage_save.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            setSettingsMessage(data.message || 'Failed to save settings', true);
+            return;
+          }
+
+          setSettingsMessage('Portal settings saved', false);
+          await loadPortalData();
+        } catch (_error) {
+          setSettingsMessage('Network error while saving settings', true);
+        }
+      }
+
+      async function runAction(clientId, action) {
+        if (!canEditPortal) {
+          alert('You do not have permission to manage portal users');
+          return;
+        }
+        const res = await fetch('backend/public/clients/portal_manage_user_action.php', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ client_id: Number(clientId), action }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          const details = data && data.error ? ('\n\nDetails: ' + data.error) : '';
+          alert((data.message || 'Failed to process action') + details);
+          return;
+        }
+
+        if (data.temp_password) {
+          document.getElementById('tempPasswordValue').value = data.temp_password;
+          document.getElementById('tempPasswordModal').classList.add('active');
+        }
+
+        await loadPortalData();
+      }
+
+      function viewUser(clientId) {
+        const user = portalUsers.find((item) => Number(item.id) === Number(clientId));
+        if (!user) return;
+        alert(`${user.client_code}\n${user.full_name}\n${user.connection_email || '-'}\n${user.package_name || '-'}\nStatus: ${user.status}`);
+      }
+
+      document.getElementById('portalSettingsForm').addEventListener('submit', saveSettings);
+      document.getElementById('pmRefreshBtn').addEventListener('click', loadPortalData);
+      document.getElementById('pmExportBtn').addEventListener('click', () => {
+        if (!portalUsers.length) return alert('No data to export');
+        const headers = ['Client Code', 'Name', 'Email', 'Package', 'Status', 'Joined', 'Last Login', 'Login Count'];
+        const rows = portalUsers.map((user) => [user.client_code, user.full_name, user.connection_email, user.package_name, user.status, user.connection_start_date, user.portal_last_login_at || 'Never', user.portal_login_count || 0]);
+        const csv = [headers.join(','), ...rows.map((row) => row.map((cell) => '"' + String(cell == null ? '' : cell).replace(/"/g, '""') + '"').join(','))].join('\n');
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'portal_users_' + new Date().getTime() + '.csv';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      });
+      document.getElementById('portalFilterBtn').addEventListener('click', renderUsers);
+      document.getElementById('filter-status').addEventListener('change', renderUsers);
+      document.getElementById('filter-search').addEventListener('input', () => {
+        clearTimeout(window.pmSearchTimer);
+        window.pmSearchTimer = setTimeout(renderUsers, 200);
+      });
+      portalUsersBody.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const clientId = button.getAttribute('data-id');
+        const action = button.getAttribute('data-action');
+        if (action === 'view') return viewUser(clientId);
+        runAction(clientId, action);
+      });
+      document.getElementById('closeTempPasswordBtn').addEventListener('click', () => document.getElementById('tempPasswordModal').classList.remove('active'));
+      document.getElementById('copyTempPasswordBtn').addEventListener('click', async () => {
+        const value = document.getElementById('tempPasswordValue').value;
+        await navigator.clipboard.writeText(value);
+        alert('Password copied');
+      });
+
+      loadPortalData();
+    </script>
+  </body>
+</html>
